@@ -42,7 +42,7 @@ enable_testing()
 
 file(GLOB_RECURSE test_sources "tests/*.cpp" "tests/*.h")
 add_executable(tests ${test_sources})
-target_link_libraries(tests PRIVATE ${GTEST_LDFLAGS})
+target_link_libraries(tests PRIVATE nidavellir ${GTEST_LDFLAGS})
 target_compile_options(tests PRIVATE ${GTEST_CFLAGS})
 
 include(GoogleTest)
