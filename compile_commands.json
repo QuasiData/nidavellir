@@ -1,56 +1,56 @@
 [
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Debug\\\" -IC:/dev4.0/nidavellir/src -O0 -std=gnu++23 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -g -Xclang -gcodeview -Wall -Wextra -Werror -o CMakeFiles\\nidavellir.dir\\Debug\\src\\main.cpp.obj -c C:\\dev4.0\\nidavellir\\src\\main.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Debug\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O0 -std=gnu++23 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -g -Xclang -gcodeview -Wall -Wextra -o CMakeFiles\\nidavellir.dir\\Debug\\src\\main.cpp.obj -c C:\\dev4.0\\nidavellir\\src\\main.cpp",
   "file": "C:\\dev4.0\\nidavellir\\src\\main.cpp",
   "output": "CMakeFiles\\nidavellir.dir\\Debug\\src\\main.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Release\\\" -IC:/dev4.0/nidavellir/src -O3 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -Wall -Wextra -Werror -o CMakeFiles\\nidavellir.dir\\Release\\src\\main.cpp.obj -c C:\\dev4.0\\nidavellir\\src\\main.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Release\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O3 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -Wall -Wextra -o CMakeFiles\\nidavellir.dir\\Release\\src\\main.cpp.obj -c C:\\dev4.0\\nidavellir\\src\\main.cpp",
   "file": "C:\\dev4.0\\nidavellir\\src\\main.cpp",
   "output": "CMakeFiles\\nidavellir.dir\\Release\\src\\main.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -IC:/dev4.0/nidavellir/src -O2 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -g -Xclang -gcodeview -Wall -Wextra -Werror -o CMakeFiles\\nidavellir.dir\\RelWithDebInfo\\src\\main.cpp.obj -c C:\\dev4.0\\nidavellir\\src\\main.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O2 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -g -Xclang -gcodeview -Wall -Wextra -o CMakeFiles\\nidavellir.dir\\RelWithDebInfo\\src\\main.cpp.obj -c C:\\dev4.0\\nidavellir\\src\\main.cpp",
   "file": "C:\\dev4.0\\nidavellir\\src\\main.cpp",
   "output": "CMakeFiles\\nidavellir.dir\\RelWithDebInfo\\src\\main.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Debug\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O0 -std=gnu++23 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -g -Xclang -gcodeview -Wall -Wextra -Werror -o CMakeFiles\\benches.dir\\Debug\\benches\\world_bench.cpp.obj -c C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Debug\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O0 -std=gnu++23 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -g -Xclang -gcodeview -Wall -Wextra -o CMakeFiles\\benches.dir\\Debug\\benches\\world_bench.cpp.obj -c C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
   "file": "C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
   "output": "CMakeFiles\\benches.dir\\Debug\\benches\\world_bench.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Release\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O3 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -Wall -Wextra -Werror -o CMakeFiles\\benches.dir\\Release\\benches\\world_bench.cpp.obj -c C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"Release\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O3 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -Wall -Wextra -o CMakeFiles\\benches.dir\\Release\\benches\\world_bench.cpp.obj -c C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
   "file": "C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
   "output": "CMakeFiles\\benches.dir\\Release\\benches\\world_bench.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O2 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -g -Xclang -gcodeview -Wall -Wextra -Werror -o CMakeFiles\\benches.dir\\RelWithDebInfo\\benches\\world_bench.cpp.obj -c C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O2 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -g -Xclang -gcodeview -Wall -Wextra -o CMakeFiles\\benches.dir\\RelWithDebInfo\\benches\\world_bench.cpp.obj -c C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
   "file": "C:\\dev4.0\\nidavellir\\benches\\world_bench.cpp",
   "output": "CMakeFiles\\benches.dir\\RelWithDebInfo\\benches\\world_bench.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -DCMAKE_INTDIR=\\\"Debug\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O0 -std=gnu++23 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -g -Xclang -gcodeview -Wall -Wextra -Werror -o CMakeFiles\\tests.dir\\Debug\\tests\\world_tests.cpp.obj -c C:\\dev4.0\\nidavellir\\tests\\world_tests.cpp",
-  "file": "C:\\dev4.0\\nidavellir\\tests\\world_tests.cpp",
-  "output": "CMakeFiles\\tests.dir\\Debug\\tests\\world_tests.cpp.obj"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -DCMAKE_INTDIR=\\\"Debug\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O0 -std=gnu++23 -D_DEBUG -D_DLL -D_MT -Xclang --dependent-lib=msvcrtd -g -Xclang -gcodeview -Wall -Wextra -o CMakeFiles\\tests.dir\\Debug\\tests\\tests.cpp.obj -c C:\\dev4.0\\nidavellir\\tests\\tests.cpp",
+  "file": "C:\\dev4.0\\nidavellir\\tests\\tests.cpp",
+  "output": "CMakeFiles\\tests.dir\\Debug\\tests\\tests.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -DCMAKE_INTDIR=\\\"Release\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O3 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -Wall -Wextra -Werror -o CMakeFiles\\tests.dir\\Release\\tests\\world_tests.cpp.obj -c C:\\dev4.0\\nidavellir\\tests\\world_tests.cpp",
-  "file": "C:\\dev4.0\\nidavellir\\tests\\world_tests.cpp",
-  "output": "CMakeFiles\\tests.dir\\Release\\tests\\world_tests.cpp.obj"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -DCMAKE_INTDIR=\\\"Release\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O3 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -Wall -Wextra -o CMakeFiles\\tests.dir\\Release\\tests\\tests.cpp.obj -c C:\\dev4.0\\nidavellir\\tests\\tests.cpp",
+  "file": "C:\\dev4.0\\nidavellir\\tests\\tests.cpp",
+  "output": "CMakeFiles\\tests.dir\\Release\\tests\\tests.cpp.obj"
 },
 {
   "directory": "C:/dev4.0/nidavellir/build/x64-windows-clang",
-  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O2 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -g -Xclang -gcodeview -Wall -Wextra -Werror -o CMakeFiles\\tests.dir\\RelWithDebInfo\\tests\\world_tests.cpp.obj -c C:\\dev4.0\\nidavellir\\tests\\world_tests.cpp",
-  "file": "C:\\dev4.0\\nidavellir\\tests\\world_tests.cpp",
-  "output": "CMakeFiles\\tests.dir\\RelWithDebInfo\\tests\\world_tests.cpp.obj"
+  "command": "C:\\PROGRA~1\\LLVM\\bin\\clang++.exe -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -IC:/dev4.0/nidavellir/src -isystem C:/dev4.0/nidavellir/build/x64-windows-clang/vcpkg_installed/x64-windows/include -O2 -DNDEBUG -std=gnu++23 -D_DLL -D_MT -Xclang --dependent-lib=msvcrt -g -Xclang -gcodeview -Wall -Wextra -o CMakeFiles\\tests.dir\\RelWithDebInfo\\tests\\tests.cpp.obj -c C:\\dev4.0\\nidavellir\\tests\\tests.cpp",
+  "file": "C:\\dev4.0\\nidavellir\\tests\\tests.cpp",
+  "output": "CMakeFiles\\tests.dir\\RelWithDebInfo\\tests\\tests.cpp.obj"
 }
 ]

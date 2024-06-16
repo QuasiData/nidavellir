@@ -4,10 +4,7 @@ project(nidavellir VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_SYSTEM_LIBRARY_PATH "$ENV{ProgramFiles}/LLVM/lib")
 
-
-#find_package(OpenMP REQUIRED COMPONENTS CXX)
-#find_package(unordered_dense CONFIG REQUIRED)
-#find_package(flecs CONFIG REQUIRED)
+find_package(unordered_dense CONFIG REQUIRED)
 
 set(gcc_like_cxx "$<COMPILE_LANG_AND_ID:CXX,ARMClang,AppleClang,Clang,GNU,LCC>")
 set(msvc_cxx "$<COMPILE_LANG_AND_ID:CXX,MSVC>")
@@ -27,14 +24,15 @@ target_compile_options(nidavellir_compiler_flags INTERFACE
 
 file(GLOB_RECURSE sources "src/*.cpp" "src/*.h")
 add_library(nidavellir ${sources})
-target_link_libraries(nidavellir PUBLIC nidavellir_compiler_flags)
+target_link_libraries(nidavellir PUBLIC nidavellir_compiler_flags unordered_dense::unordered_dense)
 target_include_directories(nidavellir PUBLIC "src/")
 
 find_package(benchmark CONFIG REQUIRED)
+find_package(flecs CONFIG REQUIRED)
 
 file(GLOB_RECURSE bench_sources "benches/*.cpp" "benches/*.h")
 add_executable(benches ${bench_sources})
-target_link_libraries(benches PRIVATE nidavellir benchmark::benchmark benchmark::benchmark_main)
+target_link_libraries(benches PRIVATE nidavellir flecs::flecs benchmark::benchmark benchmark::benchmark_main)
 
 enable_testing()
 

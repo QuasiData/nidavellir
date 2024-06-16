@@ -1,0 +1,5 @@
+benches/** linguist-vendored
+docs/** linguist-vendored
+images/** linguist-vendored
+cmake/** linguist-vendored
+.github/** linguist-vendored
