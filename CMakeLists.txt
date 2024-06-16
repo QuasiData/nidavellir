@@ -30,19 +30,16 @@ file(GLOB_RECURSE sources "src/*.cpp" "src/*.h")
 add_library(nidavellir ${sources})
 target_link_libraries(nidavellir PUBLIC nidavellir_compiler_flags)
 target_include_directories(nidavellir PUBLIC "src/")
-set_target_properties(nidavellir PROPERTIES COMPILE_WARNING_AS_ERROR OFF)
 
 file(GLOB_RECURSE bench_sources "benches/*.cpp" "benches/*.h")
 add_executable(benches ${bench_sources})
 target_link_libraries(benches PRIVATE nidavellir benchmark::benchmark benchmark::benchmark_main)
-set_target_properties(benches PROPERTIES COMPILE_WARNING_AS_ERROR OFF)
 
 enable_testing()
 
 file(GLOB_RECURSE test_sources "tests/*.cpp" "tests/*.h")
 add_executable(tests ${test_sources})
 target_link_libraries(tests PRIVATE nidavellir GTest::gtest_main)
-set_target_properties(tests PROPERTIES COMPILE_WARNING_AS_ERROR OFF)
 
 include(GoogleTest)
 gtest_discover_tests(tests)
