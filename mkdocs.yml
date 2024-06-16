@@ -1,3 +1,14 @@
 site_name: My Docs
 theme:
   name: material
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.tracking
+    - navigation.top
+    - toc.integrate
+
+plugins:
+  - search:
+  - offline:
