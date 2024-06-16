@@ -72,8 +72,8 @@ Setup
 
 ### Prerequisites
 
-* vcpkg
-    https://github.com/microsoft/vcpkg
+* vcpkg https://github.com/microsoft/vcpkg
+* cmake https://cmake.org/
 
 ### Installation
 

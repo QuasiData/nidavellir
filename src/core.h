@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <cstddef>
 #include <type_traits>
 
 namespace nid {
@@ -16,6 +17,6 @@ using i64 = std::int64_t;
 using f32 = float;
 using f64 = double;
 
-using usize = size_t;
+using usize = std::size_t;
 using isize = std::conditional_t<sizeof(usize) == 8, i64, i32>;
 } // namespace nid
