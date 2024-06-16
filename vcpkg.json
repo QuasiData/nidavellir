@@ -1,0 +1,9 @@
+{
+  "name": "nidavellir",
+  "version-string": "0.0.1",
+  "dependencies": [
+    "gtest",
+    "benchmark"
+  ],
+  "builtin-baseline": "943c5ef1c8f6b5e6ced092b242c8299caae2ff01"
+}

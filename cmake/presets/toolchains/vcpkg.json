@@ -1,0 +1,14 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "vcpkg",
+            "hidden": true,
+            "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+            "cacheVariables": {
+                "VCPKG_INSTALL_OPTIONS": "--no-print-usage",
+                "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/vcpkg/triplets"
+            }
+        }
+    ]
+}

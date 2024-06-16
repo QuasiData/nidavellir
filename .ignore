@@ -1,0 +1,7 @@
+build
+cmake
+.cache
+.vsc
+.vs
+.idea
+

@@ -1,0 +1,13 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "clang",
+            "hidden": true,
+            "environment": {
+                "CC": "clang",
+                "CXX": "clang++"
+            }
+        }
+    ]
+}

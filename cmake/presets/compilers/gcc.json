@@ -1,0 +1,13 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "gcc",
+            "hidden": true,
+            "environment": {
+                "CC": "gcc",
+                "CXX": "g++"
+            }
+        }
+    ]
+}

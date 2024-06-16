@@ -1,0 +1,112 @@
+{
+    "version": 6,
+    "include": [
+        "base.json",
+        "os/linux.json",
+        "compilers/gcc.json"
+    ],
+    "configurePresets": [
+        {
+            "name": "x64-linux-gcc",
+            "inherits": [
+                "base",
+                "linux",
+                "gcc"
+            ],
+            "displayName": "x64 linux gcc static libs"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "x64-linux-gcc-debug",
+            "inherits": "base",
+            "configurePreset": "x64-linux-gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "x64-linux-gcc-relwithdebinfo",
+            "inherits": "base",
+            "configurePreset": "x64-linux-gcc",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "inherits": "base",
+            "configurePreset": "x64-linux-gcc",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "x64-linux-gcc-debug",
+            "inherits": "base",
+            "configurePreset": "x64-linux-gcc",
+            "configuration": "Debug"
+        },
+        {
+            "name": "x64-linux-gcc-relwithdebinfo",
+            "inherits": "base",
+            "configurePreset": "x64-linux-gcc",
+            "configuration": "RelWithDebInfo"
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "inherits": "base",
+            "configurePreset": "x64-linux-gcc",
+            "configuration": "Release"
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "x64-linux-gcc-debug",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "x64-linux-gcc"
+                },
+                {
+                    "type": "build",
+                    "name": "x64-linux-gcc-debug"
+                },
+                {
+                    "type": "test",
+                    "name": "x64-linux-gcc-debug"
+                }
+            ]
+        },
+        {
+            "name": "x64-linux-gcc-relwithdebinfo",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "x64-linux-gcc"
+                },
+                {
+                    "type": "build",
+                    "name": "x64-linux-gcc-relwithdebinfo"
+                },
+                {
+                    "type": "test",
+                    "name": "x64-linux-gcc-relwithdebinfo"
+                }
+            ]
+        },
+        {
+            "name": "x64-linux-gcc-release",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "x64-linux-gcc"
+                },
+                {
+                    "type": "build",
+                    "name": "x64-linux-gcc-release"
+                },
+                {
+                    "type": "test",
+                    "name": "x64-linux-gcc-release"
+                }
+            ]
+        }
+    ]
+}
