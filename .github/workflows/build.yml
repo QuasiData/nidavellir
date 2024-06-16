@@ -7,5 +7,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: cmake --version
-      - run: apt-get install ninja-build
+      - run: sudo apt-get install ninja-build
       - run: cmake --workflow --preset=x64-linux-gcc-release
