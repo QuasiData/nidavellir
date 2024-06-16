@@ -11,6 +11,7 @@ theme:
 
 nav:
   - "Home": index.md
+  - "Api documentation": html/index.html
 
 plugins:
   - search:
