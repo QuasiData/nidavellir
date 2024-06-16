@@ -2,7 +2,7 @@
  * @brief A structure containing type information and operations for a
  * component.
  *
- * I have changed the workflow on GH
+ * I have changed the workflow on GH and even more so now without local build
  * This structure holds metadata and function pointers for managing the
  * lifecycle of a component type. It includes functions for construction,
  * destruction, copy construction, copy assignment, move construction, move
