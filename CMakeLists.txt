@@ -4,8 +4,8 @@ project(nidavellir VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_SYSTEM_LIBRARY_PATH "$ENV{ProgramFiles}/LLVM/lib")
 
-find_package(gtest CONFIG REQUIRED)
 find_package(benchmark CONFIG REQUIRED)
+find_package(gtest CONFIG REQUIRED)
 #find_package(OpenMP REQUIRED COMPONENTS CXX)
 #find_package(unordered_dense CONFIG REQUIRED)
 #find_package(flecs CONFIG REQUIRED)
