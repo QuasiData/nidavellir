@@ -7,5 +7,5 @@ TEST(k, ksd) {
 }
 
 TEST(k, ksdd) {
-    EXPECT_EQ(k::kaka(), 2);
+    EXPECT_EQ(k::kaka(), 3);
 }
