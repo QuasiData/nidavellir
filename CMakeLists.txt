@@ -5,7 +5,10 @@ project(nidavellir VERSION 0.0.1 LANGUAGES CXX)
 set(CMAKE_SYSTEM_LIBRARY_PATH "$ENV{ProgramFiles}/LLVM/lib")
 
 find_package(benchmark CONFIG REQUIRED)
-#find_package(gtest CONFIG REQUIRED)
+
+find_package(PkgConfig)
+pkg_search_module(GTEST REQUIRED gtest_main)
+
 #find_package(OpenMP REQUIRED COMPONENTS CXX)
 #find_package(unordered_dense CONFIG REQUIRED)
 #find_package(flecs CONFIG REQUIRED)
@@ -37,9 +40,10 @@ target_link_libraries(benches PRIVATE nidavellir benchmark::benchmark benchmark:
 
 enable_testing()
 
-#file(GLOB_RECURSE test_sources "tests/*.cpp" "tests/*.h")
-#add_executable(tests ${test_sources})
-#target_link_libraries(tests PRIVATE nidavellir GTest::gtest_main)
+file(GLOB_RECURSE test_sources "tests/*.cpp" "tests/*.h")
+add_executable(tests ${test_sources})
+target_link_libraries(tests PRIVATE ${GTEST_LDFLAGS})
+target_compile_options(tests PRIVATE ${GTEST_CFLAGS})
 
-#include(GoogleTest)
-#gtest_discover_tests(tests)
+include(GoogleTest)
+gtest_discover_tests(tests)
