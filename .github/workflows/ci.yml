@@ -26,6 +26,6 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: sudo apt-get install doxygen
-      - run: Doxygen Doxyfile
+      - run: doxygen Doxyfile
       - run: pip install mkdocs-material
       - run: mkdocs gh-deploy --force
