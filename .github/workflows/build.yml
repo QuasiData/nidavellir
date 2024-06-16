@@ -6,4 +6,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - run: cmake --version
       - run: cmake --workflow --preset=x64-linux-gcc-release
