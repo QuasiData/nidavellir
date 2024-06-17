@@ -2,7 +2,7 @@ name: build
 run-name: ${{github.actor}} build
 on: [push]
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
