@@ -1,4 +1,7 @@
 build
+benches/gbench
+vcpkg
+docs
 cmake
 .cache
 .vsc
