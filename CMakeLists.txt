@@ -25,32 +25,10 @@ target_compile_options(nidavellir_compiler_flags INTERFACE
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-W4>>"
 )
 
-file(GLOB_RECURSE sources "src/*.cpp" "src/*.h")
-add_library(nidavellir ${sources})
-target_link_libraries(nidavellir PUBLIC nidavellir_compiler_flags unordered_dense::unordered_dense)
-target_include_directories(nidavellir PUBLIC "src/")
+add_subdirectory(src)
 
-find_package(benchmark CONFIG REQUIRED)
-find_package(flecs CONFIG REQUIRED)
-
-file(GLOB_RECURSE bench_sources "benches/*.cpp" "benches/*.h")
-add_executable(benches ${bench_sources})
-target_link_libraries(benches PRIVATE nidavellir flecs::flecs benchmark::benchmark benchmark::benchmark_main)
+add_subdirectory(benches)
 
 enable_testing()
 
-file(GLOB_RECURSE test_sources "tests/*.cpp" "tests/*.h")
-add_executable(tests ${test_sources})
-
-if (WIN32)
-find_package(gtest CONFIG REQUIRED)
-target_link_libraries(tests PRIVATE nidavellir GTest::gtest_main)
-else()
-find_package(PkgConfig)
-pkg_search_module(GTEST REQUIRED gtest_main)
-target_link_libraries(tests PRIVATE nidavellir ${GTEST_LDFLAGS})
-target_compile_options(tests PRIVATE ${GTEST_CFLAGS})
-endif()
-
-include(GoogleTest)
-gtest_discover_tests(tests)
+add_subdirectory(tests)

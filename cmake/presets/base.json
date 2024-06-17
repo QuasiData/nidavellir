@@ -16,6 +16,19 @@
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true
             }
+        },
+        {
+            "name": "asan",
+            "hidden": true,
+            "inherits": [
+                "ninja-multi-config",
+                "vcpkg"
+            ],
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "CMAKE_CXX_FLAGS_INIT": "-fsanitize=address -fsanitize=undefined -fsanitize-address-use-after-scope -fno-omit-frame-pointer"
+            }
         }
     ],
     "buildPresets": [
@@ -24,6 +37,12 @@
             "hidden": true,
             "inherits": "ninja-multi-config",
             "configurePreset": "base"
+        },
+        {
+            "name": "asan",
+            "hidden": true,
+            "inherits": "ninja-multi-config",
+            "configurePreset": "asan"
         }
     ],
     "testPresets": [
@@ -32,6 +51,19 @@
             "hidden": true,
             "inherits": "ninja-multi-config",
             "configurePreset": "base",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error",
+                "stopOnFailure": false
+            }
+        },
+        {
+            "name": "asan",
+            "hidden": true,
+            "inherits": "ninja-multi-config",
+            "configurePreset": "asan",
             "output": {
                 "outputOnFailure": true
             },
