@@ -39,6 +39,7 @@ def parse_arguments():
 
 
 def cmake_build(build_type, compiler, platform, asan):
+    b = build_type
     if asan:
         b = build_type + "-asan"
     subprocess.run((
@@ -47,6 +48,7 @@ def cmake_build(build_type, compiler, platform, asan):
 
 
 def cmake_test(build_type, compiler, platform, asan):
+    b = build_type
     if asan:
         b = build_type + "-asan"
     subprocess.run((
@@ -55,6 +57,7 @@ def cmake_test(build_type, compiler, platform, asan):
 
 
 def cmake_configure(compiler, platform, asan):
+    c = compiler
     if asan:
         c = compiler + "-asan"
     subprocess.run((
@@ -63,6 +66,7 @@ def cmake_configure(compiler, platform, asan):
 
 
 def cmake_workflow(build_type, compiler, platform, asan):
+    b = build_type
     if asan:
         b = build_type + "-asan"
     subprocess.run((
@@ -71,6 +75,7 @@ def cmake_workflow(build_type, compiler, platform, asan):
 
 
 def run(build_type: str, compiler, platform, asan):
+    c = compiler
     if asan:
         c = compiler + "-asan"
     
@@ -78,7 +83,7 @@ def run(build_type: str, compiler, platform, asan):
     if platform == "windows":
         subprocess.run((
             f"./build/x64-{platform}-{c}/{build_type}/testbed.exe"
-        ), shell=True)
+        ))
     else:
         subprocess.run((
             f"./build/x64-{platform}-{c}/{build_type}/testbed"
@@ -91,7 +96,7 @@ def do_bench(build_type: str, compiler, platform, project):
     if platform == "windows":
         subprocess.run((
             f"./build/x64-{platform}-{compiler}/benches/{project}/{build_type}/{project}_benches.exe --benchmark_out=benches/results/{project}_benches.json --benchmark_out_format=json"
-        ), shell=True)
+        ))
     else:
         subprocess.run((
             f"./build/x64-{platform}-{compiler}/benches/{project}/{build_type}/{project}_benches --benchmark_out=benches/results/{project}_benches.json --benchmark_out_format=json"
@@ -138,6 +143,7 @@ def bench(build_type: str, compiler, platform, project, create_baseline):
 
 
 def copy_compile_commands(compiler, platform, asan):
+    c = compiler
     if asan:
         c = compiler + "-asan"
     
