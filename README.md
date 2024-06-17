@@ -72,14 +72,13 @@ Setup
 
 ### Prerequisites
 
-* vcpkg https://github.com/microsoft/vcpkg
 * cmake https://cmake.org/
 
 ### Installation
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/QuasiData/nidavellir.git
+   git clone --recursive https://github.com/QuasiData/nidavellir.git
    ```
 2. Move to the repo
     ```sh
@@ -88,12 +87,12 @@ Setup
 
 3. Build and run tests
     ```sh
-    cmake --workflow --preset=x64-{platform}-{compiler}
+    cmake --workflow --preset=x64-{platform}-{compiler}-{config}
     ```
 
 4. Example
     ```sh
-    cmake --workflow --preset=x64-linux-gcc
+    cmake --workflow --preset=x64-linux-gcc-release
     ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

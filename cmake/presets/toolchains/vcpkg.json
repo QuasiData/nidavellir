@@ -4,7 +4,6 @@
         {
             "name": "vcpkg",
             "hidden": true,
-            "toolchainFile": "$env{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake",
             "cacheVariables": {
                 "VCPKG_INSTALL_OPTIONS": "--no-print-usage",
                 "VCPKG_OVERLAY_TRIPLETS": "${sourceDir}/cmake/vcpkg/triplets"
