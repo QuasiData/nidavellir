@@ -3,6 +3,7 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
+[![Build][workflow-shield]][workflow-url]
 
 
 
@@ -135,6 +136,8 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[workflow-shield]: https://github.com/QuasiData/nidavellir/actions/workflows/build-linux.yml/badge.svg
+[workflow-url]: https://github.com/QuasiData/nidavellir/actions/workflows/build-linux.yml/badge.svg
 [contributors-shield]: https://img.shields.io/github/contributors/QuasiData/nidavellir.svg?style=for-the-badge
 [contributors-url]: https://github.com/QuasiData/nidavellir/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/QuasiData/nidavellir.svg?style=for-the-badge
