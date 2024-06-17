@@ -16,6 +16,9 @@ jobs:
           VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
 
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
       - uses: ilammy/msvc-dev-cmd@v1
       - run: cmake --workflow --preset=x64-windows-clang-debug
       - run: cmake --workflow --preset=x64-windows-clang-release

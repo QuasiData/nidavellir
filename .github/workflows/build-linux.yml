@@ -16,6 +16,9 @@ jobs:
           VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
 
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
       - run: sudo apt-get install ninja-build
       - run: cmake --workflow --preset=x64-linux-gcc-debug
       - run: cmake --workflow --preset=x64-linux-gcc-release
