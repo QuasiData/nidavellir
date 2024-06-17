@@ -27,6 +27,10 @@ target_compile_options(nidavellir_compiler_flags INTERFACE
 
 add_subdirectory(src)
 
+file(GLOB_RECURSE sources "testbed.cpp")
+add_executable(testbed ${sources})
+target_link_libraries(testbed PUBLIC nidavellir)
+
 add_subdirectory(benches)
 
 enable_testing()

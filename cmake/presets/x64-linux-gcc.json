@@ -137,6 +137,23 @@
             ]
         },
         {
+            "name": "x64-linux-gcc-release-asan",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "x64-linux-gcc-asan"
+                },
+                {
+                    "type": "build",
+                    "name": "x64-linux-gcc-release-asan"
+                },
+                {
+                    "type": "test",
+                    "name": "x64-linux-gcc-release-asan"
+                }
+            ]
+        },
+        {
             "name": "x64-linux-gcc-debug",
             "steps": [
                 {

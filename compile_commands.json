@@ -1,6 +1,24 @@
 [
 {
   "directory": "/home/data/nidavellir/build/x64-linux-clang",
+  "command": "/usr/bin/clang++ -DCMAKE_INTDIR=\\\"Debug\\\" -I/home/data/nidavellir/src/. -isystem /home/data/nidavellir/build/x64-linux-clang/vcpkg_installed/x64-linux/include -g -std=gnu++23 -fcolor-diagnostics -Wall -Wextra -o CMakeFiles/testbed.dir/Debug/testbed.cpp.o -c /home/data/nidavellir/testbed.cpp",
+  "file": "/home/data/nidavellir/testbed.cpp",
+  "output": "CMakeFiles/testbed.dir/Debug/testbed.cpp.o"
+},
+{
+  "directory": "/home/data/nidavellir/build/x64-linux-clang",
+  "command": "/usr/bin/clang++ -DCMAKE_INTDIR=\\\"Release\\\" -I/home/data/nidavellir/src/. -isystem /home/data/nidavellir/build/x64-linux-clang/vcpkg_installed/x64-linux/include -O3 -DNDEBUG -std=gnu++23 -fcolor-diagnostics -Wall -Wextra -o CMakeFiles/testbed.dir/Release/testbed.cpp.o -c /home/data/nidavellir/testbed.cpp",
+  "file": "/home/data/nidavellir/testbed.cpp",
+  "output": "CMakeFiles/testbed.dir/Release/testbed.cpp.o"
+},
+{
+  "directory": "/home/data/nidavellir/build/x64-linux-clang",
+  "command": "/usr/bin/clang++ -DCMAKE_INTDIR=\\\"RelWithDebInfo\\\" -I/home/data/nidavellir/src/. -isystem /home/data/nidavellir/build/x64-linux-clang/vcpkg_installed/x64-linux/include -O2 -g -DNDEBUG -std=gnu++23 -fcolor-diagnostics -Wall -Wextra -o CMakeFiles/testbed.dir/RelWithDebInfo/testbed.cpp.o -c /home/data/nidavellir/testbed.cpp",
+  "file": "/home/data/nidavellir/testbed.cpp",
+  "output": "CMakeFiles/testbed.dir/RelWithDebInfo/testbed.cpp.o"
+},
+{
+  "directory": "/home/data/nidavellir/build/x64-linux-clang",
   "command": "/usr/bin/clang++ -DCMAKE_INTDIR=\\\"Debug\\\" -I/home/data/nidavellir/src/. -isystem /home/data/nidavellir/build/x64-linux-clang/vcpkg_installed/x64-linux/include -g -std=gnu++23 -fcolor-diagnostics -Wall -Wextra -o src/CMakeFiles/nidavellir.dir/Debug/main.cpp.o -c /home/data/nidavellir/src/main.cpp",
   "file": "/home/data/nidavellir/src/main.cpp",
   "output": "src/CMakeFiles/nidavellir.dir/Debug/main.cpp.o"

@@ -137,6 +137,23 @@
             ]
         },
         {
+            "name": "x64-linux-clang-release-asan",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "x64-linux-clang-asan"
+                },
+                {
+                    "type": "build",
+                    "name": "x64-linux-clang-release-asan"
+                },
+                {
+                    "type": "test",
+                    "name": "x64-linux-clang-release-asan"
+                }
+            ]
+        },
+        {
             "name": "x64-linux-clang-debug",
             "steps": [
                 {
