@@ -10,7 +10,12 @@ jobs:
           submodules: recursive
 
       - uses: lukka/get-cmake@latest
-      - run: cmake --workflow --preset=x64-linux-gcc14-debug-asan
-      - run: cmake --workflow --preset=x64-linux-gcc14-relwithdebinfo-asan
+
+      - run: |
+          sudo apt install gcc-14 g++-14
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 --slave /usr/bin/g++ g++ /usr/bin/g++-14 --slave /usr/bin/gcov gcov /usr/bin/gcov-14
+          sudo update-alternatives --set gcc /usr/bin/gcc-14
+      - run: cmake --workflow --preset=x64-linux-gcc-debug-asan
+      - run: cmake --workflow --preset=x64-linux-gcc-relwithdebinfo-asan
       - run: cmake --workflow --preset=x64-linux-clang-debug-asan
       - run: cmake --workflow --preset=x64-linux-clang-relwithdebinfo-asan

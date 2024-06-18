@@ -9,7 +9,6 @@
         "cmake/presets/x64-windows-clang.json",
         "cmake/presets/x64-windows-msvc.json",
         "cmake/presets/x64-linux-clang.json",
-        "cmake/presets/x64-linux-gcc.json",
-        "cmake/presets/x64-linux-gcc14.json"
+        "cmake/presets/x64-linux-gcc.json"
     ]
 }
