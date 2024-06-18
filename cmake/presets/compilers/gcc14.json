@@ -2,7 +2,7 @@
   "version": 6,
   "configurePresets": [
     {
-      "name": "gcc",
+      "name": "gcc14",
       "hidden": true,
       "environment": {
         "CC": "gcc-14",
