@@ -3,19 +3,13 @@ run-name: ${{github.actor}} build
 on: [push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - uses: lukka/get-cmake@latest
-
-      - run: |
-          sudo apt-get update -y
-          sudo apt-get install gcc-13 g++-13
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
-          sudo update-alternatives --set gcc /usr/bin/gcc-13
       - run: cmake --workflow --preset=x64-linux-gcc-debug-asan
       - run: cmake --workflow --preset=x64-linux-gcc-relwithdebinfo-asan
       - run: cmake --workflow --preset=x64-linux-clang-debug-asan
