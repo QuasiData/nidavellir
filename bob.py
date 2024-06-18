@@ -5,7 +5,7 @@ import json
 import os
 from colorama import Fore, Style
 from datetime import date, datetime
-i
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser()

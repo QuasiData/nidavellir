@@ -3,12 +3,7 @@
     "configurePresets": [
         {
             "name": "linux",
-            "hidden": true,
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            }
+            "hidden": true
         }
     ],
     "buildPresets": [

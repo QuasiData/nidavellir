@@ -22,9 +22,7 @@ namespace nid {
  * @tparam T The type to check against the component requirements.
  */
 template<typename T>
-concept Component = std::is_nothrow_move_assignable_v<T> 
-                    and std::is_nothrow_move_constructible_v<T> 
-                    and std::is_default_constructible_v<T> 
+concept Component = std::is_default_constructible_v<T>
                     and std::is_destructible_v<T>;
 // clang-format on
 
@@ -350,6 +348,12 @@ auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
     T* dst_arr = static_cast<T*>(dst);
 
     if constexpr (std::is_trivially_copyable_v<T> or requires(T) { typename T::is_relocatable; }) {
+        if constexpr (!std::is_trivially_destructible_v<T>) {
+            for (usize i{0}; i < count; ++i) {
+                dst_arr[i].~T();
+            }
+        }
+
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
         for (usize i{0}; i < count; ++i) {
