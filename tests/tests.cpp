@@ -103,7 +103,10 @@ TEST(Archetype, emplace_back_and_reserve) {
     constexpr usize num{512};
     auto arch = Archetype(lst);
     for (usize i{0}; i < num; ++i) {
-        auto _ = arch.emplace_back(row_indices, T1{.x = 1, .y = 1}, T2{.x = 2, .y = 2, .z = 2, .w = 2}, T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}});
+        auto _ = arch.emplace_back(row_indices,
+                                   T1{.x = 1, .y = 1},
+                                   T2{.x = 2, .y = 2, .z = 2, .w = 2},
+                                   T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}});
     }
 
     const auto& [t1_x, t1_y] = arch.get_component<T1>(num >> 2, row_indices[0]);
@@ -144,14 +147,14 @@ TEST(Archetype, iterator) {
     auto arch = Archetype(lst);
     for (usize i{0}; i < num; ++i) {
         auto _ = arch.emplace_back(row_indices,
-            T1{.x = 1, .y = 1},
-            T2{.x = 2, .y = 2, .z = 2, .w = 2},
-            T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
-            T4{.x = 4, .y = 5, .message = "TestMessage"});
+                                   T1{.x = 1, .y = 1},
+                                   T2{.x = 2, .y = 2, .z = 2, .w = 2},
+                                   T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
+                                   T4{.x = 4, .y = 5, .message = "TestMessage"});
     }
     std::random_device dev{};
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(0, num);
+    std::uniform_int_distribution<std::mt19937::result_type> dist(0, num - 1);
 
     const auto n = dist(rng);
 
@@ -181,17 +184,17 @@ TEST(Archetype, remove) {
     auto arch = Archetype(lst);
     for (usize i{0}; i < num - 1; ++i) {
         auto _ = arch.emplace_back(row_indices,
-            T1{.x = 1, .y = 1},
-            T2{.x = 2, .y = 2, .z = 2, .w = 2},
-            T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
-            T4{.x = 4, .y = 5, .message = "TestMessage"});
+                                   T1{.x = 1, .y = 1},
+                                   T2{.x = 2, .y = 2, .z = 2, .w = 2},
+                                   T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
+                                   T4{.x = 4, .y = 5, .message = "TestMessage"});
     }
 
     auto _ = arch.emplace_back(row_indices,
-    T1{.x = 1, .y = 1},
-    T2{.x = 2, .y = 2, .z = 2, .w = 2},
-    T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
-    T4{.x = 5, .y = 4, .message = "TheLastOne"});
+                               T1{.x = 1, .y = 1},
+                               T2{.x = 2, .y = 2, .z = 2, .w = 2},
+                               T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
+                               T4{.x = 5, .y = 4, .message = "TheLastOne"});
 
     std::random_device dev{};
     std::mt19937 rng(dev());
@@ -205,4 +208,6 @@ TEST(Archetype, remove) {
     EXPECT_EQ(x, 5);
     EXPECT_EQ(y, 4);
     EXPECT_EQ(message, "TheLastOne");
+
+    EXPECT_NO_FATAL_FAILURE(const auto k = arch.remove(num - 2));
 }

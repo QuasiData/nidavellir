@@ -1,5 +1,6 @@
 // ReSharper disable CppUseStructuredBinding
 #include "archetype.h"
+#include <cassert>
 
 namespace nid {
 namespace {
@@ -11,7 +12,7 @@ namespace {
             return cond;
         });
     }
-}
+} // namespace
 
 Archetype::Archetype(CompTypeList comp_infos) : rows(comp_infos.size()), infos(std::move(comp_infos)), capacity(start_capacity) {
     assert(check_align_order(infos));
@@ -57,11 +58,17 @@ auto Archetype::reserve(const usize new_capacity) -> void {
 }
 auto Archetype::remove(const usize col) -> usize {
     const auto last_col = --size;
+    assert(col <= last_col);
     for (usize row{0}; row < rows.size(); ++row) {
-        void* dst = internal_get(col, row);
-        void* src = internal_get(last_col, row);
+        if (col == last_col) {
+            void* last = internal_get(last_col, row);
+            infos[row].dtor(last, 1);
+        } else {
+            void* dst = internal_get(col, row);
+            void* src = internal_get(last_col, row);
 
-        infos[row].move_assign_dtor(dst, src, 1);
+            infos[row].move_assign_dtor(dst, src, 1);
+        }
     }
 
     return last_col;
