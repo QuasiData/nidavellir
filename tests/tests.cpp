@@ -53,11 +53,22 @@ TEST(Archetype, emplace_back_once) {
     std::vector<usize> indices = {0, 1, 2};
     sort_component_list(lst, indices);
 
+    std::vector<usize> row_indices;
+    row_indices.reserve(indices.size());
+    for (usize i{0}; i < indices.size(); ++i) {
+        usize index = 0;
+        while (indices[index] != i) {
+            ++index;
+        }
+
+        row_indices.emplace_back(index);
+    }
+
     auto arch = Archetype(lst);
-    const auto col = arch.emplace_back(indices, T1{.x = 1, .y = 1}, T2{.x = 2, .y = 2, .z = 2, .w = 2}, T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}});
-    const auto& [t1_x, t1_y] = arch.get_component<T1>(col, indices[0]);
-    const auto& [t2_x, t2_y, t2_z, t2_w] = arch.get_component<T2>(col, indices[1]);
-    const auto& [t3_x, t3_y, floats] = arch.get_component<T3>(col, indices[2]);
+    const auto col = arch.emplace_back(row_indices, T1{.x = 1, .y = 1}, T2{.x = 2, .y = 2, .z = 2, .w = 2}, T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}});
+    const auto& [t1_x, t1_y] = arch.get_component<T1>(col, row_indices[0]);
+    const auto& [t2_x, t2_y, t2_z, t2_w] = arch.get_component<T2>(col, row_indices[1]);
+    const auto& [t3_x, t3_y, floats] = arch.get_component<T3>(col, row_indices[2]);
 
     EXPECT_EQ(1, t1_x);
     EXPECT_EQ(1, t1_y);
@@ -78,15 +89,26 @@ TEST(Archetype, emplace_back_and_reserve) {
     std::vector<usize> indices = {0, 1, 2};
     sort_component_list(lst, indices);
 
+    std::vector<usize> row_indices;
+    row_indices.reserve(indices.size());
+    for (usize i{0}; i < indices.size(); ++i) {
+        usize index = 0;
+        while (indices[index] != i) {
+            ++index;
+        }
+
+        row_indices.emplace_back(index);
+    }
+
     constexpr usize num{512};
     auto arch = Archetype(lst);
     for (usize i{0}; i < num; ++i) {
-        auto _ = arch.emplace_back(indices, T1{.x = 1, .y = 1}, T2{.x = 2, .y = 2, .z = 2, .w = 2}, T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}});
+        auto _ = arch.emplace_back(row_indices, T1{.x = 1, .y = 1}, T2{.x = 2, .y = 2, .z = 2, .w = 2}, T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}});
     }
 
-    const auto& [t1_x, t1_y] = arch.get_component<T1>(num >> 2, indices[0]);
-    const auto& [t2_x, t2_y, t2_z, t2_w] = arch.get_component<T2>(num >> 1, indices[1]);
-    const auto& [t3_x, t3_y, floats] = arch.get_component<T3>(num >> 3, indices[2]);
+    const auto& [t1_x, t1_y] = arch.get_component<T1>(num >> 2, row_indices[0]);
+    const auto& [t2_x, t2_y, t2_z, t2_w] = arch.get_component<T2>(num >> 1, row_indices[1]);
+    const auto& [t3_x, t3_y, floats] = arch.get_component<T3>(num >> 3, row_indices[2]);
 
     EXPECT_EQ(1, t1_x);
     EXPECT_EQ(1, t1_y);
@@ -107,10 +129,21 @@ TEST(Archetype, iterator) {
     std::vector<usize> indices = {0, 1, 2, 3};
     sort_component_list(lst, indices);
 
+    std::vector<usize> row_indices;
+    row_indices.reserve(indices.size());
+    for (usize i{0}; i < indices.size(); ++i) {
+        usize index = 0;
+        while (indices[index] != i) {
+            ++index;
+        }
+
+        row_indices.emplace_back(index);
+    }
+
     constexpr usize num{512};
     auto arch = Archetype(lst);
     for (usize i{0}; i < num; ++i) {
-        auto _ = arch.emplace_back(indices,
+        auto _ = arch.emplace_back(row_indices,
             T1{.x = 1, .y = 1},
             T2{.x = 2, .y = 2, .z = 2, .w = 2},
             T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
@@ -122,7 +155,7 @@ TEST(Archetype, iterator) {
 
     const auto n = dist(rng);
 
-    const std::vector t4s(arch.begin<T4>(indices[3]), arch.end<T4>(indices[3]));
+    const std::vector t4s(arch.begin<T4>(row_indices[3]), arch.end<T4>(row_indices[3]));
     EXPECT_EQ(t4s[n].x, 4);
     EXPECT_EQ(t4s[n].y, 5);
     EXPECT_EQ(t4s[n].message, "TestMessage");
@@ -133,17 +166,28 @@ TEST(Archetype, remove) {
     std::vector<usize> indices = {0, 1, 2, 3};
     sort_component_list(lst, indices);
 
+    std::vector<usize> row_indices;
+    row_indices.reserve(indices.size());
+    for (usize i{0}; i < indices.size(); ++i) {
+        usize index = 0;
+        while (indices[index] != i) {
+            ++index;
+        }
+
+        row_indices.emplace_back(index);
+    }
+
     constexpr usize num{512};
     auto arch = Archetype(lst);
     for (usize i{0}; i < num - 1; ++i) {
-        auto _ = arch.emplace_back(indices,
+        auto _ = arch.emplace_back(row_indices,
             T1{.x = 1, .y = 1},
             T2{.x = 2, .y = 2, .z = 2, .w = 2},
             T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
             T4{.x = 4, .y = 5, .message = "TestMessage"});
     }
 
-    auto _ = arch.emplace_back(indices,
+    auto _ = arch.emplace_back(row_indices,
     T1{.x = 1, .y = 1},
     T2{.x = 2, .y = 2, .z = 2, .w = 2},
     T3{.x = 3, .y = 3, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}},
@@ -156,7 +200,7 @@ TEST(Archetype, remove) {
     const auto n = dist(rng);
     const auto l = arch.remove(n);
 
-    const auto [x, y, message] = arch.get_component<T4>(n, indices[3]);
+    const auto [x, y, message] = arch.get_component<T4>(n, row_indices[3]);
 
     EXPECT_EQ(x, 5);
     EXPECT_EQ(y, 4);

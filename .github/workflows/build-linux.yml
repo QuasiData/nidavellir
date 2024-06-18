@@ -10,9 +10,7 @@ jobs:
           submodules: recursive
 
       - uses: lukka/get-cmake@latest
-        
-      - run: sudo apt-get install build-essential
-      - run: cmake --workflow --preset=x64-linux-gcc-debug-asan
-      - run: cmake --workflow --preset=x64-linux-gcc-relwithdebinfo-asan
+      - run: cmake --workflow --preset=x64-linux-gcc14-debug-asan
+      - run: cmake --workflow --preset=x64-linux-gcc14-relwithdebinfo-asan
       - run: cmake --workflow --preset=x64-linux-clang-debug-asan
       - run: cmake --workflow --preset=x64-linux-clang-relwithdebinfo-asan

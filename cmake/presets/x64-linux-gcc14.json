@@ -1,0 +1,208 @@
+{
+  "version": 6,
+  "include": [
+    "base.json",
+    "os/linux.json",
+    "compilers/gcc14.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "x64-linux-gcc14",
+      "inherits": [
+        "base",
+        "linux",
+        "gcc14"
+      ],
+      "displayName": "x64 linux gcc14 static libs"
+    },
+    {
+      "name": "x64-linux-gcc14-asan",
+      "inherits": [
+        "asan",
+        "linux",
+        "gcc14"
+      ],
+      "displayName": "x64 linux gcc14 asan"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-linux-gcc14-debug",
+      "inherits": "base",
+      "configurePreset": "x64-linux-gcc14",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-gcc14-relwithdebinfo",
+      "inherits": "base",
+      "configurePreset": "x64-linux-gcc14",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-gcc14-release",
+      "inherits": "base",
+      "configurePreset": "x64-linux-gcc14",
+      "configuration": "Release"
+    },
+    {
+      "name": "x64-linux-gcc14-debug-asan",
+      "inherits": "asan",
+      "configurePreset": "x64-linux-gcc14-asan",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-gcc14-relwithdebinfo-asan",
+      "inherits": "asan",
+      "configurePreset": "x64-linux-gcc14-asan",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-gcc14-release-asan",
+      "inherits": "asan",
+      "configurePreset": "x64-linux-gcc14-asan",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "x64-linux-gcc14-debug",
+      "inherits": "base",
+      "configurePreset": "x64-linux-gcc14",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-gcc14-relwithdebinfo",
+      "inherits": "base",
+      "configurePreset": "x64-linux-gcc14",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-gcc14-release",
+      "inherits": "base",
+      "configurePreset": "x64-linux-gcc14",
+      "configuration": "Release"
+    },
+    {
+      "name": "x64-linux-gcc14-debug-asan",
+      "inherits": "asan",
+      "configurePreset": "x64-linux-gcc14-asan",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-gcc14-relwithdebinfo-asan",
+      "inherits": "asan",
+      "configurePreset": "x64-linux-gcc14-asan",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-gcc14-release-asan",
+      "inherits": "asan",
+      "configurePreset": "x64-linux-gcc14-asan",
+      "configuration": "Release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "x64-linux-gcc14-debug-asan",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc14-asan"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc14-debug-asan"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc14-debug-asan"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc14-relwithdebinfo-asan",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc14-asan"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc14-relwithdebinfo-asan"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc14-relwithdebinfo-asan"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc14-release-asan",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc14-asan"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc14-release-asan"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc14-release-asan"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc14-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc14"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc14-debug"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc14-debug"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc14-relwithdebinfo",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc14"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc14-relwithdebinfo"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc14-relwithdebinfo"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc14-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc14"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc14-release"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc14-release"
+        }
+      ]
+    }
+  ]
+}

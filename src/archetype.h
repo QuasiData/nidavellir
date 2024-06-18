@@ -27,7 +27,6 @@ namespace nid {
 template<std::ranges::contiguous_range... Ts>
 auto sort_component_list(CompTypeList& lst, Ts&&... args) -> void {
     assert((... == args.size()));
-    (..., assert(lst.size() == args.size()));
     auto zip = std::ranges::views::zip(lst, std::forward<Ts>(args)...);
     std::ranges::sort(zip, [](const auto& lhs, const auto& rhs) {
         return std::get<0>(lhs).alignment > std::get<0>(rhs).alignment or
@@ -301,7 +300,9 @@ class Archetype {
 
     template<Component T>
     [[nodiscard]] auto get_component(const usize col, const usize row) -> T& {
-        assert(row < rows.size() and col < size and infos[row].id == typeid(T).hash_code());
+        assert(row < rows.size());
+        assert(col < size);
+        assert(infos[row].id == typeid(T).hash_code());
         return *static_cast<T*>(internal_get(col, row));
     }
 
