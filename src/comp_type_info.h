@@ -43,12 +43,17 @@ struct CompTypeInfo {
     ComponentId id;
 
     /**
+     * @brief The alignment of the component type.
+     */
+    usize alignment;
+
+    /**
      * @brief Function pointer for the default constructor.
      *
      * @param dst The destination where the components are constructed.
      * @param count The number of components to construct.
      */
-    void (*ctor)(void* dst, u32 count);
+    void (*ctor)(void* dst, usize count);
 
     /**
      * @brief Function pointer for the destructor.
@@ -56,7 +61,7 @@ struct CompTypeInfo {
      * @param src The source from where the components are destructed.
      * @param count The number of components to destruct.
      */
-    void (*dtor)(void* src, u32 count);
+    void (*dtor)(void* src, usize count);
 
     /**
      * @brief Function pointer for the copy constructor.
@@ -65,7 +70,7 @@ struct CompTypeInfo {
      * @param src The source from where the components are copied.
      * @param count The number of components to copy construct.
      */
-    void (*copy_ctor)(void* dst, void* src, u32 count);
+    void (*copy_ctor)(void* dst, void* src, usize count);
 
     /**
      * @brief Function pointer for the copy assignment operator.
@@ -74,7 +79,7 @@ struct CompTypeInfo {
      * @param src The source from where the components are copied.
      * @param count The number of components to copy assign.
      */
-    void (*copy_assign)(void* dst, void* src, u32 count);
+    void (*copy_assign)(void* dst, void* src, usize count);
 
     /**
      * @brief Function pointer for the move constructor.
@@ -83,7 +88,7 @@ struct CompTypeInfo {
      * @param src The source from where the components are moved.
      * @param count The number of components to move construct.
      */
-    void (*move_ctor)(void* dst, void* src, u32 count);
+    void (*move_ctor)(void* dst, void* src, usize count);
 
     /**
      * @brief Function pointer for the move assignment operator.
@@ -92,7 +97,7 @@ struct CompTypeInfo {
      * @param src The source from where the components are moved.
      * @param count The number of components to move assign.
      */
-    void (*move_assign)(void* dst, void* src, u32 count);
+    void (*move_assign)(void* dst, void* src, usize count);
 
     /**
      * @brief Function pointer for the combined move constructor and destructor.
@@ -101,7 +106,7 @@ struct CompTypeInfo {
      * @param src The source from where the components are moved and destructed.
      * @param count The number of components to move construct and destruct.
      */
-    void (*move_ctor_dtor)(void* dst, void* src, u32 count);
+    void (*move_ctor_dtor)(void* dst, void* src, usize count);
 
     /**
      * @brief Function pointer for the combined move assignment and destructor.
@@ -110,12 +115,12 @@ struct CompTypeInfo {
      * @param src The source from where the components are moved and destructed.
      * @param count The number of components to move assign and destruct.
      */
-    void (*move_assign_dtor)(void* dst, void* src, u32 count);
+    void (*move_assign_dtor)(void* dst, void* src, usize count);
 
     /**
      * @brief The size of the component type in bytes.
      */
-    u32 size;
+    usize size;
 };
 
 /**
@@ -124,7 +129,7 @@ struct CompTypeInfo {
  * This alias represents a vector of `CompTypeInfo` objects, which store metadata
  * and operations for managing the lifecycle of different component types.
  */
-using TypeList = std::vector<CompTypeInfo>;
+using CompTypeList = std::vector<CompTypeInfo>;
 
 /**
  * @brief A hash function object for `TypeList`.
@@ -143,9 +148,9 @@ struct TypeHash {
      * @param x The `TypeList` to hash.
      * @return The computed hash value of type `u64`.
      */
-    auto operator()(const TypeList& x) const noexcept -> u64 {
+    auto operator()(const CompTypeList& x) const noexcept -> u64 {
         u64 h{0};
-        for (u32 i{0}; i < x.size(); ++i) {
+        for (usize i{0}; i < x.size(); ++i) {
             h += ankerl::unordered_dense::detail::wyhash::hash(x[i].id);
         }
         return h;
@@ -162,11 +167,11 @@ struct TypeHash {
  * @param count The number of instances to construct.
  */
 template<typename T>
-auto ctor_impl(void* ptr, const u32 count) -> void {
+auto ctor_impl(void* ptr, const usize count) -> void {
     assert(ptr);
 
     T* arr = static_cast<T*>(ptr);
-    for (u32 i = 0; i < count; ++i) {
+    for (usize i{0}; i < count; ++i) {
         new (std::addressof(arr[i])) T();
     }
 }
@@ -181,12 +186,12 @@ auto ctor_impl(void* ptr, const u32 count) -> void {
  * @param count The number of instances to destruct.
  */
 template<typename T>
-auto dtor_impl(void* ptr, const u32 count) -> void {
+auto dtor_impl(void* ptr, const usize count) -> void {
     assert(ptr);
 
     if constexpr (!std::is_trivially_destructible_v<T>) {
         T* arr = static_cast<T*>(ptr);
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             arr[i].~T();
         }
     }
@@ -203,7 +208,7 @@ auto dtor_impl(void* ptr, const u32 count) -> void {
  * @param count The number of instances to copy construct.
  */
 template<typename T>
-auto copy_ctor_impl(void* dst, void* src, const u32 count) -> void {
+auto copy_ctor_impl(void* dst, void* src, const usize count) -> void {
     assert(dst && src);
 
     T* src_arr = static_cast<T*>(src);
@@ -212,7 +217,7 @@ auto copy_ctor_impl(void* dst, void* src, const u32 count) -> void {
     if constexpr (std::is_trivially_copyable_v<T>) {
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             new (std::addressof(dst_arr[i])) T(src_arr[i]);
         }
     }
@@ -229,7 +234,7 @@ auto copy_ctor_impl(void* dst, void* src, const u32 count) -> void {
  * @param count The number of instances to copy assign.
  */
 template<typename T>
-auto copy_assgin_impl(void* dst, void* src, const u32 count) -> void {
+auto copy_assgin_impl(void* dst, void* src, const usize count) -> void {
     assert(dst && src);
 
     T* src_arr = static_cast<T*>(src);
@@ -238,7 +243,7 @@ auto copy_assgin_impl(void* dst, void* src, const u32 count) -> void {
     if constexpr (std::is_trivially_copyable_v<T>) {
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             dst_arr[i] = src_arr[i];
         }
     }
@@ -255,7 +260,7 @@ auto copy_assgin_impl(void* dst, void* src, const u32 count) -> void {
  * @param count The number of instances to move construct.
  */
 template<typename T>
-auto move_ctor_impl(void* dst, void* src, const u32 count) -> void {
+auto move_ctor_impl(void* dst, void* src, const usize count) -> void {
     assert(dst && src);
 
     T* src_arr = static_cast<T*>(src);
@@ -264,7 +269,7 @@ auto move_ctor_impl(void* dst, void* src, const u32 count) -> void {
     if constexpr (std::is_trivially_copyable_v<T>) {
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             new (std::addressof(dst_arr[i])) T(std::move(src_arr[i]));
         }
     }
@@ -281,7 +286,7 @@ auto move_ctor_impl(void* dst, void* src, const u32 count) -> void {
  * @param count The number of instances to move assign.
  */
 template<typename T>
-auto move_assign_impl(void* dst, void* src, const u32 count) -> void {
+auto move_assign_impl(void* dst, void* src, const usize count) -> void {
     assert(dst && src);
 
     T* src_arr = static_cast<T*>(src);
@@ -290,7 +295,7 @@ auto move_assign_impl(void* dst, void* src, const u32 count) -> void {
     if constexpr (std::is_trivially_copyable_v<T>) {
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             dst_arr[i] = std::move(src_arr[i]);
         }
     }
@@ -308,16 +313,16 @@ auto move_assign_impl(void* dst, void* src, const u32 count) -> void {
  * @param count The number of instances to move construct and destruct.
  */
 template<typename T>
-auto move_ctor_dtor_impl(void* dst, void* src, const u32 count) -> void {
+auto move_ctor_dtor_impl(void* dst, void* src, const usize count) -> void {
     assert(dst && src);
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
 
-    if constexpr (std::is_trivially_copyable_v<T>) {
+    if constexpr (std::is_trivially_copyable_v<T> or requires(T) { typename T::is_relocatable; }) {
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             new (std::addressof(dst_arr[i])) T(std::move(src_arr[i]));
             if constexpr (!std::is_trivially_destructible_v<T>) {
                 src_arr[i].~T();
@@ -338,16 +343,16 @@ auto move_ctor_dtor_impl(void* dst, void* src, const u32 count) -> void {
  * @param count The number of instances to move assign and destruct.
  */
 template<typename T>
-auto move_assign_dtor_impl(void* dst, void* src, const u32 count) -> void {
+auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
     assert(dst && src);
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
 
-    if constexpr (std::is_trivially_copyable_v<T>) {
+    if constexpr (std::is_trivially_copyable_v<T> or requires(T) { typename T::is_relocatable; }) {
         std::memcpy(dst, src, sizeof(T) * count);
     } else {
-        for (u32 i = 0; i < count; ++i) {
+        for (usize i{0}; i < count; ++i) {
             dst_arr[i] = std::move(src_arr[i]);
             if constexpr (!std::is_trivially_destructible_v<T>) {
                 src_arr[i].~T();
@@ -371,7 +376,7 @@ template<Component T>
 
     auto info = CompTypeInfo{
         .id = typeid(Ty).hash_code(),
-        .size = sizeof(Ty),
+        .alignment = alignof(T),
         .ctor = &ctor_impl<Ty>,
         .dtor = &dtor_impl<Ty>,
         .copy_ctor = nullptr,
@@ -379,7 +384,8 @@ template<Component T>
         .move_ctor = &move_ctor_impl<Ty>,
         .move_assign = &move_assign_impl<Ty>,
         .move_ctor_dtor = &move_ctor_dtor_impl<Ty>,
-        .move_assign_dtor = &move_assign_dtor_impl<Ty>};
+        .move_assign_dtor = &move_assign_dtor_impl<Ty>,
+        .size = sizeof(Ty)};
 
     if constexpr (std::is_copy_constructible_v<Ty>) {
         info.copy_ctor = &copy_ctor_impl<Ty>;

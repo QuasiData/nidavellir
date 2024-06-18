@@ -25,7 +25,10 @@ target_compile_options(nidavellir_compiler_flags INTERFACE
         "$<${msvc_cxx}:$<BUILD_INTERFACE:-W4>>"
 )
 
-add_subdirectory(src)
+file(GLOB_RECURSE sources "src/*.cpp" "src/*.h")
+add_library(nidavellir ${sources})
+target_link_libraries(nidavellir PUBLIC nidavellir_compiler_flags unordered_dense::unordered_dense)
+target_include_directories(nidavellir PUBLIC "src/")
 
 file(GLOB_RECURSE sources "testbed.cpp")
 add_executable(testbed ${sources})

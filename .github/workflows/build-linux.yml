@@ -1,8 +1,8 @@
-name: build
+name: build-linux
 run-name: ${{github.actor}} build
 on: [push]
 jobs:
-  build-linux:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

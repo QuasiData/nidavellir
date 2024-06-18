@@ -1,8 +1,8 @@
-name: build
+name: build-windows
 run-name: ${{github.actor}} build
 on: [push]
 jobs:
-  build-windows:
+  build:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
