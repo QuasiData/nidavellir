@@ -74,6 +74,7 @@ auto Archetype::grow() -> void {
 }
 
 auto Archetype::swap(const usize first, const usize second) -> void {
+    assert(first < size and second < size);
     if (first == second) {
         return;
     }

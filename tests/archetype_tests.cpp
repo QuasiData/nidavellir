@@ -320,8 +320,8 @@ TEST_F(ArchetypeTest, swap_same_and_full) {
         [[maybe_unused]] auto _ = arch3.emplace_back(row3, l_t3, l_t4);
     }
     EXPECT_EQ(arch3.cap(), arch3.len());
-    arch3.swap(arch3.len(), arch3.len());
-    arch3.swap(arch3.len(), 0);
+    arch3.swap(arch3.len() - 1, arch3.len() - 1);
+    arch3.swap(arch3.len() - 1, 0);
 }
 
 TEST_F(ArchetypeTest, swap_empty) {
