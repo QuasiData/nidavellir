@@ -17,44 +17,29 @@ namespace {
 Archetype::Archetype(CompTypeList comp_infos) : rows(comp_infos.size()), infos(std::move(comp_infos)), capacity(start_capacity) {
     assert(check_align_order(infos));
 
-    for (const auto& comp_info : infos) {
-        column_size_bytes += comp_info.size;
-    }
-
-    if (!rows.empty()) {
-        auto* buffer = static_cast<u8*>(::operator new(column_size_bytes * start_capacity));
-        for (usize row{0}; row < rows.size(); ++row) {
-            rows[row] = buffer;
-            buffer += infos[row].size * start_capacity;
-        }
+    for (usize row{0}; row < rows.size(); ++row) {
+        rows[row] = ::operator new(infos[row].size * start_capacity, std::align_val_t{infos[row].alignment});
     }
 }
+
 Archetype::~Archetype() {
     for (usize row{0}; row < rows.size(); ++row) {
         infos[row].dtor(rows[row], size);
-    }
-
-    if (!rows.empty()) {
-        ::operator delete(rows[0]);
+        ::operator delete(rows[row], std::align_val_t{infos[row].alignment});
     }
 }
 auto Archetype::reserve(const usize new_capacity) -> void {
+    assert(new_capacity > capacity);
     std::vector<void*> new_rows(rows.size());
 
-    if (!rows.empty()) {
-        auto* buffer = static_cast<u8*>(::operator new(column_size_bytes * new_capacity));
-        for (usize row{0}; row < new_rows.size(); ++row) {
-            new_rows[row] = buffer;
-            infos[row].move_ctor_dtor(buffer, rows[row], size);
-
-            buffer += infos[row].size * new_capacity;
-        }
-
-        ::operator delete(rows[0]);
-
-        rows = std::move(new_rows);
-        capacity = new_capacity;
+    for (usize row{0}; row < new_rows.size(); ++row) {
+        new_rows[row] = ::operator new(infos[row].size * new_capacity, std::align_val_t{infos[row].alignment});
+        infos[row].move_ctor_dtor(new_rows[row], rows[row], size);
+        ::operator delete(rows[row], std::align_val_t{infos[row].alignment});
     }
+
+    rows = std::move(new_rows);
+    capacity = new_capacity;
 }
 
 auto Archetype::remove(const usize col) -> usize {

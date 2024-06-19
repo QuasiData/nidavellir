@@ -22,10 +22,10 @@ namespace nid {
  * @tparam T The type to check against the component requirements.
  */
 template<typename T>
-concept Component = std::is_move_assignable_v<T>
-                    and std::is_move_constructible_v<T>
-                    and std::is_default_constructible_v<T>
-                    and std::is_destructible_v<T>;
+concept Component = std::is_move_assignable_v<std::decay_t<T>>
+                    and std::is_move_constructible_v<std::decay_t<T>>
+                    and std::is_default_constructible_v<std::decay_t<T>>
+                    and std::is_destructible_v<std::decay_t<T>>;
 // clang-format on
 
 /**

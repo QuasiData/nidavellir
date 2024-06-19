@@ -12,32 +12,6 @@ namespace nid {
 /**
  * @brief Sorts a component type list based on alignment and ID.
  *
- * This function takes a vector of component type infos and additional ranges, zips them together,
- * and sorts the zipped ranges based on the alignment and ID of the components.
- *
- * @tparam Ts A pack of ranges that must be contiguous.
- * @param lst The vector of component type infos to be sorted.
- * @param args Additional ranges to be zipped with the component list.
- *
- * This function uses the `std::ranges::views::zip` to combine the component type list and
- * the additional ranges. The resulting zipped range is sorted using a custom
- * comparator. The comparator prioritizes the `alignment` field of the component type infos
- * in descending order, and in case of a tie, it prioritizes the `id` field in descending order.
- */
-template<std::ranges::contiguous_range... Ts>
-auto sort_component_list(CompTypeList& lst, Ts&&... args) -> void {
-    assert((... == args.size()));
-    auto zip = std::ranges::views::zip(lst, std::forward<Ts>(args)...);
-    std::ranges::sort(zip, [](const auto& lhs, const auto& rhs) {
-        return std::get<0>(lhs).alignment > std::get<0>(rhs).alignment or
-               (std::get<0>(lhs).alignment == std::get<0>(rhs).alignment and
-                std::get<0>(lhs).id > std::get<0>(rhs).id);
-    });
-}
-
-/**
- * @brief Sorts a component type list based on alignment and ID.
- *
  * This function takes a vector of component type infos
  * and sorts it based on the alignment and ID of the components.
  *
@@ -258,14 +232,14 @@ class RowIterator {
 };
 
 static_assert(std::contiguous_iterator<RowIterator<usize>>);
+static_assert(std::contiguous_iterator<RowIterator<std::vector<f32>>>);
 
 class Archetype {
     static constexpr usize start_capacity{10};
     std::vector<void*> rows;
-    std::vector<CompTypeInfo> infos;
+    CompTypeList infos;
     usize capacity;
     usize size{0};
-    usize column_size_bytes{0};
 
   public:
     explicit Archetype(CompTypeList comp_infos);
@@ -288,7 +262,7 @@ class Archetype {
         }
 
         auto func = [&]<Component Ty>(const usize index, Ty&& t) {
-            new (static_cast<u8*>(rows[index]) + (infos[index].size * size)) Ty(std::forward<Ty>(t));
+            new (static_cast<u8*>(rows[index]) + infos[index].size * size) std::decay_t<Ty>(std::forward<Ty>(t));
         };
 
         usize i{0};
