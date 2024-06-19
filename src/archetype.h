@@ -280,8 +280,8 @@ class Archetype {
     [[nodiscard]] auto cap() const noexcept -> usize { return capacity; }
 
     /**
-     * @brief Gets the number of components in the Archetype.
-     * @return Current number of components.
+     * @brief Gets the number of columns in the Archetype.
+     * @return Current number of columns.
      */
     [[nodiscard]] auto len() const noexcept -> usize { return size; }
 
@@ -329,12 +329,14 @@ class Archetype {
             grow();
         }
 
-        auto func = [&]<Component Ty>(const usize index, Ty&& t) {
-            new (static_cast<u8*>(rows[index]) + infos[index].size * size) std::decay_t<Ty>(std::forward<Ty>(t));
-        };
+        if constexpr (sizeof...(Ts) > 0) {
+            auto func = [&]<Component Ty>(const usize index, Ty&& t) {
+                new (static_cast<u8*>(rows[index]) + infos[index].size * size) std::decay_t<Ty>(std::forward<Ty>(t));
+            };
 
-        usize i{0};
-        (..., func(row_indices[i++], std::forward<Ts>(args)));
+            usize i{0};
+            (..., func(row_indices[i++], std::forward<Ts>(args)));
+        }
 
         const auto col = size++;
         return col;
