@@ -56,6 +56,7 @@ auto Archetype::reserve(const usize new_capacity) -> void {
         capacity = new_capacity;
     }
 }
+
 auto Archetype::remove(const usize col) -> usize {
     const auto last_col = --size;
     assert(col <= last_col);
