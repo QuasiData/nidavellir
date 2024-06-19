@@ -1,208 +1,112 @@
 {
-    "version": 6,
-    "include": [
-        "base.json",
-        "os/linux.json",
-        "compilers/clang.json"
-    ],
-    "configurePresets": [
+  "version": 6,
+  "include": [
+    "base.json",
+    "os/linux.json",
+    "compilers/clang.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "x64-linux-clang",
+      "inherits": [
+        "base",
+        "linux",
+        "clang"
+      ],
+      "displayName": "x64 linux clang static libs"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-linux-clang-debug",
+      "inherits": "base",
+      "configurePreset": "x64-linux-clang",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-clang-relwithdebinfo",
+      "inherits": "base",
+      "configurePreset": "x64-linux-clang",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-clang-release",
+      "inherits": "base",
+      "configurePreset": "x64-linux-clang",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "x64-linux-clang-debug",
+      "inherits": "base",
+      "configurePreset": "x64-linux-clang",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-clang-relwithdebinfo",
+      "inherits": "base",
+      "configurePreset": "x64-linux-clang",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-clang-release",
+      "inherits": "base",
+      "configurePreset": "x64-linux-clang",
+      "configuration": "Release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "x64-linux-clang-debug",
+      "steps": [
         {
-            "name": "x64-linux-clang",
-            "inherits": [
-                "base",
-                "linux",
-                "clang"
-            ],
-            "displayName": "x64 linux clang static libs"
+          "type": "configure",
+          "name": "x64-linux-clang"
         },
         {
-            "name": "x64-linux-clang-asan",
-            "inherits": [
-                "asan",
-                "linux",
-                "clang"
-            ],
-            "displayName": "x64 linux clang asan"
+          "type": "build",
+          "name": "x64-linux-clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-clang-debug"
         }
-    ],
-    "buildPresets": [
+      ]
+    },
+    {
+      "name": "x64-linux-clang-relwithdebinfo",
+      "steps": [
         {
-            "name": "x64-linux-clang-debug",
-            "inherits": "base",
-            "configurePreset": "x64-linux-clang",
-            "configuration": "Debug"
+          "type": "configure",
+          "name": "x64-linux-clang"
         },
         {
-            "name": "x64-linux-clang-relwithdebinfo",
-            "inherits": "base",
-            "configurePreset": "x64-linux-clang",
-            "configuration": "RelWithDebInfo"
+          "type": "build",
+          "name": "x64-linux-clang-relwithdebinfo"
         },
         {
-            "name": "x64-linux-clang-release",
-            "inherits": "base",
-            "configurePreset": "x64-linux-clang",
-            "configuration": "Release"
-        },
-        {
-            "name": "x64-linux-clang-debug-asan",
-            "inherits": "asan",
-            "configurePreset": "x64-linux-clang-asan",
-            "configuration": "Debug"
-        },
-        {
-            "name": "x64-linux-clang-relwithdebinfo-asan",
-            "inherits": "asan",
-            "configurePreset": "x64-linux-clang-asan",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "x64-linux-clang-release-asan",
-            "inherits": "asan",
-            "configurePreset": "x64-linux-clang-asan",
-            "configuration": "Release"
+          "type": "test",
+          "name": "x64-linux-clang-relwithdebinfo"
         }
-    ],
-    "testPresets": [
+      ]
+    },
+    {
+      "name": "x64-linux-clang-release",
+      "steps": [
         {
-            "name": "x64-linux-clang-debug",
-            "inherits": "base",
-            "configurePreset": "x64-linux-clang",
-            "configuration": "Debug"
+          "type": "configure",
+          "name": "x64-linux-clang"
         },
         {
-            "name": "x64-linux-clang-relwithdebinfo",
-            "inherits": "base",
-            "configurePreset": "x64-linux-clang",
-            "configuration": "RelWithDebInfo"
+          "type": "build",
+          "name": "x64-linux-clang-release"
         },
         {
-            "name": "x64-linux-clang-release",
-            "inherits": "base",
-            "configurePreset": "x64-linux-clang",
-            "configuration": "Release"
-        },
-        {
-            "name": "x64-linux-clang-debug-asan",
-            "inherits": "asan",
-            "configurePreset": "x64-linux-clang-asan",
-            "configuration": "Debug"
-        },
-        {
-            "name": "x64-linux-clang-relwithdebinfo-asan",
-            "inherits": "asan",
-            "configurePreset": "x64-linux-clang-asan",
-            "configuration": "RelWithDebInfo"
-        },
-        {
-            "name": "x64-linux-clang-release-asan",
-            "inherits": "asan",
-            "configurePreset": "x64-linux-clang-asan",
-            "configuration": "Release"
+          "type": "test",
+          "name": "x64-linux-clang-release"
         }
-    ],
-    "workflowPresets": [
-        {
-            "name": "x64-linux-clang-debug-asan",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "x64-linux-clang-asan"
-                },
-                {
-                    "type": "build",
-                    "name": "x64-linux-clang-debug-asan"
-                },
-                {
-                    "type": "test",
-                    "name": "x64-linux-clang-debug-asan"
-                }
-            ]
-        },
-        {
-            "name": "x64-linux-clang-relwithdebinfo-asan",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "x64-linux-clang-asan"
-                },
-                {
-                    "type": "build",
-                    "name": "x64-linux-clang-relwithdebinfo-asan"
-                },
-                {
-                    "type": "test",
-                    "name": "x64-linux-clang-relwithdebinfo-asan"
-                }
-            ]
-        },
-        {
-            "name": "x64-linux-clang-release-asan",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "x64-linux-clang-asan"
-                },
-                {
-                    "type": "build",
-                    "name": "x64-linux-clang-release-asan"
-                },
-                {
-                    "type": "test",
-                    "name": "x64-linux-clang-release-asan"
-                }
-            ]
-        },
-        {
-            "name": "x64-linux-clang-debug",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "x64-linux-clang"
-                },
-                {
-                    "type": "build",
-                    "name": "x64-linux-clang-debug"
-                },
-                {
-                    "type": "test",
-                    "name": "x64-linux-clang-debug"
-                }
-            ]
-        },
-        {
-            "name": "x64-linux-clang-relwithdebinfo",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "x64-linux-clang"
-                },
-                {
-                    "type": "build",
-                    "name": "x64-linux-clang-relwithdebinfo"
-                },
-                {
-                    "type": "test",
-                    "name": "x64-linux-clang-relwithdebinfo"
-                }
-            ]
-        },
-        {
-            "name": "x64-linux-clang-release",
-            "steps": [
-                {
-                    "type": "configure",
-                    "name": "x64-linux-clang"
-                },
-                {
-                    "type": "build",
-                    "name": "x64-linux-clang-release"
-                },
-                {
-                    "type": "test",
-                    "name": "x64-linux-clang-release"
-                }
-            ]
-        }
-    ]
+      ]
+    }
+  ]
 }

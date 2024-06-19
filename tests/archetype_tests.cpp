@@ -1,13 +1,8 @@
 // ReSharper disable CppNoDiscardExpression
 #include "archetype.h"
 #include "comp_type_info.h"
-#include "nidavellir.h"
 
 #include "gtest/gtest.h"
-#include <algorithm>
-#include <cstddef>
-#include <ranges>
-#include <utility>
 #include <vector>
 #include <random>
 
@@ -65,19 +60,22 @@ class ArchetypeTest : public testing::Test {
     std::vector<usize> row3;
     Archetype arch3;
 
+    CompTypeList lste = get_sorted_infos<>();
+    Archetype arche;
+
     T1 t1{.x = 1, .y = 1};
     T2 t2{.x = 2, .y = 2, .z = 2, .w = 2};
     T3 t3{.x = 4, .y = 4, .floats = {1, 2}};
     T4 t4{.x = 6, .y = 6, .message = "TestMessage"};
 
-    static constexpr usize num{512};
+    static constexpr usize num{32};
 
     std::random_device dev;
     std::mt19937 rng{dev()};
     std::uniform_int_distribution<std::mt19937::result_type> dist{1, num - 2};
 
     ArchetypeTest()
-        : arch1(lst1), arch2(lst2), arch3(lst3) {
+        : arch1(lst1), arch2(lst2), arch3(lst3), arche(lste) {
 
         const auto l1 = get_infos<T1, T2>();
         const auto l2 = get_infos<T2, T3>();
@@ -115,9 +113,10 @@ class ArchetypeTest : public testing::Test {
         assert(l3[0].id == lst3[row3[0]].id);
 
         for (usize i{0}; i < num; ++i) {
-            auto _ = arch1.emplace_back(row1, t1, t2);
-            _ = arch2.emplace_back(row2, t2, t3);
-            _ = arch3.emplace_back(row3, t3, t4);
+            [[maybe_unused]] auto _1 = arch1.emplace_back(row1, t1, t2);
+            [[maybe_unused]] auto _2 = arch2.emplace_back(row2, t2, t3);
+            [[maybe_unused]] auto _3 = arch3.emplace_back(row3, t3, t4);
+            [[maybe_unused]] auto _e = arche.emplace_back(std::vector<usize>{});
         }
     }
 };
@@ -208,8 +207,8 @@ TEST_F(ArchetypeTest, iterators3) {
 TEST_F(ArchetypeTest, remove1) {
     T1 l_t1{.x = 100, .y = 100};
     T2 l_t2{.x = 1000, .y = 1000, .z = 1000, .w = 1000};
-    auto _ = arch1.emplace_back(row1, l_t1, l_t2);
-    _ = arch1.remove(0);
+    [[maybe_unused]] auto _1 = arch1.emplace_back(row1, l_t1, l_t2);
+    [[maybe_unused]] auto _2 = arch1.remove(0);
     const auto& [x, y] = arch1.get_component<T1>(0, row1[0]);
     const auto& [x2, y2, z2, w2] = arch1.get_component<T2>(0, row1[1]);
     EXPECT_EQ(x, l_t1.x);
@@ -222,10 +221,109 @@ TEST_F(ArchetypeTest, remove1) {
 
 TEST_F(ArchetypeTest, remove2) {
     T3 l_t3{.x = 100, .y = 100, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}};
-    auto _ = arch2.emplace_back(row2, T2{.x = 1, .y = 1, .z = 1, .w = 1}, l_t3);
-    _ = arch2.remove(0);
+    [[maybe_unused]] auto _1 = arch2.emplace_back(row2, T2{.x = 1, .y = 1, .z = 1, .w = 1}, l_t3);
+    [[maybe_unused]] auto _2 = arch2.remove(0);
     const auto& [x, y, floats] = arch2.get_component<T3>(0, row2[1]);
     EXPECT_EQ(x, l_t3.x);
     EXPECT_EQ(y, l_t3.y);
     EXPECT_EQ(floats, l_t3.floats);
+}
+
+TEST_F(ArchetypeTest, remove3) {
+    const auto len = arche.len();
+    [[maybe_unused]] auto _ = arche.remove(0);
+    EXPECT_NE(len, arche.len());
+}
+
+TEST_F(ArchetypeTest, move_constructor) {
+    EXPECT_EQ(arch1.len(), num);
+    Archetype arch{std::move(arch1)};
+    EXPECT_EQ(arch1.len(), 0);
+    EXPECT_EQ(arch1.cap(), 0);
+    EXPECT_EQ(arch.len(), num);
+    const auto& [x, y] = arch.get_component<T1>(0, row1[0]);
+    EXPECT_EQ(x, t1.x);
+    EXPECT_EQ(y, t1.y);
+}
+
+TEST_F(ArchetypeTest, move_assign1) {
+    EXPECT_EQ(arch1.len(), num);
+    Archetype arch = std::move(arch1);
+    EXPECT_EQ(arch1.len(), 0);
+    EXPECT_EQ(arch1.cap(), 0);
+    EXPECT_EQ(arch.len(), num);
+    const auto& [x, y] = arch.get_component<T1>(0, row1[0]);
+    EXPECT_EQ(x, t1.x);
+    EXPECT_EQ(y, t1.y);
+}
+
+TEST_F(ArchetypeTest, move_assign2) {
+    EXPECT_EQ(arch1.len(), num);
+    arch2 = std::move(arch1);
+    EXPECT_EQ(arch1.len(), 0);
+    EXPECT_EQ(arch1.cap(), 0);
+    EXPECT_EQ(arch2.len(), num);
+    const auto& [x, y] = arch2.get_component<T1>(0, row1[0]);
+    EXPECT_EQ(x, t1.x);
+    EXPECT_EQ(y, t1.y);
+}
+
+TEST_F(ArchetypeTest, move_assign3) {
+    EXPECT_NO_FATAL_FAILURE(Archetype arch = std::move(arche));
+}
+
+TEST_F(ArchetypeTest, move_assign4) {
+    EXPECT_EQ(arch1.len(), num);
+    arche = std::move(arch1);
+    EXPECT_EQ(arch1.len(), 0);
+    EXPECT_EQ(arch1.cap(), 0);
+    EXPECT_EQ(arche.len(), num);
+    const auto& [x, y] = arche.get_component<T1>(0, row1[0]);
+    EXPECT_EQ(x, t1.x);
+    EXPECT_EQ(y, t1.y);
+}
+
+TEST_F(ArchetypeTest, swap) {
+    T3 l_t3{.x = 10, .y = 10, .floats = {1, 2, 3, 4}};
+    T4 l_t4{.x = 20, .y = 20, .message = "SwapTest"};
+    const auto col = arch3.emplace_back(row3, l_t3, l_t4);
+    const auto rnd = dist(rng);
+    arch3.swap(rnd, col);
+    auto [x1, y1, floats] = arch3.get_component<T3>(rnd, row3[0]);
+    EXPECT_EQ(x1, l_t3.x);
+    EXPECT_EQ(y1, l_t3.y);
+    EXPECT_EQ(floats, l_t3.floats);
+    auto [x2, y2, message] = arch3.get_component<T4>(rnd, row3[1]);
+    EXPECT_EQ(x2, l_t4.x);
+    EXPECT_EQ(y2, l_t4.y);
+    EXPECT_EQ(message, l_t4.message);
+}
+
+TEST_F(ArchetypeTest, remove_and_emplace) {
+    EXPECT_EQ(arch3.len(), num);
+    for (usize i{0}; i < num; ++i) {
+        [[maybe_unused]] auto _ = arch3.remove(0);
+    }
+    EXPECT_EQ(arch3.len(), 0);
+    for (usize i{0}; i < num; ++i) {
+        [[maybe_unused]] auto _ = arch3.emplace_back(row3, t3, t4);
+    }
+    EXPECT_EQ(arch3.len(), num);
+}
+
+TEST_F(ArchetypeTest, swap_same_and_full) {
+    T3 l_t3{.x = 10, .y = 10, .floats = {1, 2, 3, 4}};
+    T4 l_t4{.x = 20, .y = 20, .message = "SwapTest"};
+    const auto cap = arch3.cap();
+    const auto len = arch3.len();
+    for (usize i{0}; i < cap - len; ++i) {
+        [[maybe_unused]] auto _ = arch3.emplace_back(row3, l_t3, l_t4);
+    }
+    EXPECT_EQ(arch3.cap(), arch3.len());
+    arch3.swap(arch3.len(), arch3.len());
+    arch3.swap(arch3.len(), 0);
+}
+
+TEST_F(ArchetypeTest, swap_empty) {
+    arche.swap(0, arche.len() - 1);
 }

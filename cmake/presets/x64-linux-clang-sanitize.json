@@ -1,0 +1,112 @@
+{
+  "version": 6,
+  "include": [
+    "base.json",
+    "os/linux.json",
+    "compilers/clang.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "x64-linux-clang-sanitize",
+      "inherits": [
+        "sanitize",
+        "linux",
+        "clang"
+      ],
+      "displayName": "x64 linux clang sanitize"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-linux-clang-debug-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-clang-sanitize",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-clang-relwithdebinfo-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-clang-sanitize",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-clang-release-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-clang-sanitize",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "x64-linux-clang-debug-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-clang-sanitize",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-clang-relwithdebinfo-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-clang-sanitize",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-clang-release-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-clang-sanitize",
+      "configuration": "Release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "x64-linux-clang-debug-sanitize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-clang-sanitize"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-clang-debug-sanitize"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-clang-debug-sanitize"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-clang-relwithdebinfo-sanitize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-clang-sanitize"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-clang-relwithdebinfo-sanitize"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-clang-relwithdebinfo-sanitize"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-clang-release-sanitize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-clang-sanitize"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-clang-release-sanitize"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-clang-release-sanitize"
+        }
+      ]
+    }
+  ]
+}

@@ -1,76 +1,76 @@
 {
-    "version": 6,
-    "include": [
-        "generators/ninja.json",
-        "toolchains/vcpkg.json"
-    ],
-    "configurePresets": [
-        {
-            "name": "base",
-            "hidden": true,
-            "inherits": [
-                "ninja-multi-config",
-                "vcpkg"
-            ],
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true
-            }
-        },
-        {
-            "name": "asan",
-            "hidden": true,
-            "inherits": [
-                "ninja-multi-config",
-                "vcpkg"
-            ],
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true,
-                "CMAKE_CXX_FLAGS_INIT": "-fsanitize=address -fsanitize=undefined -fsanitize-address-use-after-scope -fno-omit-frame-pointer"
-            }
-        }
-    ],
-    "buildPresets": [
-        {
-            "name": "base",
-            "hidden": true,
-            "inherits": "ninja-multi-config",
-            "configurePreset": "base"
-        },
-        {
-            "name": "asan",
-            "hidden": true,
-            "inherits": "ninja-multi-config",
-            "configurePreset": "asan"
-        }
-    ],
-    "testPresets": [
-        {
-            "name": "base",
-            "hidden": true,
-            "inherits": "ninja-multi-config",
-            "configurePreset": "base",
-            "output": {
-                "outputOnFailure": true
-            },
-            "execution": {
-                "noTestsAction": "error",
-                "stopOnFailure": false
-            }
-        },
-        {
-            "name": "asan",
-            "hidden": true,
-            "inherits": "ninja-multi-config",
-            "configurePreset": "asan",
-            "output": {
-                "outputOnFailure": true
-            },
-            "execution": {
-                "noTestsAction": "error",
-                "stopOnFailure": false
-            }
-        }
-    ]
+  "version": 6,
+  "include": [
+    "generators/ninja.json",
+    "toolchains/vcpkg.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "inherits": [
+        "ninja-multi-config",
+        "vcpkg"
+      ],
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+      }
+    },
+    {
+      "name": "sanitize",
+      "hidden": true,
+      "inherits": [
+        "ninja-multi-config",
+        "vcpkg"
+      ],
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+        "CMAKE_CXX_FLAGS_INIT": "-fsanitize=address -fsanitize=undefined -fsanitize-address-use-after-scope -fno-omit-frame-pointer --coverage"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "inherits": "ninja-multi-config",
+      "configurePreset": "base"
+    },
+    {
+      "name": "sanitize",
+      "hidden": true,
+      "inherits": "ninja-multi-config",
+      "configurePreset": "sanitize"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "inherits": "ninja-multi-config",
+      "configurePreset": "base",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      }
+    },
+    {
+      "name": "sanitize",
+      "hidden": true,
+      "inherits": "ninja-multi-config",
+      "configurePreset": "sanitize",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": false
+      }
+    }
+  ]
 }

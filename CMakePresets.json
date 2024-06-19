@@ -1,14 +1,16 @@
 {
-    "version": 6,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 25,
-        "patch": 0
-    },
-    "include": [
-        "cmake/presets/x64-windows-clang.json",
-        "cmake/presets/x64-windows-msvc.json",
-        "cmake/presets/x64-linux-clang.json",
-        "cmake/presets/x64-linux-gcc.json"
-    ]
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 25,
+    "patch": 0
+  },
+  "include": [
+    "cmake/presets/x64-windows-clang.json",
+    "cmake/presets/x64-windows-msvc.json",
+    "cmake/presets/x64-linux-gcc.json",
+    "cmake/presets/x64-linux-gcc-sanitize.json",
+    "cmake/presets/x64-linux-clang.json",
+    "cmake/presets/x64-linux-clang-sanitize.json"
+  ]
 }

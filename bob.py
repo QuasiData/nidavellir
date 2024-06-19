@@ -14,7 +14,7 @@ def parse_arguments():
                                "vcpkg\nworkflow: configure build and test"
                         , default="configure")
     parser.add_argument("-bt", "--build_type", choices=["debug", "relwithdebinfo", "release"], default="debug")
-    parser.add_argument("-asan", action="store_true", default=False)
+    parser.add_argument("-san", action="store_true", default=False)
     parser.add_argument("-c", "--compiler", choices=["clang", "gcc", "msvc"], default="clang")
     parser.add_argument("-cb", "--create_baseline_bench", action="store_true")
     parser.add_argument("-p", "--platform", choices=["windows", "linux"], default="linux")
@@ -23,8 +23,8 @@ def parse_arguments():
     if args.compiler == "msvc" and args.platform != "windows":
         parser.error("msvc compiler is only supported on windows")
 
-    if args.asan and args.platform == "windows":
-        parser.error("\'--asan\' is not supported on windows")
+    if args.san and args.platform == "windows":
+        parser.error("\'--san\' is not supported on windows")
 
     if args.create_baseline_bench and not args.mode == "bench":
         parser.error("\'--create_baseline_bench\' requires the mode to be \'bench\'")
@@ -32,52 +32,52 @@ def parse_arguments():
     if args.mode == "bench" and not args.build_type == "release":
         parser.error("mode \'bench\' requires the build type to be \'release\'")
         
-    if args.mode == "bench" and args.asan:
-        parser.error("mode \'bench\' cant be ran with \'asan\'")
+    if args.mode == "bench" and args.san:
+        parser.error("mode \'bench\' cant be ran with \'san\'")
 
     return args
 
 
-def cmake_build(build_type, compiler, platform, asan):
+def cmake_build(build_type, compiler, platform, san):
     b = build_type
-    if asan:
-        b = build_type + "-asan"
+    if san:
+        b = build_type + "-sanitize"
     subprocess.run((
         f"cmake --build --preset=x64-{platform}-{compiler}-{b}"
     ), shell=True)
 
 
-def cmake_test(build_type, compiler, platform, asan):
+def cmake_test(build_type, compiler, platform, san):
     b = build_type
-    if asan:
-        b = build_type + "-asan"
+    if san:
+        b = build_type + "-sanitize"
     subprocess.run((
         f"ctest --preset=x64-{platform}-{compiler}-{b}"
     ), shell=True)
 
 
-def cmake_configure(compiler, platform, asan):
+def cmake_configure(compiler, platform, san):
     c = compiler
-    if asan:
-        c = compiler + "-asan"
+    if san:
+        c = compiler + "-sanitize"
     subprocess.run((
         f"cmake --preset=x64-{platform}-{c}"
     ), shell=True)
 
 
-def cmake_workflow(build_type, compiler, platform, asan):
+def cmake_workflow(build_type, compiler, platform, san):
     b = build_type
-    if asan:
-        b = build_type + "-asan"
+    if san:
+        b = build_type + "-sanitize"
     subprocess.run((
         f"cmake --workflow --preset=x64-{platform}-{compiler}-{b}"
     ), shell=True)
 
 
-def run(build_type: str, compiler, platform, asan):
+def run(build_type: str, compiler, platform, san):
     c = compiler
-    if asan:
-        c = compiler + "-asan"
+    if san:
+        c = compiler + "-sanitize"
     
     build_type = build_type.capitalize()
     if platform == "windows":
@@ -142,10 +142,10 @@ def bench(build_type: str, compiler, platform, project, create_baseline):
                 f"{Fore.RED}Error:{Style.RESET_ALL} Tried running benches for project: {project} but it does not exist. Run cmake configure or check spelling.")
 
 
-def copy_compile_commands(compiler, platform, asan):
+def copy_compile_commands(compiler, platform, san):
     c = compiler
-    if asan:
-        c = compiler + "-asan"
+    if san:
+        c = compiler + "-sanitize"
     
     shutil.copyfile(f"build/x64-{platform}-{c}/compile_commands.json", "compile_commands.json")
 
@@ -156,25 +156,25 @@ if __name__ == "__main__":
     compiler = args.compiler
     platform = args.platform
     project = "nidavellir"
-    asan = args.asan
+    san = args.san
     cb = args.create_baseline_bench
 
     if args.mode == "run":
-        cmake_build(build_type, compiler, platform, asan)
-        run(build_type, compiler, platform, asan)
+        cmake_build(build_type, compiler, platform, san)
+        run(build_type, compiler, platform, san)
     elif args.mode == "build":
-        cmake_build(build_type, compiler, platform, asan)
+        cmake_build(build_type, compiler, platform, san)
     elif args.mode == "test":
-        cmake_build(build_type, compiler, platform, asan)
-        cmake_test(build_type, compiler, platform, asan)
+        cmake_build(build_type, compiler, platform, san)
+        cmake_test(build_type, compiler, platform, san)
     elif args.mode == "configure":
-        cmake_configure(compiler, platform, asan)
+        cmake_configure(compiler, platform, san)
         if compiler != "msvc":
-            copy_compile_commands(compiler, platform, asan)
+            copy_compile_commands(compiler, platform, san)
     elif args.mode == "workflow":
-        cmake_workflow(build_type, compiler, platform, asan)
+        cmake_workflow(build_type, compiler, platform, san)
         if compiler != "msvc":
-            copy_compile_commands(compiler, platform, asan)
+            copy_compile_commands(compiler, platform, san)
     elif args.mode == "bench":
-        cmake_build(build_type, compiler, platform, asan)
+        cmake_build(build_type, compiler, platform, san)
         bench(build_type, compiler, platform, project, cb)

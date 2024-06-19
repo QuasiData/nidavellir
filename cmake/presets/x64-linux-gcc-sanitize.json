@@ -1,0 +1,112 @@
+{
+  "version": 6,
+  "include": [
+    "base.json",
+    "os/linux.json",
+    "compilers/gcc.json"
+  ],
+  "configurePresets": [
+    {
+      "name": "x64-linux-gcc-sanitize",
+      "inherits": [
+        "sanitize",
+        "linux",
+        "gcc"
+      ],
+      "displayName": "x64 linux gcc sanitize"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "x64-linux-gcc-debug-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-gcc-sanitize",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-gcc-relwithdebinfo-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-gcc-sanitize",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-gcc-release-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-gcc-sanitize",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "x64-linux-gcc-debug-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-gcc-sanitize",
+      "configuration": "Debug"
+    },
+    {
+      "name": "x64-linux-gcc-relwithdebinfo-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-gcc-sanitize",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "x64-linux-gcc-release-sanitize",
+      "inherits": "sanitize",
+      "configurePreset": "x64-linux-gcc-sanitize",
+      "configuration": "Release"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "x64-linux-gcc-debug-sanitize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc-sanitize"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc-debug-sanitize"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc-debug-sanitize"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc-relwithdebinfo-sanitize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc-sanitize"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc-relwithdebinfo-sanitize"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc-relwithdebinfo-sanitize"
+        }
+      ]
+    },
+    {
+      "name": "x64-linux-gcc-release-sanitize",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "x64-linux-gcc-sanitize"
+        },
+        {
+          "type": "build",
+          "name": "x64-linux-gcc-release-sanitize"
+        },
+        {
+          "type": "test",
+          "name": "x64-linux-gcc-release-sanitize"
+        }
+      ]
+    }
+  ]
+}

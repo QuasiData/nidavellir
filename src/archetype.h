@@ -234,31 +234,99 @@ class RowIterator {
 static_assert(std::contiguous_iterator<RowIterator<usize>>);
 static_assert(std::contiguous_iterator<RowIterator<std::vector<f32>>>);
 
+/**
+ * @class Archetype
+ * @brief Manages a collection of components arranged in a contiguous memory layout.
+ */
 class Archetype {
-    static constexpr usize start_capacity{10};
-    std::vector<void*> rows;
-    CompTypeList infos;
-    usize capacity;
-    usize size{0};
+    static constexpr usize start_capacity{10}; ///< Initial capacity for components.
+    std::vector<void*> rows;                   ///< Storage for component data.
+    CompTypeList infos;                        ///< List of component type information.
+    usize capacity;                            ///< Current capacity of the archetype.
+    usize size{0};                             ///< Number of components currently stored.
 
   public:
+    /**
+     * @brief Constructs an Archetype with the given component type list.
+     * @param comp_infos List of component type information.
+     */
     explicit Archetype(CompTypeList comp_infos);
+
+    /**
+     * @brief Destructor for Archetype.
+     */
     ~Archetype();
 
     Archetype(const Archetype&) = delete;
     auto operator=(const Archetype&) -> Archetype& = delete;
-    Archetype(Archetype&&) = delete;
-    auto operator=(Archetype&&) -> Archetype& = delete;
 
+    /**
+     * @brief Move constructor for Archetype.
+     * @param other Archetype to be moved.
+     */
+    Archetype(Archetype&& other) noexcept;
+
+    /**
+     * @brief Move assignment operator for Archetype.
+     * @param other Archetype to be moved.
+     * @return Reference to the assigned Archetype.
+     */
+    auto operator=(Archetype&& other) noexcept -> Archetype&;
+
+    /**
+     * @brief Gets the capacity of the Archetype.
+     * @return Current capacity.
+     */
+    [[nodiscard]] auto cap() const noexcept -> usize { return capacity; }
+
+    /**
+     * @brief Gets the number of components in the Archetype.
+     * @return Current number of components.
+     */
+    [[nodiscard]] auto len() const noexcept -> usize { return size; }
+
+    /**
+     * @brief Reserves additional capacity for the Archetype.
+     * @param new_capacity The new capacity to reserve.
+     */
     auto reserve(usize new_capacity) -> void;
 
+    /**
+     * @brief Grows the Archetype by some amount.
+     */
+    auto grow() -> void;
+
+    /**
+     * @brief Swaps the components at two specified columns.
+     * @param first Index of the first column.
+     * @param second Index of the second column.
+     */
+    auto swap(usize first, usize second) -> void;
+
+    /**
+     * @brief Removes the component at the specified column.
+     * @param col Index of the column to remove.
+     * @return Index to the column that was last before removal(the len after removal).
+     */
     [[nodiscard]] auto remove(usize col) -> usize;
 
+    /**
+     * @brief Adds a new column to the Archetype.
+     *
+     * 'row_indices' should be a container which in each position
+     * contains the row within which to the place the corresponding component.
+     *
+     * @tparam T Type of the index container.
+     * @tparam Ts Types of the components.
+     * @param row_indices Container of row indices.
+     * @param args Components to be added.
+     * @return Index of the added column.
+     */
     template<typename T, Component... Ts>
         requires std::ranges::contiguous_range<T> and std::same_as<usize, std::ranges::range_value_t<T>>
     [[nodiscard]] auto emplace_back(T&& row_indices, Ts&&... args) -> usize {
         if (capacity == size) {
-            reserve(capacity * 2);
+            grow();
         }
 
         auto func = [&]<Component Ty>(const usize index, Ty&& t) {
@@ -268,10 +336,17 @@ class Archetype {
         usize i{0};
         (..., func(row_indices[i++], std::forward<Ts>(args)));
 
-        auto col = size++;
+        const auto col = size++;
         return col;
     }
 
+    /**
+     * @brief Gets a reference to a component at the specified position.
+     * @tparam T Type of the component.
+     * @param col Column index of the component.
+     * @param row Row index of the component.
+     * @return Reference to the component.
+     */
     template<Component T>
     [[nodiscard]] auto get_component(const usize col, const usize row) -> T& {
         assert(row < rows.size());
@@ -280,12 +355,24 @@ class Archetype {
         return *static_cast<T*>(internal_get(col, row));
     }
 
+    /**
+     * @brief Gets an iterator to the beginning of the specified row.
+     * @tparam T Type of the component.
+     * @param row Row index.
+     * @return Iterator to the beginning of the row.
+     */
     template<Component T>
     [[nodiscard]] auto begin(const usize row) -> RowIterator<T> {
         assert(row < rows.size() and infos[row].id == typeid(T).hash_code());
         return RowIterator<T>(static_cast<T*>(internal_get(0, row)));
     }
 
+    /**
+     * @brief Gets an iterator to the end of the specified row.
+     * @tparam T Type of the component.
+     * @param row Row index.
+     * @return Iterator to the end of the row.
+     */
     template<Component T>
     [[nodiscard]] auto end(const usize row) -> RowIterator<T> {
         assert(row < rows.size() and infos[row].id == typeid(T).hash_code());
@@ -293,6 +380,12 @@ class Archetype {
     }
 
   private:
+    /**
+     * @brief Gets a pointer to the memory at the specified position.
+     * @param col Column index of the component.
+     * @param row Row index of the component.
+     * @return Pointer to the memory.
+     */
     [[nodiscard]] auto internal_get(const usize col, const usize row) const -> void* {
         return static_cast<u8*>(rows[row]) + infos[row].size * col;
     }
