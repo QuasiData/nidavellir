@@ -8,6 +8,21 @@
 #include <cassert>
 
 namespace nid {
+/**
+ * @brief Sorts a component type list based on alignment and ID, with additional zipped ranges.
+ *
+ * This function takes a vector of component type infos and additional contiguous ranges,
+ * zips them together, and sorts the zipped ranges based on the alignment and ID of the components.
+ *
+ * @tparam Ts A parameter pack of contiguous ranges.
+ * @param lst The vector of component type infos to be sorted.
+ * @param range Additional ranges to be zipped with the component list.
+ *
+ * This function uses the `std::views::zip` to combine the component type infos and
+ * the additional ranges. The resulting zipped range is sorted using a custom
+ * comparator. The comparator prioritizes the `alignment` field of the component type infos
+ * in descending order, and in case of a tie, it prioritizes the `id` field in descending order.
+ */
 template<std::ranges::contiguous_range... Ts>
 auto sort_component_list(CompTypeList& lst, Ts&&... range) -> void {
     auto zip = std::views::zip(lst, std::forward<Ts>(range)...);
@@ -344,7 +359,7 @@ class Archetype {
             };
 
             usize i{0};
-            (..., func(row_indices[i++], std::forward<Ts>(args)));
+            (..., func(std::forward<T>(row_indices)[i++], std::forward<Ts>(args)));
         }
 
         const auto col = size++;

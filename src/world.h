@@ -43,6 +43,8 @@ class World {
 
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
         constexpr usize pack_size = sizeof...(Ts);
 
         CompTypeList comp_ts = {get_component_info<Ts>()...};
@@ -65,18 +67,18 @@ class World {
                 if (const auto comp_it = component_map.find(type.id); comp_it != component_map.end()) {
                     comp_it->second.insert({arch_id, RowRecord{.row = orig_indices[i]}});
                 } else {
-                    auto result = component_map.insert({type.id, ArchetypeMap{}});
-                    result.first->second.insert({arch_id, RowRecord{.row = orig_indices[i]}});
+                    auto [fst, _] = component_map.insert({type.id, ArchetypeMap{}});
+                    fst->second.insert({arch_id, RowRecord{.row = orig_indices[i]}});
                 }
             }
         };
 
         const auto new_entity_id = next_entity_id++;
         if (const auto arch_it = type_map.find(comp_ts); arch_it != type_map.end()) {
-            auto& arch_record = archetype_map.at(arch_it->second);
-            const auto col = arch_record.archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
+            auto& [archetype, entities] = archetype_map.at(arch_it->second);
+            const auto col = archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
 
-            arch_record.entities.emplace_back(new_entity_id);
+            entities.emplace_back(new_entity_id);
             entity_map.insert({new_entity_id, EntityRecord{.archetype = arch_it->second, .col = col}});
 
             func(arch_it->second, comp_ts);
@@ -84,10 +86,9 @@ class World {
             type_map.insert({std::move(comp_ts), arch_it->second});
         } else {
             const auto new_arch_id = next_archetype_id++;
-
-            auto result = archetype_map.insert(
+            auto [fst, _] = archetype_map.insert(
                 {new_arch_id, ArchetypeRecord{.archetype = Archetype(comp_ts), .entities = {new_entity_id}}});
-            const auto col = result.first->second.archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
+            const auto col = fst->second.archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
 
             entity_map.insert({new_entity_id, EntityRecord{.archetype = new_arch_id, .col = col}});
 
@@ -97,6 +98,7 @@ class World {
         }
 
         return new_entity_id;
+#pragma GCC diagnostic pop
     }
 
   private:

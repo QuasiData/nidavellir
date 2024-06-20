@@ -5,24 +5,62 @@
 using namespace nid;
 
 namespace {
-struct CopyMover {
+struct NonTrivialCopy {
+    std::vector<usize> vec{10};
     usize copies{0};
     usize moves{0};
 
-    CopyMover() = default;
-    ~CopyMover() = default;
+    NonTrivialCopy() = default;
+    ~NonTrivialCopy() = default;
 
-    CopyMover([[maybe_unused]] const CopyMover& other) {
+    NonTrivialCopy([[maybe_unused]] const NonTrivialCopy& other) : copies(other.copies) {
         ++copies;
     }
-    auto operator=([[maybe_unused]] const CopyMover& other) -> CopyMover& {
+
+    auto operator=([[maybe_unused]] const NonTrivialCopy& other) -> NonTrivialCopy& {
+        copies = other.copies;
         ++copies;
         return *this;
     }
-    CopyMover([[maybe_unused]] CopyMover&& other) noexcept {
+
+    NonTrivialCopy([[maybe_unused]] NonTrivialCopy&& other) noexcept : moves(other.moves) {
         ++moves;
     }
-    auto operator=([[maybe_unused]] CopyMover&& other) noexcept -> CopyMover& {
+
+    auto operator=([[maybe_unused]] NonTrivialCopy&& other) noexcept -> NonTrivialCopy& {
+        moves = other.moves;
+        ++moves;
+        return *this;
+    }
+};
+
+static_assert(!std::is_trivially_copyable_v<NonTrivialCopy>);
+
+struct Relocatable {
+    using is_relocatable = void;
+    std::vector<usize> vec{10};
+    usize copies{0};
+    usize moves{0};
+
+    Relocatable() = default;
+    ~Relocatable() = default;
+
+    Relocatable([[maybe_unused]] const Relocatable& other) : copies(other.copies) {
+        ++copies;
+    }
+
+    auto operator=([[maybe_unused]] const Relocatable& other) -> Relocatable& {
+        copies = other.copies;
+        ++copies;
+        return *this;
+    }
+
+    Relocatable([[maybe_unused]] Relocatable&& other) noexcept : moves(other.moves) {
+        ++moves;
+    }
+
+    auto operator=([[maybe_unused]] Relocatable&& other) noexcept -> Relocatable& {
+        moves = other.moves;
         ++moves;
         return *this;
     }

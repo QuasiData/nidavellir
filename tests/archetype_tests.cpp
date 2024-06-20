@@ -28,34 +28,6 @@ template<typename... Ts>
     return lst;
 }
 
-struct TrivialCopy {
-    usize copies{0};
-    usize moves{0};
-
-    TrivialCopy() = default;
-    ~TrivialCopy() = default;
-
-    TrivialCopy([[maybe_unused]] const TrivialCopy& other) : copies(other.copies) {
-        ++copies;
-    }
-
-    auto operator=([[maybe_unused]] const TrivialCopy& other) -> TrivialCopy& {
-        copies = other.copies;
-        ++copies;
-        return *this;
-    }
-
-    TrivialCopy([[maybe_unused]] TrivialCopy&& other) noexcept : moves(other.moves) {
-        ++moves;
-    }
-
-    auto operator=([[maybe_unused]] TrivialCopy&& other) noexcept -> TrivialCopy& {
-        moves = other.moves;
-        ++moves;
-        return *this;
-    }
-};
-
 struct NonTrivialCopy {
     std::vector<usize> vec{10};
     usize copies{0};
@@ -84,6 +56,8 @@ struct NonTrivialCopy {
         return *this;
     }
 };
+
+static_assert(!std::is_trivially_copyable_v<NonTrivialCopy>);
 
 struct Relocatable {
     using is_relocatable = void;
@@ -150,7 +124,7 @@ class ArchetypeTest : public testing::Test {
     CompTypeList lste = get_sorted_infos<>();
     Archetype arche;
 
-    CompTypeList lstcopy = get_sorted_infos<TrivialCopy, NonTrivialCopy, Relocatable>();
+    CompTypeList lstcopy = get_sorted_infos<NonTrivialCopy, Relocatable>();
     std::vector<usize> row_copy;
     Archetype archcopy;
 
@@ -171,7 +145,7 @@ class ArchetypeTest : public testing::Test {
         const auto l1 = get_infos<T1, T2>();
         const auto l2 = get_infos<T2, T3>();
         const auto l3 = get_infos<T3, T4>();
-        const auto lc = get_infos<TrivialCopy, NonTrivialCopy, Relocatable>();
+        const auto lc = get_infos<NonTrivialCopy, Relocatable>();
 
         for (usize i{0}; i < l1.size(); ++i) {
             for (usize j{0}; j < lst1.size(); ++j) {
@@ -219,7 +193,7 @@ class ArchetypeTest : public testing::Test {
             [[maybe_unused]] auto _2 = arch2.emplace_back(row2, t2, t3);
             [[maybe_unused]] auto _3 = arch3.emplace_back(row3, t3, t4);
             [[maybe_unused]] auto _e = arche.emplace_back(std::vector<usize>{});
-            [[maybe_unused]] auto _c = archcopy.emplace_back(row_copy, TrivialCopy{}, NonTrivialCopy{}, Relocatable{});
+            [[maybe_unused]] auto _c = archcopy.emplace_back(row_copy, NonTrivialCopy{}, Relocatable{});
         }
     }
 };
@@ -432,29 +406,23 @@ TEST_F(ArchetypeTest, swap_empty) {
 }
 
 TEST_F(ArchetypeTest, no_copies) {
-    auto& t_c = archcopy.get_component<TrivialCopy>(0, row_copy[0]);
-    auto& n_c = archcopy.get_component<NonTrivialCopy>(0, row_copy[1]);
-    auto& r_c = archcopy.get_component<Relocatable>(0, row_copy[2]);
-    EXPECT_EQ(t_c.copies, 0);
-    EXPECT_EQ(t_c.moves, 1);
+    const auto& n_c = archcopy.get_component<NonTrivialCopy>(archcopy.len() - 1, row_copy[0]);
+    const auto& r_c = archcopy.get_component<Relocatable>(archcopy.len() - 1, row_copy[1]);
 
     EXPECT_EQ(n_c.copies, 0);
-    EXPECT_GT(n_c.moves, 1);
+    EXPECT_EQ(n_c.moves, 1);
 
     EXPECT_EQ(r_c.copies, 0);
     EXPECT_EQ(r_c.moves, 1);
 
     archcopy.swap(archcopy.len() - 1, 0);
-    t_c = archcopy.get_component<TrivialCopy>(0, row_copy[0]);
-    n_c = archcopy.get_component<NonTrivialCopy>(0, row_copy[1]);
-    r_c = archcopy.get_component<Relocatable>(0, row_copy[2]);
+    const auto& n_c2 = archcopy.get_component<NonTrivialCopy>(0, row_copy[0]);
+    const auto& r_c2 = archcopy.get_component<Relocatable>(0, row_copy[1]);
 
-    EXPECT_EQ(t_c.copies, 0);
-    EXPECT_EQ(t_c.moves, 1);
+    EXPECT_EQ(n_c2.copies, 0);
+    EXPECT_GT(n_c2.moves, 1);
+    EXPECT_LT(n_c2.moves, 4);
 
-    EXPECT_EQ(n_c.copies, 0);
-    EXPECT_GT(n_c.moves, 1);
-
-    EXPECT_EQ(r_c.copies, 0);
-    EXPECT_EQ(r_c.moves, 1);
+    EXPECT_EQ(r_c2.copies, 0);
+    EXPECT_EQ(r_c2.moves, 1);
 }

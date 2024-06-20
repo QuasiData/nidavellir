@@ -4,6 +4,7 @@
 
 namespace nid {
 namespace {
+#ifndef NDEBUG
     auto check_align_order(const CompTypeList& lst) -> bool {
         usize prev_alignment = std::numeric_limits<usize>::max();
         return std::ranges::all_of(lst, [&prev_alignment](const CompTypeInfo& info) {
@@ -12,6 +13,7 @@ namespace {
             return cond;
         });
     }
+#endif
 } // namespace
 
 Archetype::Archetype(CompTypeList comp_infos) : rows(comp_infos.size()), infos(std::move(comp_infos)), capacity(start_capacity) {
