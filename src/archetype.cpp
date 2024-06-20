@@ -89,13 +89,13 @@ auto Archetype::swap(const usize first, const usize second) -> void {
         void* ptr_second = internal_get(second, row);
 
         // Move construct first element at the back of buffer
-        infos[row].move_ctor(end, ptr_first, 1);
+        infos[row].move_ctor_dtor(end, ptr_first, 1);
 
         // Move assign from second to first
-        infos[row].move_assign(ptr_first, ptr_second, 1);
+        infos[row].move_ctor_dtor(ptr_first, ptr_second, 1);
 
         // Move assign and destroy from end to second
-        infos[row].move_assign_dtor(ptr_second, end, 1);
+        infos[row].move_ctor_dtor(ptr_second, end, 1);
     }
 }
 

@@ -1,9 +1,12 @@
 #pragma once
 #include "core.h"
 
+#include <compare>
+
+#include "ankerl/unordered_dense.h"
+
 namespace nid {
-using IdType = u64;
-using EntityId = IdType;
+using EntityId = usize;
 using ComponentId = usize;
-using ArchetypeId = IdType;
+using ArchetypeId = usize;
 } // namespace nid

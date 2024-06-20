@@ -120,6 +120,10 @@ struct CompTypeInfo {
      * @brief The size of the component type in bytes.
      */
     usize size;
+
+    [[nodiscard]] auto operator==(const CompTypeInfo& rhs) const noexcept -> bool {
+        return id == rhs.id and move_assign == rhs.move_assign;
+    }
 };
 
 /**

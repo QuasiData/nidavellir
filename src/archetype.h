@@ -5,10 +5,19 @@
 #include <ranges>
 #include <algorithm>
 #include <vector>
-#include <new>
 #include <cassert>
 
 namespace nid {
+template<std::ranges::contiguous_range... Ts>
+auto sort_component_list(CompTypeList& lst, Ts&&... range) -> void {
+    auto zip = std::views::zip(lst, std::forward<Ts>(range)...);
+    std::ranges::sort(zip, [](const auto& lhs, const auto& rhs) {
+        return std::get<0>(lhs).alignment > std::get<0>(rhs).alignment or
+               (std::get<0>(lhs).alignment == std::get<0>(rhs).alignment and
+                std::get<0>(lhs).id > std::get<0>(rhs).id);
+    });
+}
+
 /**
  * @brief Sorts a component type list based on alignment and ID.
  *
