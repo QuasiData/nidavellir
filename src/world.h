@@ -2,6 +2,9 @@
 #include "archetype.h"
 #include "comp_type_info.h"
 #include "identifiers.h"
+
+#include <numeric>
+
 #include <ankerl/unordered_dense.h>
 
 namespace nid {
@@ -43,13 +46,16 @@ class World {
 
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
+
+#if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif
         constexpr usize pack_size = sizeof...(Ts);
 
         CompTypeList comp_ts = {get_component_info<Ts>()...};
         std::array<usize, pack_size> orig_indices;
-        std::ranges::iota(orig_indices, usize{0});
+        std::iota(orig_indices.begin(), orig_indices.end(), usize{0});
         sort_component_list(comp_ts, orig_indices);
 
         std::array<usize, pack_size> row_indices;
@@ -98,7 +104,9 @@ class World {
         }
 
         return new_entity_id;
+#if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
 #pragma GCC diagnostic pop
+#endif
     }
 
   private:
