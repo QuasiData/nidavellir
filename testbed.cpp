@@ -45,7 +45,7 @@ auto main() -> int {
     T3 t31{.x = 3, .y = 3, .floats = {1, 2, 3}};
     T4 t41{.x = 4, .y = 4, .message = "1234"};
 
-    for (usize i{0}; i < 10000; ++i) {
+    for (usize i{0}; i < 100000000; ++i) {
         world.add(entities[3], t11, t21, t31, t41);
     }
 

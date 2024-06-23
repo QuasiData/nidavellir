@@ -371,6 +371,28 @@ auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
     }
 }
 
+constexpr auto fnv1a_hash(const char* str) -> usize {
+    usize hash = 0xcbf29ce484222325;
+    while (*str != 0) {
+        hash ^= static_cast<std::size_t>(*str);
+        hash *= 0x100000001b3;
+        ++str;
+    }
+    return hash;
+}
+
+template<Component T>
+constexpr auto type_id() -> usize {
+#if defined(_MSC_VER)
+    return fnv1a_hash(__FUNCSIG__);
+#elif defined(__GNUC__) || defined(__clang__)
+    return fnv1a_hash(__PRETTY_FUNCTION__);
+#else
+    // Runtime fallback
+    return fnv1a_hash(typeid(T).name());
+#endif
+}
+
 /**
  * @brief Retrieves the component type information for type `T`.
  *
@@ -385,7 +407,7 @@ template<Component T>
     using Ty = std::decay_t<T>;
 
     auto info = CompTypeInfo{
-        .id = typeid(Ty).hash_code(),
+        .id = type_id<Ty>(),
         .alignment = alignof(T),
         .ctor = &ctor_impl<Ty>,
         .dtor = &dtor_impl<Ty>,

@@ -425,7 +425,7 @@ class Archetype {
     [[nodiscard]] auto get_component(const usize col, const usize row) -> T& {
         assert(row < rows.size());
         assert(col < size);
-        assert(infos[row].id == typeid(T).hash_code());
+        assert(infos[row].id == type_id<T>());
         return *static_cast<T*>(get(col, row));
     }
 
@@ -437,7 +437,7 @@ class Archetype {
      */
     template<Component T>
     [[nodiscard]] auto begin(const usize row) -> RowIterator<T> {
-        assert(row < rows.size() and infos[row].id == typeid(T).hash_code());
+        assert(row < rows.size() and infos[row].id == type_id<T>());
         return RowIterator<T>(static_cast<T*>(get(0, row)));
     }
 
@@ -449,7 +449,7 @@ class Archetype {
      */
     template<Component T>
     [[nodiscard]] auto end(const usize row) -> RowIterator<T> {
-        assert(row < rows.size() and infos[row].id == typeid(T).hash_code());
+        assert(row < rows.size() and infos[row].id == type_id<T>());
         return RowIterator<T>(static_cast<T*>(get(size, row)));
     }
 

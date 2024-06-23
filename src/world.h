@@ -125,7 +125,7 @@ class World {
         auto& arch = archetype_map.at(ent_rec.archetype);
 
         auto func = [&]<typename T>() -> T& {
-            const auto row = arch.archetype.get_row(typeid(std::decay_t<T>).hash_code());
+            const auto row = arch.archetype.get_row(type_id<std::decay_t<T>>());
             return arch.archetype.get_component<T>(ent_rec.col, row);
         };
 
@@ -149,16 +149,12 @@ class World {
         comp_ts.reserve(old_arch_comps.size() + sizeof...(Ts));
         comp_ts.insert(comp_ts.end(), {get_component_info<Ts>()...});
 
-#if 0
         constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
         std::array<u8, stack_buffer_size> buffer{};
         std::pmr::monotonic_buffer_resource resource(buffer.data(), stack_buffer_size);
         std::pmr::vector<CompTypeInfo> in_pack_types{&resource};
         std::pmr::vector<CompTypeInfo> not_in_pack_types{&resource};
-#else
-        std::vector<CompTypeInfo> in_pack_types{};
-        std::vector<CompTypeInfo> not_in_pack_types{};
-#endif
+
         auto in_pack = [&comp_ts](const CompTypeInfo& info1) {
             return std::ranges::find_if(comp_ts, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != comp_ts.end();
         };
@@ -199,7 +195,7 @@ class World {
         }
 
         auto func = [&]<Component T>(T&& t) {
-            void* dst_ptr = arch.get(target_col, arch.get_row(typeid(std::decay_t<T>).hash_code()));
+            void* dst_ptr = arch.get(target_col, arch.get_row(type_id<std::decay_t<T>>()));
             new (dst_ptr) std::decay_t<T>(std::forward<T>(t));
         };
 
