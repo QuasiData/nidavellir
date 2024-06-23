@@ -142,6 +142,7 @@ class World {
 
     template<Component... Ts>
     auto add(const EntityId entity, Ts&&... pack) -> void {
+        static_assert(sizeof...(Ts) > 0);
         const auto [src_arch_id, col] = entity_map.at(entity);
         auto& [src_arch, src_entities, _] = archetype_map.at(src_arch_id);
         const auto& src_arch_comps = src_arch.type();

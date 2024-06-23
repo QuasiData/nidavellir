@@ -40,13 +40,25 @@ auto main() -> int {
         entities.emplace_back(world.spawn(t1, t2, t3, t4));
     }
 
-    T1 t11{.x = 1, .y = 1};
-    T2 t21{.x = 2, .y = 2, .z = 2, .w = 2};
-    T3 t31{.x = 3, .y = 3, .floats = {1, 2, 3}};
-    T4 t41{.x = 4, .y = 4, .message = "1234"};
+    EntityId id{};
+    for (usize i{0}; i < 10000000; ++i) {
+        id = world.spawn();
+        world.add(id, t1);
 
-    for (usize i{0}; i < 100000000; ++i) {
-        world.add(entities[3], t11, t21, t31, t41);
+        id = world.spawn();
+        world.add(id, t1, t2);
+
+        id = world.spawn(t1);
+        world.add(id, t2);
+
+        id = world.spawn(t1);
+        world.add(id, t1, t2);
+
+        id = world.spawn(t1, t2);
+        world.add(id, t1);
+
+        id = world.spawn(t1, t2);
+        world.add(id, t1, t2);
     }
 
     return 0;
