@@ -36,6 +36,8 @@ class World {
     ankerl::unordered_dense::map<ComponentId, ArchetypeMap> component_map;
     ankerl::unordered_dense::map<CompTypeList, ArchetypeId, TypeHash> type_map;
 
+    CompTypeList scratch_comp_ts;
+
     ArchetypeId next_archetype_id{0};
     EntityId next_entity_id{0};
 
@@ -147,9 +149,7 @@ class World {
         auto& [src_arch, src_entities, _] = archetype_map.at(src_arch_id);
         const auto& src_arch_comps = src_arch.type();
 
-        CompTypeList comp_ts;
-        comp_ts.reserve(src_arch_comps.size() + sizeof...(Ts));
-        comp_ts.insert(comp_ts.end(), {get_component_info<Ts>()...});
+        scratch_comp_ts.insert(scratch_comp_ts.begin(), {get_component_info<Ts>()...});
 
         constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
         std::array<u8, stack_buffer_size> buffer{};
@@ -157,8 +157,8 @@ class World {
         std::pmr::vector<CompTypeInfo> in_pack_types{&resource};
         std::pmr::vector<CompTypeInfo> not_in_pack_types{&resource};
 
-        auto in_pack = [&comp_ts](const CompTypeInfo& info1) {
-            return std::ranges::find_if(comp_ts, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != comp_ts.end();
+        auto in_pack = [&](const CompTypeInfo& info1) {
+            return std::ranges::find_if(scratch_comp_ts, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != scratch_comp_ts.end();
         };
 
         for (const auto& item : src_arch_comps) {
@@ -169,10 +169,10 @@ class World {
             }
         }
 
-        std::ranges::copy(not_in_pack_types, std::back_inserter(comp_ts));
-        sort_component_list(comp_ts);
+        std::ranges::copy(not_in_pack_types, std::back_inserter(scratch_comp_ts));
+        sort_component_list(scratch_comp_ts);
 
-        auto& [arch, entities, arch_id] = find_or_create_archetype(comp_ts);
+        auto& [arch, entities, arch_id] = find_or_create_archetype(scratch_comp_ts);
 
         usize target_col = 0;
         if (src_arch_id == arch_id) {
@@ -214,6 +214,8 @@ class World {
             src_entities.pop_back();
             src_arch.decrease_size(1);
         }
+
+        scratch_comp_ts.clear();
     }
 };
 } // namespace nid
