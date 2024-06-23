@@ -1,7 +1,9 @@
 #pragma once
 #include "core.h"
 #include "comp_type_info.h"
+#include "identifiers.h"
 
+#include <ankerl/unordered_dense.h>
 #include <ranges>
 #include <algorithm>
 #include <vector>
@@ -263,11 +265,12 @@ static_assert(std::contiguous_iterator<RowIterator<std::vector<f32>>>);
  * @brief Manages a collection of components arranged in a contiguous memory layout.
  */
 class Archetype {
-    static constexpr usize start_capacity{10}; ///< Initial capacity for components.
-    std::vector<void*> rows;                   ///< Storage for component data.
-    CompTypeList infos;                        ///< List of component type information.
-    usize capacity;                            ///< Current capacity of the archetype.
-    usize size{0};                             ///< Number of components currently stored.
+    static constexpr usize start_capacity{10};                 ///< Initial capacity for components.
+    std::vector<void*> rows;                                   ///< Storage for component data.
+    CompTypeList infos;                                        ///< List of component type information.
+    ankerl::unordered_dense::map<ComponentId, usize> comp_map; ///< Map from componentid to row.
+    usize capacity;                                            ///< Current capacity of the archetype.
+    usize size{0};                                             ///< Number of components currently stored.
 
   public:
     /**
@@ -321,6 +324,37 @@ class Archetype {
     auto grow() -> void;
 
     /**
+     * @brief Prepares the Archetype to push new components by ensuring sufficient capacity.
+     *
+     * This function ensures that the Archetype has enough capacity to add the specified number of new components.
+     * If the current capacity is insufficient, it will grow the capacity to accommodate the new components.
+     *
+     * @param count The number of new components to be added.
+     */
+    auto prepare_push(usize count) -> void;
+
+    /**
+     * @brief Increases the current size of the Archetype by the specified count.
+     *
+     * This function increments the size of the Archetype by the given count, which represents the number of new columns added.
+     *
+     * @param count The number of columns to add to the current size.
+     */
+    auto increase_size(const usize count) -> void { size += count; }
+
+    /**
+     * @brief Decrease the current size of the Archetype by the specified count.
+     *
+     * This function decrements the size of the Archetype by the given count, which represents the number of columns that are removed.
+     *
+     * @param count The number of columns to remove from the current size.
+     */
+    auto decrease_size(const usize count) -> void {
+        assert(count <= size and size > 0);
+        size -= count;
+    }
+
+    /**
      * @brief Swaps the components at two specified columns.
      * @param first Index of the first column.
      * @param second Index of the second column.
@@ -333,6 +367,20 @@ class Archetype {
      * @return Index to the column that was last before removal(the len after removal).
      */
     [[nodiscard]] auto remove(usize col) -> usize;
+
+    /**
+     * @brief Retrieves the component type list.
+     * @return A constant reference to the CompTypeList containing component information.
+     */
+    [[nodiscard]] auto type() -> const CompTypeList& { return infos; }
+
+    /**
+     * @brief Gets the row index associated with the specified component ID.
+     * @param id The component ID for which to get the row index.
+     * @return The row index associated with the specified component ID.
+     * @throws std::out_of_range if the component ID is not found in the map.
+     */
+    [[nodiscard]] auto get_row(const ComponentId id) const -> usize { return comp_map.at(id); }
 
     /**
      * @brief Adds a new column to the Archetype.
@@ -348,7 +396,7 @@ class Archetype {
      */
     template<typename T, Component... Ts>
         requires std::ranges::contiguous_range<T> and std::same_as<usize, std::ranges::range_value_t<T>>
-    [[nodiscard]] auto emplace_back(T&& row_indices, Ts&&... args) -> usize {
+    [[nodiscard]] auto emplace_back(T&& row_indices, Ts&&... pack) -> usize {
         if (capacity == size) {
             grow();
         }
@@ -359,7 +407,7 @@ class Archetype {
             };
 
             usize i{0};
-            (..., func(std::forward<T>(row_indices)[i++], std::forward<Ts>(args)));
+            (..., func(std::forward<T>(row_indices)[i++], std::forward<Ts>(pack)));
         }
 
         const auto col = size++;
@@ -378,7 +426,7 @@ class Archetype {
         assert(row < rows.size());
         assert(col < size);
         assert(infos[row].id == typeid(T).hash_code());
-        return *static_cast<T*>(internal_get(col, row));
+        return *static_cast<T*>(get(col, row));
     }
 
     /**
@@ -390,7 +438,7 @@ class Archetype {
     template<Component T>
     [[nodiscard]] auto begin(const usize row) -> RowIterator<T> {
         assert(row < rows.size() and infos[row].id == typeid(T).hash_code());
-        return RowIterator<T>(static_cast<T*>(internal_get(0, row)));
+        return RowIterator<T>(static_cast<T*>(get(0, row)));
     }
 
     /**
@@ -402,17 +450,16 @@ class Archetype {
     template<Component T>
     [[nodiscard]] auto end(const usize row) -> RowIterator<T> {
         assert(row < rows.size() and infos[row].id == typeid(T).hash_code());
-        return RowIterator<T>(static_cast<T*>(internal_get(size, row)));
+        return RowIterator<T>(static_cast<T*>(get(size, row)));
     }
 
-  private:
     /**
      * @brief Gets a pointer to the memory at the specified position.
      * @param col Column index of the component.
      * @param row Row index of the component.
      * @return Pointer to the memory.
      */
-    [[nodiscard]] auto internal_get(const usize col, const usize row) const -> void* {
+    [[nodiscard]] auto get(const usize col, const usize row) const -> void* {
         return static_cast<u8*>(rows[row]) + infos[row].size * col;
     }
 };

@@ -200,3 +200,65 @@ TEST_F(WorldTest, get_comp_not_found) {
     auto ent = world.spawn(t2, t3, T4{.x = 20, .y = 30, .message = "GetTest"});
     EXPECT_THROW([[maybe_unused]] auto t_1 = world.get<T1>(ent), std::out_of_range);
 }
+
+TEST_F(WorldTest, add1) {
+    const auto ent = world.spawn(t1, t2, t3);
+    world.add(ent, t4);
+    const auto& t44 = world.get<T4>(ent);
+    EXPECT_EQ(t44.message, t4.message);
+
+    const auto ent2 = world.spawn();
+    world.add(ent2, t1, t2, t3, t4);
+    const auto& [t_1, t_2, t_3, t_4] = world.get<T1, T2, T3, T4>(ent2);
+    EXPECT_EQ(t_1.x, t1.x);
+    EXPECT_EQ(t_2.x, t2.x);
+    EXPECT_EQ(t_3.floats, t3.floats);
+    EXPECT_EQ(t_4.message, t4.message);
+}
+
+TEST_F(WorldTest, add2) {
+    const auto ent2 = world.spawn();
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    world.add(ent2, test_1, test_2);
+    const auto& [t_1, t_2] = world.get<T1, T2>(ent2);
+    EXPECT_EQ(t_1.x, test_1.x);
+    EXPECT_EQ(t_2.x, test_2.x);
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+    world.add(ent2, test_3, test_4);
+    const auto& [t_11, t_22, t_3, t_4] = world.get<T1, T2, T3, T4>(ent2);
+    EXPECT_EQ(t_11.x, test_1.x);
+    EXPECT_EQ(t_22.x, test_2.x);
+    EXPECT_EQ(t_3.floats, test_3.floats);
+    EXPECT_EQ(t_4.message, test_4.message);
+}
+
+TEST_F(WorldTest, add3) {
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+    const auto ent2 = world.spawn(t1, t2);
+    const auto& [t_11, t_21] = world.get<T1, T2>(ent2);
+    EXPECT_EQ(t_11.x, t1.x);
+    EXPECT_EQ(t_21.x, t2.x);
+
+    world.add(ent2, test_1, test_2, test_3, test_4);
+    const auto& [t_12, t_22, t_32, t_42] = world.get<T1, T2, T3, T4>(ent2);
+    EXPECT_EQ(t_12.x, test_1.x);
+    EXPECT_EQ(t_22.x, test_2.x);
+    EXPECT_EQ(t_32.floats, test_3.floats);
+    EXPECT_EQ(t_42.message, test_4.message);
+}
+
+TEST_F(WorldTest, add4) {
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+
+    for (usize i{0}; i < 10000; ++i) {
+        world.add(entities[3], test_1, test_2, test_3, test_4);
+    }
+}

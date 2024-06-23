@@ -4,16 +4,18 @@
 #include "identifiers.h"
 
 #include <numeric>
+#include <ranges>
+#include <tuple>
 
 #include <ankerl/unordered_dense.h>
-#include <stdexcept>
-#include <tuple>
+#include <type_traits>
 
 namespace nid {
 class World {
     struct ArchetypeRecord {
         Archetype archetype;
         std::vector<EntityId> entities;
+        ArchetypeId id;
     };
 
     struct EntityRecord {
@@ -25,7 +27,6 @@ class World {
         usize row;
     };
 
-    using EntityMap = ankerl::unordered_dense::map<usize, EntityId>;
     using ArchetypeMap = ankerl::unordered_dense::map<ArchetypeId, RowRecord>;
 
     ankerl::unordered_dense::map<ArchetypeId, ArchetypeRecord> archetype_map;
@@ -47,6 +48,10 @@ class World {
     auto operator=(World&&) = delete;
 
     auto despawn(EntityId entity) -> void;
+
+    auto swap(ArchetypeRecord& arch_rec, usize col1, usize col2) -> void;
+
+    auto find_or_create_archetype(const CompTypeList& comp_ts) -> ArchetypeRecord&;
 
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
@@ -101,28 +106,12 @@ class World {
             Create an Archetype and add a new column, add any components that didnt exist already
         */
         const auto new_entity_id = next_entity_id++;
-        if (const auto arch_it = type_map.find(comp_ts); arch_it != type_map.end()) {
-            auto& [archetype, entities] = archetype_map.at(arch_it->second);
-            const auto col = archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
-
-            entities.emplace_back(new_entity_id);
-            entity_map.insert({new_entity_id, EntityRecord{.archetype = arch_it->second, .col = col}});
-
-            func(arch_it->second, comp_ts);
-
-            type_map.insert({std::move(comp_ts), arch_it->second});
-        } else {
-            const auto new_arch_id = next_archetype_id++;
-            auto [fst, _] = archetype_map.insert(
-                {new_arch_id, ArchetypeRecord{.archetype = Archetype(comp_ts), .entities = {new_entity_id}}});
-            const auto col = fst->second.archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
-
-            entity_map.insert({new_entity_id, EntityRecord{.archetype = new_arch_id, .col = col}});
-
-            func(new_arch_id, comp_ts);
-
-            type_map.insert({std::move(comp_ts), new_arch_id});
-        }
+        auto& arch_rec = find_or_create_archetype(comp_ts);
+        const auto col = arch_rec.archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
+        arch_rec.entities.push_back(new_entity_id);
+        entity_map.insert({new_entity_id, EntityRecord{.archetype = arch_rec.id, .col = col}});
+        func(arch_rec.id, comp_ts);
+        type_map.insert({std::move(comp_ts), arch_rec.id});
 
         return new_entity_id;
 #if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
@@ -136,7 +125,7 @@ class World {
         auto& arch = archetype_map.at(ent_rec.archetype);
 
         auto func = [&]<typename T>() -> T& {
-            const auto row = component_map.at(typeid(std::decay_t<T>).hash_code()).at(ent_rec.archetype).row;
+            const auto row = arch.archetype.get_row(typeid(std::decay_t<T>).hash_code());
             return arch.archetype.get_component<T>(ent_rec.col, row);
         };
 
@@ -150,6 +139,84 @@ class World {
         }
     }
 
-  private:
+    template<Component... Ts>
+    auto add(const EntityId entity, Ts&&... pack) -> void {
+        const auto ent_rec = entity_map.at(entity);
+        auto& old_arch = archetype_map.at(ent_rec.archetype);
+        const auto& old_arch_comps = old_arch.archetype.type();
+
+        CompTypeList comp_ts;
+        comp_ts.reserve(old_arch_comps.size() + sizeof...(Ts));
+        comp_ts.insert(comp_ts.end(), {get_component_info<Ts>()...});
+
+#if 0
+        constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
+        std::array<u8, stack_buffer_size> buffer{};
+        std::pmr::monotonic_buffer_resource resource(buffer.data(), stack_buffer_size);
+        std::pmr::vector<CompTypeInfo> in_pack_types{&resource};
+        std::pmr::vector<CompTypeInfo> not_in_pack_types{&resource};
+#else
+        std::vector<CompTypeInfo> in_pack_types{};
+        std::vector<CompTypeInfo> not_in_pack_types{};
+#endif
+        auto in_pack = [&comp_ts](const CompTypeInfo& info1) {
+            return std::ranges::find_if(comp_ts, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != comp_ts.end();
+        };
+
+        for (const auto& item : old_arch_comps) {
+            if (in_pack(item)) {
+                in_pack_types.push_back(item);
+            } else {
+                not_in_pack_types.push_back(item);
+            }
+        }
+
+        std::ranges::copy(not_in_pack_types, std::back_inserter(comp_ts));
+        sort_component_list(comp_ts);
+
+        auto& arch_rec = find_or_create_archetype(comp_ts);
+        auto& arch = arch_rec.archetype;
+
+        usize target_col = 0;
+        if (old_arch.id == arch_rec.id) {
+            target_col = ent_rec.col;
+        } else {
+            target_col = arch.len();
+            arch_rec.archetype.prepare_push(1);
+        }
+
+        for (const auto& info : not_in_pack_types) {
+            void* src_ptr = old_arch.archetype.get(ent_rec.col, old_arch.archetype.get_row(info.id));
+            void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
+
+            info.move_ctor_dtor(dst_ptr, src_ptr, 1);
+        }
+
+        for (const auto& info : in_pack_types) {
+            void* src_ptr = old_arch.archetype.get(ent_rec.col, old_arch.archetype.get_row(info.id));
+
+            info.dtor(src_ptr, 1);
+        }
+
+        auto func = [&]<Component T>(T&& t) {
+            void* dst_ptr = arch.get(target_col, arch.get_row(typeid(std::decay_t<T>).hash_code()));
+            new (dst_ptr) std::decay_t<T>(std::forward<T>(t));
+        };
+
+        (func(pack), ...);
+
+        if (old_arch.id != arch_rec.id) {
+            entity_map.at(entity) = EntityRecord{.archetype = arch_rec.id, .col = target_col};
+            arch_rec.entities.push_back(entity);
+            arch.increase_size(1);
+
+            if (ent_rec.col < old_arch.entities.size() - 1) {
+                std::swap(old_arch.entities[ent_rec.col], old_arch.entities.back());
+                entity_map.at(old_arch.entities[ent_rec.col]).col = ent_rec.col;
+            }
+            old_arch.entities.pop_back();
+            old_arch.archetype.decrease_size(1);
+        }
+    }
 };
 } // namespace nid
