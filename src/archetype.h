@@ -391,7 +391,7 @@ class Archetype {
      * @tparam T Type of the index container.
      * @tparam Ts Types of the components.
      * @param row_indices Container of row indices.
-     * @param args Components to be added.
+     * @param pack Components to be added.
      * @return Index of the added column.
      */
     template<typename T, Component... Ts>

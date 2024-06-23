@@ -371,6 +371,15 @@ auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
     }
 }
 
+/**
+ * @brief Computes the FNV-1a hash for a given string at compile time.
+ *
+ * This function uses the FNV-1a hash algorithm to generate a hash value for the provided
+ * null-terminated string. It is a constexpr function, allowing it to be evaluated at compile time.
+ *
+ * @param str A pointer to a null-terminated string to be hashed.
+ * @return The computed hash value as a `usize`.
+ */
 constexpr auto fnv1a_hash(const char* str) -> usize {
     usize hash = 0xcbf29ce484222325;
     while (*str != 0) {
@@ -381,6 +390,16 @@ constexpr auto fnv1a_hash(const char* str) -> usize {
     return hash;
 }
 
+/**
+ * @brief Generates a unique ID for a given type at compile time.
+ *
+ * This function uses the FNV-1a hash algorithm to generate a unique ID based on the type's
+ * signature. It utilizes compiler-specific macros to obtain the type signature, ensuring
+ * uniqueness across different types.
+ *
+ * @tparam T The type for which to generate a unique ID.
+ * @return The computed unique ID as a `usize`.
+ */
 template<Component T>
 constexpr auto type_id() -> usize {
 #if defined(_MSC_VER)
@@ -403,7 +422,7 @@ constexpr auto type_id() -> usize {
  * @return A `CompTypeInfo` object containing the type information and lifecycle functions for type `T`.
  */
 template<Component T>
-[[nodiscard]] auto get_component_info() -> CompTypeInfo {
+[[nodiscard]] constexpr auto get_component_info() -> CompTypeInfo {
     using Ty = std::decay_t<T>;
 
     auto info = CompTypeInfo{

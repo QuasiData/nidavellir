@@ -1,3 +1,4 @@
+// ReSharper disable CppUseStructuredBinding
 #pragma once
 #include "archetype.h"
 #include "comp_type_info.h"
@@ -121,12 +122,12 @@ class World {
 
     template<Component... Ts>
     [[nodiscard]] auto get(const EntityId entity) -> decltype(auto) {
-        const auto ent_rec = entity_map.at(entity);
-        auto& arch = archetype_map.at(ent_rec.archetype);
+        const auto [arch_id, col] = entity_map.at(entity);
+        auto& [arch, entities, _] = archetype_map.at(arch_id);
 
         auto func = [&]<typename T>() -> T& {
-            const auto row = arch.archetype.get_row(type_id<std::decay_t<T>>());
-            return arch.archetype.get_component<T>(ent_rec.col, row);
+            const auto row = arch.get_row(type_id<std::decay_t<T>>());
+            return arch.get_component<T>(col, row);
         };
 
         auto tup = std::tie(func.template operator()<Ts>()...);
@@ -141,12 +142,12 @@ class World {
 
     template<Component... Ts>
     auto add(const EntityId entity, Ts&&... pack) -> void {
-        const auto ent_rec = entity_map.at(entity);
-        auto& old_arch = archetype_map.at(ent_rec.archetype);
-        const auto& old_arch_comps = old_arch.archetype.type();
+        const auto [src_arch_id, col] = entity_map.at(entity);
+        auto& [src_arch, src_entities, _] = archetype_map.at(src_arch_id);
+        const auto& src_arch_comps = src_arch.type();
 
         CompTypeList comp_ts;
-        comp_ts.reserve(old_arch_comps.size() + sizeof...(Ts));
+        comp_ts.reserve(src_arch_comps.size() + sizeof...(Ts));
         comp_ts.insert(comp_ts.end(), {get_component_info<Ts>()...});
 
         constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
@@ -159,7 +160,7 @@ class World {
             return std::ranges::find_if(comp_ts, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != comp_ts.end();
         };
 
-        for (const auto& item : old_arch_comps) {
+        for (const auto& item : src_arch_comps) {
             if (in_pack(item)) {
                 in_pack_types.push_back(item);
             } else {
@@ -170,26 +171,25 @@ class World {
         std::ranges::copy(not_in_pack_types, std::back_inserter(comp_ts));
         sort_component_list(comp_ts);
 
-        auto& arch_rec = find_or_create_archetype(comp_ts);
-        auto& arch = arch_rec.archetype;
+        auto& [arch, entities, arch_id] = find_or_create_archetype(comp_ts);
 
         usize target_col = 0;
-        if (old_arch.id == arch_rec.id) {
-            target_col = ent_rec.col;
+        if (src_arch_id == arch_id) {
+            target_col = col;
         } else {
             target_col = arch.len();
-            arch_rec.archetype.prepare_push(1);
+            arch.prepare_push(1);
         }
 
         for (const auto& info : not_in_pack_types) {
-            void* src_ptr = old_arch.archetype.get(ent_rec.col, old_arch.archetype.get_row(info.id));
+            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
             void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
 
             info.move_ctor_dtor(dst_ptr, src_ptr, 1);
         }
 
         for (const auto& info : in_pack_types) {
-            void* src_ptr = old_arch.archetype.get(ent_rec.col, old_arch.archetype.get_row(info.id));
+            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
 
             info.dtor(src_ptr, 1);
         }
@@ -201,17 +201,17 @@ class World {
 
         (func(pack), ...);
 
-        if (old_arch.id != arch_rec.id) {
-            entity_map.at(entity) = EntityRecord{.archetype = arch_rec.id, .col = target_col};
-            arch_rec.entities.push_back(entity);
+        if (src_arch_id != arch_id) {
+            entity_map.at(entity) = EntityRecord{.archetype = arch_id, .col = target_col};
+            entities.push_back(entity);
             arch.increase_size(1);
 
-            if (ent_rec.col < old_arch.entities.size() - 1) {
-                std::swap(old_arch.entities[ent_rec.col], old_arch.entities.back());
-                entity_map.at(old_arch.entities[ent_rec.col]).col = ent_rec.col;
+            if (col < src_entities.size() - 1) {
+                std::swap(src_entities[col], src_entities.back());
+                entity_map.at(src_entities[col]).col = col;
             }
-            old_arch.entities.pop_back();
-            old_arch.archetype.decrease_size(1);
+            src_entities.pop_back();
+            src_arch.decrease_size(1);
         }
     }
 };
