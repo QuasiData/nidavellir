@@ -23,7 +23,7 @@ namespace nid {
  */
 template<typename T>
 concept Component = std::is_move_assignable_v<std::decay_t<T>>
-                    and std::is_move_constructible_v<std::decay_t<T>>
+                    and std::is_nothrow_move_constructible_v<std::decay_t<T>>
                     and std::is_destructible_v<std::decay_t<T>>
                     and !std::is_pointer_v<std::decay_t<T>>;
 // clang-format on

@@ -22,16 +22,6 @@ auto World::despawn(const EntityId entity) -> void {
     entity_map.erase(entity);
 }
 
-auto World::swap(ArchetypeRecord& arch_rec, const usize col1, const usize col2) -> void {
-    if (col1 == col2) {
-        return;
-    }
-
-    entity_map.at(arch_rec.entities[col1]).col = col2;
-    entity_map.at(arch_rec.entities[col2]).col = col1;
-    std::swap(arch_rec.entities[col1], arch_rec.entities[col2]);
-}
-
 auto World::find_or_create_archetype(const CompTypeList& comp_ts) -> ArchetypeRecord& {
     if (const auto arch_it = type_map.find(comp_ts); arch_it != type_map.end()) {
         return archetype_map.at(arch_it->second);

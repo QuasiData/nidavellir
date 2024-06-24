@@ -87,7 +87,7 @@ auto Archetype::prepare_push(const usize count) -> void {
     }
 }
 
-auto Archetype::swap(const usize first, const usize second) -> void {
+auto Archetype::swap(const usize first, const usize second) noexcept -> void {
     assert(first < size and second < size);
     if (first == second) {
         return;

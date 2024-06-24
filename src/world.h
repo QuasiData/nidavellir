@@ -52,8 +52,6 @@ class World {
 
     auto despawn(EntityId entity) -> void;
 
-    auto swap(ArchetypeRecord& arch_rec, usize col1, usize col2) -> void;
-
     auto find_or_create_archetype(const CompTypeList& comp_ts) -> ArchetypeRecord&;
 
     template<Component... Ts>
@@ -200,7 +198,7 @@ class World {
             new (dst_ptr) std::decay_t<T>(std::forward<T>(t));
         };
 
-        (func(pack), ...);
+        (func(std::forward<Ts>(pack)), ...);
 
         if (src_arch_id != arch_id) {
             entity_map.at(entity) = EntityRecord{.archetype = arch_id, .col = target_col};
@@ -214,6 +212,70 @@ class World {
             src_entities.pop_back();
             src_arch.decrease_size(1);
         }
+
+        scratch_comp_ts.clear();
+    }
+
+    template<Component...Ts>
+    auto remove(const EntityId entity) -> void {
+        static_assert(sizeof...(Ts) > 0);
+        const auto [src_arch_id, col] = entity_map.at(entity);
+        auto& [src_arch, src_entities, _] = archetype_map.at(src_arch_id);
+        const auto& src_arch_comps = src_arch.type();
+
+        scratch_comp_ts.insert(scratch_comp_ts.begin(), {get_component_info<Ts>()...});
+
+        constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
+        std::array<u8, stack_buffer_size> buffer{};
+        std::pmr::monotonic_buffer_resource resource(buffer.data(), stack_buffer_size);
+        std::pmr::vector<CompTypeInfo> remain_types{&resource};
+
+        for (const auto& info1 : src_arch_comps) {
+            auto it = std::ranges::find_if(scratch_comp_ts, [&](const CompTypeInfo& info2) {
+                return info2.id == info1.id;
+            });
+
+            if (it == scratch_comp_ts.end()) {
+                remain_types.push_back(info1);
+            }
+        }
+
+        for (const auto& info : scratch_comp_ts) {
+            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
+
+            info.dtor(src_ptr, 1);
+        }
+
+        scratch_comp_ts.clear();
+
+        std::ranges::copy(remain_types, std::back_inserter(scratch_comp_ts));
+        sort_component_list(scratch_comp_ts);
+
+        auto& [arch, entities, arch_id] = find_or_create_archetype(scratch_comp_ts);
+
+        assert(arch_id != src_arch_id);
+
+        const usize target_col = arch.len();
+        arch.prepare_push(1);
+
+        for (const auto& info : remain_types) {
+            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
+            void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
+
+            info.move_ctor_dtor(dst_ptr, src_ptr, 1);
+        }
+
+        entity_map.at(entity) = EntityRecord{.archetype = arch_id, .col = target_col};
+        entities.push_back(entity);
+        arch.increase_size(1);
+
+        if (col < src_entities.size() - 1) {
+            std::swap(src_entities[col], src_entities.back());
+            entity_map.at(src_entities[col]).col = col;
+        }
+        src_entities.pop_back();
+        src_arch.decrease_size(1);
+        
 
         scratch_comp_ts.clear();
     }

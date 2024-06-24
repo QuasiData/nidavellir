@@ -268,7 +268,7 @@ class Archetype {
     static constexpr usize start_capacity{10};                 ///< Initial capacity for components.
     std::vector<void*> rows;                                   ///< Storage for component data.
     CompTypeList infos;                                        ///< List of component type information.
-    ankerl::unordered_dense::map<ComponentId, usize> comp_map; ///< Map from componentid to row.
+    ankerl::unordered_dense::map<ComponentId, usize> comp_map; ///< Map from component id to row.
     usize capacity;                                            ///< Current capacity of the archetype.
     usize size{0};                                             ///< Number of components currently stored.
 
@@ -359,7 +359,7 @@ class Archetype {
      * @param first Index of the first column.
      * @param second Index of the second column.
      */
-    auto swap(usize first, usize second) -> void;
+    auto swap(usize first, usize second) noexcept -> void;
 
     /**
      * @brief Removes the component at the specified column.
@@ -396,7 +396,7 @@ class Archetype {
      */
     template<typename T, Component... Ts>
         requires std::ranges::contiguous_range<T> and std::same_as<usize, std::ranges::range_value_t<T>>
-    [[nodiscard]] auto emplace_back(T&& row_indices, Ts&&... pack) -> usize {
+    [[nodiscard]] auto emplace_back(const T& row_indices, Ts&&... pack) -> usize {
         if (capacity == size) {
             grow();
         }
@@ -407,7 +407,7 @@ class Archetype {
             };
 
             usize i{0};
-            (..., func(std::forward<T>(row_indices)[i++], std::forward<Ts>(pack)));
+            (..., func(row_indices[i++], std::forward<Ts>(pack)));
         }
 
         const auto col = size++;
