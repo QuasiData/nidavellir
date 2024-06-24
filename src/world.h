@@ -84,21 +84,6 @@ class World {
         }
 
         /*
-        If component already registered then add the new RowRecord
-        Else create an ArchetypeMap and insert the RowRecord
-        */
-        auto func = [&](const ArchetypeId arch_id, const CompTypeList& comps) {
-            for (usize i{0}; i < comps.size(); ++i) {
-                if (const auto comp_it = component_map.find(comps[i].id); comp_it != component_map.end()) {
-                    comp_it->second.insert({arch_id, RowRecord{.row = i}});
-                } else {
-                    auto [fst, _] = component_map.insert({comps[i].id, ArchetypeMap{}});
-                    fst->second.insert({arch_id, RowRecord{.row = i}});
-                }
-            }
-        };
-
-        /*
         Create and entity.
         If the archetype corresponding to this set of component is found
             Get the archetype and a new column to it, add any components that didnt exist already
@@ -108,11 +93,9 @@ class World {
         */
         const auto new_entity_id = next_entity_id++;
         auto& arch_rec = find_or_create_archetype(comp_ts);
-        const auto col = arch_rec.archetype.emplace_back(row_indices, std::forward<Ts>(pack)...);
+        const auto col = arch_rec.archetype.emplace_back(std::forward<Ts>(pack)...);
         arch_rec.entities.push_back(new_entity_id);
         entity_map.insert({new_entity_id, EntityRecord{.archetype = arch_rec.id, .col = col}});
-        func(arch_rec.id, comp_ts);
-        type_map.insert({std::move(comp_ts), arch_rec.id});
 
         return new_entity_id;
 #if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
@@ -126,8 +109,7 @@ class World {
         auto& [arch, entities, _] = archetype_map.at(arch_id);
 
         auto func = [&]<typename T>() -> T& {
-            const auto row = arch.get_row(type_id<std::decay_t<T>>());
-            return arch.get_component<T>(col, row);
+            return arch.get_component<T>(col);
         };
 
         auto tup = std::tie(func.template operator()<Ts>()...);
@@ -171,6 +153,7 @@ class World {
         sort_component_list(scratch_comp_ts);
 
         auto& [arch, entities, arch_id] = find_or_create_archetype(scratch_comp_ts);
+        auto& [moved_src_arch, moved_src_entities, _2] = archetype_map.at(src_arch_id);
 
         usize target_col = 0;
         if (src_arch_id == arch_id) {
@@ -178,17 +161,17 @@ class World {
         } else {
             target_col = arch.len();
             arch.prepare_push(1);
-        }
 
-        for (const auto& info : not_in_pack_types) {
-            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
-            void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
+            for (const auto& info : not_in_pack_types) {
+                void* src_ptr = moved_src_arch.get(col, moved_src_arch.get_row(info.id));
+                void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
 
-            info.move_ctor_dtor(dst_ptr, src_ptr, 1);
+                info.move_ctor_dtor(dst_ptr, src_ptr, 1);
+            }
         }
 
         for (const auto& info : in_pack_types) {
-            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
+            void* src_ptr = moved_src_arch.get(col, moved_src_arch.get_row(info.id));
 
             info.dtor(src_ptr, 1);
         }
@@ -205,18 +188,19 @@ class World {
             entities.push_back(entity);
             arch.increase_size(1);
 
-            if (col < src_entities.size() - 1) {
-                std::swap(src_entities[col], src_entities.back());
-                entity_map.at(src_entities[col]).col = col;
+            if (col < moved_src_entities.size() - 1) {
+                moved_src_arch.swap(col, moved_src_arch.len() - 1);
+                std::swap(moved_src_entities[col], moved_src_entities.back());
+                entity_map.at(moved_src_entities[col]).col = col;
             }
-            src_entities.pop_back();
-            src_arch.decrease_size(1);
+            moved_src_entities.pop_back();
+            moved_src_arch.decrease_size(1);
         }
 
         scratch_comp_ts.clear();
     }
 
-    template<Component...Ts>
+    template<Component... Ts>
     auto remove(const EntityId entity) -> void {
         static_assert(sizeof...(Ts) > 0);
         const auto [src_arch_id, col] = entity_map.at(entity);
@@ -252,6 +236,7 @@ class World {
         sort_component_list(scratch_comp_ts);
 
         auto& [arch, entities, arch_id] = find_or_create_archetype(scratch_comp_ts);
+        auto& [moved_src_arch, moved_src_entities, _2] = archetype_map.at(src_arch_id);
 
         assert(arch_id != src_arch_id);
 
@@ -259,7 +244,7 @@ class World {
         arch.prepare_push(1);
 
         for (const auto& info : remain_types) {
-            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
+            void* src_ptr = moved_src_arch.get(col, moved_src_arch.get_row(info.id));
             void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
 
             info.move_ctor_dtor(dst_ptr, src_ptr, 1);
@@ -269,13 +254,13 @@ class World {
         entities.push_back(entity);
         arch.increase_size(1);
 
-        if (col < src_entities.size() - 1) {
-            std::swap(src_entities[col], src_entities.back());
-            entity_map.at(src_entities[col]).col = col;
+        if (col < moved_src_entities.size() - 1) {
+            moved_src_arch.swap(col, moved_src_arch.len() - 1);
+            std::swap(moved_src_entities[col], moved_src_entities.back());
+            entity_map.at(moved_src_entities[col]).col = col;
         }
-        src_entities.pop_back();
-        src_arch.decrease_size(1);
-        
+        moved_src_entities.pop_back();
+        moved_src_arch.decrease_size(1);
 
         scratch_comp_ts.clear();
     }

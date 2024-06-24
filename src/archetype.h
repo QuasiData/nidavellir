@@ -385,18 +385,12 @@ class Archetype {
     /**
      * @brief Adds a new column to the Archetype.
      *
-     * 'row_indices' should be a container which in each position
-     * contains the row within which to the place the corresponding component.
-     *
-     * @tparam T Type of the index container.
      * @tparam Ts Types of the components.
-     * @param row_indices Container of row indices.
      * @param pack Components to be added.
      * @return Index of the added column.
      */
-    template<typename T, Component... Ts>
-        requires std::ranges::contiguous_range<T> and std::same_as<usize, std::ranges::range_value_t<T>>
-    [[nodiscard]] auto emplace_back(const T& row_indices, Ts&&... pack) -> usize {
+    template<Component... Ts>
+    [[nodiscard]] auto emplace_back(Ts&&... pack) -> usize {
         if (capacity == size) {
             grow();
         }
@@ -406,8 +400,7 @@ class Archetype {
                 new (static_cast<u8*>(rows[index]) + infos[index].size * size) std::decay_t<Ty>(std::forward<Ty>(t));
             };
 
-            usize i{0};
-            (..., func(row_indices[i++], std::forward<Ts>(pack)));
+            (..., func(get_row(type_id<std::decay_t<Ts>>()), std::forward<Ts>(pack)));
         }
 
         const auto col = size++;
@@ -418,39 +411,31 @@ class Archetype {
      * @brief Gets a reference to a component at the specified position.
      * @tparam T Type of the component.
      * @param col Column index of the component.
-     * @param row Row index of the component.
      * @return Reference to the component.
      */
     template<Component T>
-    [[nodiscard]] auto get_component(const usize col, const usize row) -> T& {
-        assert(row < rows.size());
-        assert(col < size);
-        assert(infos[row].id == type_id<T>());
-        return *static_cast<T*>(get(col, row));
+    [[nodiscard]] auto get_component(const usize col) -> T& {
+        return *static_cast<T*>(get(col, comp_map.at(type_id<std::decay_t<T>>())));
     }
 
     /**
-     * @brief Gets an iterator to the beginning of the specified row.
+     * @brief Gets an iterator to the beginning of the specified components row.
      * @tparam T Type of the component.
-     * @param row Row index.
-     * @return Iterator to the beginning of the row.
+     * @return Iterator to the beginning of the row of component type T.
      */
     template<Component T>
-    [[nodiscard]] auto begin(const usize row) -> RowIterator<T> {
-        assert(row < rows.size() and infos[row].id == type_id<T>());
-        return RowIterator<T>(static_cast<T*>(get(0, row)));
+    [[nodiscard]] auto begin() -> RowIterator<T> {
+        return RowIterator<T>(static_cast<T*>(get(0, comp_map.at(type_id<std::decay_t<T>>()))));
     }
 
     /**
-     * @brief Gets an iterator to the end of the specified row.
+     * @brief Gets an iterator to the end of the specified components row.
      * @tparam T Type of the component.
-     * @param row Row index.
-     * @return Iterator to the end of the row.
+     * @return Iterator to the end of the row of component type T.
      */
     template<Component T>
-    [[nodiscard]] auto end(const usize row) -> RowIterator<T> {
-        assert(row < rows.size() and infos[row].id == type_id<T>());
-        return RowIterator<T>(static_cast<T*>(get(size, row)));
+    [[nodiscard]] auto end() -> RowIterator<T> {
+        return RowIterator<T>(static_cast<T*>(get(size, comp_map.at(type_id<std::decay_t<T>>()))));
     }
 
     /**

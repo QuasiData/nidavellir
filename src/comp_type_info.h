@@ -427,7 +427,7 @@ template<Component T>
 
     auto info = CompTypeInfo{
         .id = type_id<Ty>(),
-        .alignment = alignof(T),
+        .alignment = alignof(Ty),
         .ctor = &ctor_impl<Ty>,
         .dtor = &dtor_impl<Ty>,
         .copy_ctor = nullptr,

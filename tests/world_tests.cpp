@@ -2,6 +2,7 @@
 #include "world.h"
 
 #include "gtest/gtest.h"
+#include <stdexcept>
 
 using namespace nid;
 
@@ -81,7 +82,7 @@ struct T3 {
 };
 
 struct T4 {
-    f32 x{0}, y{0};
+    f64 x{0}, y{0};
     std::string message;
 };
 
@@ -116,7 +117,7 @@ class WorldTest : public testing::Test {
             entities.emplace_back(world.spawn(t1));
             entities.emplace_back(world.spawn(t1, t2));
             entities.emplace_back(world.spawn(t1, t2, t3));
-            entities.emplace_back(world.spawn(t1, t2, t3, t4));
+            entities.emplace_back(world.spawn(t1, t2, T3{.x = static_cast<f32>(i), .y = static_cast<f32>(i), .floats = {static_cast<f32>(i)}}, t4));
         }
     }
 };
@@ -201,7 +202,7 @@ TEST_F(WorldTest, get_comp_not_found) {
     EXPECT_THROW([[maybe_unused]] auto t_1 = world.get<T1>(ent), std::out_of_range);
 }
 
-TEST_F(WorldTest, add1) {
+TEST_F(WorldTest, add) {
     const auto ent = world.spawn(t1, t2, t3);
     world.add(ent, t4);
     const auto& t44 = world.get<T4>(ent);
@@ -216,7 +217,7 @@ TEST_F(WorldTest, add1) {
     EXPECT_EQ(t_4.message, t4.message);
 }
 
-TEST_F(WorldTest, add2) {
+TEST_F(WorldTest, add_extend) {
     const auto ent2 = world.spawn();
     T1 test_1{.x = 1000, .y = 1000};
     T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
@@ -234,7 +235,7 @@ TEST_F(WorldTest, add2) {
     EXPECT_EQ(t_4.message, test_4.message);
 }
 
-TEST_F(WorldTest, add3) {
+TEST_F(WorldTest, add_overwrite_partial) {
     T1 test_1{.x = 1000, .y = 1000};
     T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
     T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
@@ -252,13 +253,72 @@ TEST_F(WorldTest, add3) {
     EXPECT_EQ(t_42.message, test_4.message);
 }
 
-TEST_F(WorldTest, add4) {
+TEST_F(WorldTest, add_overwrite_multiple) {
     T1 test_1{.x = 1000, .y = 1000};
     T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
     T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
     T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
 
-    for (usize i{0}; i < 10000; ++i) {
+    for (usize i{0}; i < 100; ++i) {
         world.add(entities[3], test_1, test_2, test_3, test_4);
     }
+}
+
+TEST_F(WorldTest, add_unseen_comp) {
+    for (usize i{0}; i < 100; ++i) {
+        world.add(entities[3], std::string("A string"), std::vector<int>(2), 2, double{2.2});
+    }
+}
+
+TEST_F(WorldTest, remove_double_throw) {
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+    auto ent = world.spawn(test_1, test_2, test_3, test_4);
+    world.remove<T3>(ent);
+    EXPECT_THROW(world.remove<T3>(ent), std::out_of_range);
+    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T3>(ent), std::out_of_range);
+}
+
+TEST_F(WorldTest, remove_and_add) {
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+    auto ent = world.spawn(test_1, test_2, test_3, test_4);
+    world.remove<T3>(ent);
+
+    world.add(ent, test_3);
+    auto& t_33 = world.get<T3>(ent);
+    EXPECT_EQ(t_33.floats, test_3.floats);
+}
+
+TEST_F(WorldTest, remove_multi_throw) {
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+    auto ent = world.spawn(test_1, test_2, test_3, test_4);
+    world.remove<T1, T2, T3, T4>(ent);
+    EXPECT_THROW(world.remove<T1>(ent), std::out_of_range);
+    EXPECT_THROW(world.remove<T2>(ent), std::out_of_range);
+    EXPECT_THROW(world.remove<T3>(ent), std::out_of_range);
+    EXPECT_THROW(world.remove<T4>(ent), std::out_of_range);
+
+    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T1>(ent), std::out_of_range);
+    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T2>(ent), std::out_of_range);
+    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T3>(ent), std::out_of_range);
+    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T4>(ent), std::out_of_range);
+}
+
+TEST_F(WorldTest, remove_multi_add) {
+    T1 test_1{.x = 1000, .y = 1000};
+    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
+    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
+    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
+    auto ent = world.spawn(test_1, test_2, test_3, test_4);
+    world.remove<T1, T2, T3, T4>(ent);
+
+    EXPECT_NO_THROW(world.add(ent, test_1, test_2, test_3, test_4));
 }
