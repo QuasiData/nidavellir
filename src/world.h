@@ -60,8 +60,6 @@ class World {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
-        constexpr usize pack_size = sizeof...(Ts);
-
         /*
         Create a list of component infos and corresponding indices
         Then sort them together
@@ -69,19 +67,7 @@ class World {
         is the index that the 'i:th' component has after the sort
         */
         CompTypeList comp_ts = {get_component_info<Ts>()...};
-        std::array<usize, pack_size> orig_indices;
-        std::iota(orig_indices.begin(), orig_indices.end(), usize{0});
-        sort_component_list(comp_ts, orig_indices);
-
-        std::array<usize, pack_size> row_indices;
-        for (usize i{0}; i < pack_size; ++i) {
-            for (usize j{0}; j < pack_size; ++j) {
-                if (i == orig_indices[j]) {
-                    row_indices[i] = j;
-                    break;
-                }
-            }
-        }
+        sort_component_list(comp_ts);
 
         /*
         Create and entity.
@@ -106,7 +92,7 @@ class World {
     template<Component... Ts>
     [[nodiscard]] auto get(const EntityId entity) -> decltype(auto) {
         const auto [arch_id, col] = entity_map.at(entity);
-        auto& [arch, entities, _] = archetype_map.at(arch_id);
+        auto& [arch, _1, _2] = archetype_map.at(arch_id);
 
         auto func = [&]<typename T>() -> T& {
             return arch.get_component<T>(col);
@@ -163,21 +149,21 @@ class World {
             arch.prepare_push(1);
 
             for (const auto& info : not_in_pack_types) {
-                void* src_ptr = moved_src_arch.get(col, moved_src_arch.get_row(info.id));
-                void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
+                void* src_ptr = moved_src_arch.get_raw(col, moved_src_arch.get_row(info.id));
+                void* dst_ptr = arch.get_raw(target_col, arch.get_row(info.id));
 
                 info.move_ctor_dtor(dst_ptr, src_ptr, 1);
             }
         }
 
         for (const auto& info : in_pack_types) {
-            void* src_ptr = moved_src_arch.get(col, moved_src_arch.get_row(info.id));
+            void* src_ptr = moved_src_arch.get_raw(col, moved_src_arch.get_row(info.id));
 
             info.dtor(src_ptr, 1);
         }
 
         auto func = [&]<Component T>(T&& t) {
-            void* dst_ptr = arch.get(target_col, arch.get_row(type_id<std::decay_t<T>>()));
+            void* dst_ptr = arch.get_raw(target_col, arch.get_row(type_id<T>()));
             new (dst_ptr) std::decay_t<T>(std::forward<T>(t));
         };
 
@@ -225,7 +211,7 @@ class World {
         }
 
         for (const auto& info : scratch_comp_ts) {
-            void* src_ptr = src_arch.get(col, src_arch.get_row(info.id));
+            void* src_ptr = src_arch.get_raw(col, src_arch.get_row(info.id));
 
             info.dtor(src_ptr, 1);
         }
@@ -244,8 +230,8 @@ class World {
         arch.prepare_push(1);
 
         for (const auto& info : remain_types) {
-            void* src_ptr = moved_src_arch.get(col, moved_src_arch.get_row(info.id));
-            void* dst_ptr = arch.get(target_col, arch.get_row(info.id));
+            void* src_ptr = moved_src_arch.get_raw(col, moved_src_arch.get_row(info.id));
+            void* dst_ptr = arch.get_raw(target_col, arch.get_row(info.id));
 
             info.move_ctor_dtor(dst_ptr, src_ptr, 1);
         }
@@ -263,6 +249,17 @@ class World {
         moved_src_arch.decrease_size(1);
 
         scratch_comp_ts.clear();
+    }
+
+  private:
+    auto archetype_from_entity(const EntityId entity) -> Archetype& {
+        const auto [src_arch_id, col] = entity_map.at(entity);
+        return archetype_map.at(src_arch_id).archetype;
+    }
+
+    auto archetype_record_from_entity(const EntityId entity) -> ArchetypeRecord& {
+        const auto [src_arch_id, col] = entity_map.at(entity);
+        return archetype_map.at(src_arch_id);
     }
 };
 } // namespace nid

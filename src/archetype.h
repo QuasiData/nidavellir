@@ -11,31 +11,6 @@
 
 namespace nid {
 /**
- * @brief Sorts a component type list based on alignment and ID, with additional zipped ranges.
- *
- * This function takes a vector of component type infos and additional contiguous ranges,
- * zips them together, and sorts the zipped ranges based on the alignment and ID of the components.
- *
- * @tparam Ts A parameter pack of contiguous ranges.
- * @param lst The vector of component type infos to be sorted.
- * @param range Additional ranges to be zipped with the component list.
- *
- * This function uses the `std::views::zip` to combine the component type infos and
- * the additional ranges. The resulting zipped range is sorted using a custom
- * comparator. The comparator prioritizes the `alignment` field of the component type infos
- * in descending order, and in case of a tie, it prioritizes the `id` field in descending order.
- */
-template<std::ranges::contiguous_range... Ts>
-auto sort_component_list(CompTypeList& lst, Ts&&... range) -> void {
-    auto zip = std::views::zip(lst, std::forward<Ts>(range)...);
-    std::ranges::sort(zip, [](const auto& lhs, const auto& rhs) {
-        return std::get<0>(lhs).alignment > std::get<0>(rhs).alignment or
-               (std::get<0>(lhs).alignment == std::get<0>(rhs).alignment and
-                std::get<0>(lhs).id > std::get<0>(rhs).id);
-    });
-}
-
-/**
  * @brief Sorts a component type list based on alignment and ID.
  *
  * This function takes a vector of component type infos
@@ -49,9 +24,7 @@ auto sort_component_list(CompTypeList& lst, Ts&&... range) -> void {
  */
 inline auto sort_component_list(CompTypeList& lst) -> void {
     std::ranges::sort(lst, [](const auto& lhs, const auto& rhs) {
-        return lhs.alignment > rhs.alignment or
-               (lhs.alignment == rhs.alignment and
-                lhs.id > rhs.id);
+        return lhs.id > rhs.id;
     });
 }
 
@@ -400,7 +373,7 @@ class Archetype {
                 new (static_cast<u8*>(rows[index]) + infos[index].size * size) std::decay_t<Ty>(std::forward<Ty>(t));
             };
 
-            (..., func(get_row(type_id<std::decay_t<Ts>>()), std::forward<Ts>(pack)));
+            (..., func(get_row(type_id<Ts>()), std::forward<Ts>(pack)));
         }
 
         const auto col = size++;
@@ -415,7 +388,8 @@ class Archetype {
      */
     template<Component T>
     [[nodiscard]] auto get_component(const usize col) -> T& {
-        return *static_cast<T*>(get(col, comp_map.at(type_id<std::decay_t<T>>())));
+        assert(col < size);
+        return *static_cast<T*>(get_raw(col, comp_map.at(type_id<T>())));
     }
 
     /**
@@ -425,7 +399,7 @@ class Archetype {
      */
     template<Component T>
     [[nodiscard]] auto begin() -> RowIterator<T> {
-        return RowIterator<T>(static_cast<T*>(get(0, comp_map.at(type_id<std::decay_t<T>>()))));
+        return RowIterator<T>(static_cast<T*>(get_raw(0, comp_map.at(type_id<T>()))));
     }
 
     /**
@@ -435,7 +409,7 @@ class Archetype {
      */
     template<Component T>
     [[nodiscard]] auto end() -> RowIterator<T> {
-        return RowIterator<T>(static_cast<T*>(get(size, comp_map.at(type_id<std::decay_t<T>>()))));
+        return RowIterator<T>(static_cast<T*>(get_raw(size, comp_map.at(type_id<T>()))));
     }
 
     /**
@@ -444,7 +418,8 @@ class Archetype {
      * @param row Row index of the component.
      * @return Pointer to the memory.
      */
-    [[nodiscard]] auto get(const usize col, const usize row) const -> void* {
+    [[nodiscard]] auto get_raw(const usize col, const usize row) const -> void* {
+        assert(row < rows.size());
         return static_cast<u8*>(rows[row]) + infos[row].size * col;
     }
 };

@@ -394,14 +394,14 @@ constexpr auto fnv1a_hash(const char* str) -> usize {
  * @brief Generates a unique ID for a given type at compile time.
  *
  * This function uses the FNV-1a hash algorithm to generate a unique ID based on the type's
- * signature. It utilizes compiler-specific macros to obtain the type signature, ensuring
+ * signature. It utilizes compiler-specific macros to obtain the type signature, ensuring(with high probability anyway)
  * uniqueness across different types.
  *
  * @tparam T The type for which to generate a unique ID.
  * @return The computed unique ID as a `usize`.
  */
 template<Component T>
-constexpr auto type_id() -> usize {
+constexpr auto type_id_impl() -> usize {
 #if defined(_MSC_VER)
     return fnv1a_hash(__FUNCSIG__);
 #elif defined(__GNUC__) || defined(__clang__)
@@ -410,6 +410,21 @@ constexpr auto type_id() -> usize {
     // Runtime fallback
     return fnv1a_hash(typeid(T).name());
 #endif
+}
+
+/**
+ * @brief Wrapper function to generate a unique ID for a given type.
+ *
+ * This function calls the `type_id_impl` function, passing the decayed type
+ * to ensure that the unique ID is consistent across all type variations
+ * (e.g., references, const, volatile).
+ *
+ * @tparam T The type for which to generate a unique ID.
+ * @return The computed unique ID as a `usize`.
+ */
+template<Component T>
+constexpr auto type_id() -> usize {
+    return type_id_impl<std::decay_t<T>>();
 }
 
 /**

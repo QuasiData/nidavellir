@@ -3,22 +3,7 @@
 #include <cassert>
 
 namespace nid {
-namespace {
-#ifndef NDEBUG
-    auto check_align_order(const CompTypeList& lst) -> bool {
-        usize prev_alignment = std::numeric_limits<usize>::max();
-        return std::ranges::all_of(lst, [&prev_alignment](const CompTypeInfo& info) {
-            const auto cond = prev_alignment >= info.alignment;
-            prev_alignment = info.alignment;
-            return cond;
-        });
-    }
-#endif
-} // namespace
-
 Archetype::Archetype(CompTypeList comp_infos) : rows(comp_infos.size()), infos(std::move(comp_infos)), capacity(start_capacity) {
-    assert(check_align_order(infos));
-
     for (usize row{0}; row < rows.size(); ++row) {
         rows[row] = operator new(infos[row].size * start_capacity, std::align_val_t{infos[row].alignment});
         comp_map.insert({infos[row].id, row});
@@ -98,9 +83,9 @@ auto Archetype::swap(const usize first, const usize second) noexcept -> void {
     }
 
     for (usize row{0}; row < rows.size(); ++row) {
-        void* end = get(size, row);
-        void* ptr_first = get(first, row);
-        void* ptr_second = get(second, row);
+        void* end = get_raw(size, row);
+        void* ptr_first = get_raw(first, row);
+        void* ptr_second = get_raw(second, row);
 
         // Move construct first element at the back of buffer
         infos[row].move_ctor_dtor(end, ptr_first, 1);
@@ -118,11 +103,11 @@ auto Archetype::remove(const usize col) -> usize {
     assert(col <= last_col);
     for (usize row{0}; row < rows.size(); ++row) {
         if (col == last_col) {
-            void* last = get(last_col, row);
+            void* last = get_raw(last_col, row);
             infos[row].dtor(last, 1);
         } else {
-            void* dst = get(col, row);
-            void* src = get(last_col, row);
+            void* dst = get_raw(col, row);
+            void* src = get_raw(last_col, row);
 
             infos[row].move_assign_dtor(dst, src, 1);
         }
