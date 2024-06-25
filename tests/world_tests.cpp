@@ -126,6 +126,7 @@ class WorldTest : public testing::Test {
 
 TEST_F(EmptyWorldTest, spawn_entity) {
     for (usize i{0}; i < num; ++i) {
+        world.spawn();
         world.spawn(t1);
         world.spawn(t1, t2);
         world.spawn(t1, t2, t3);

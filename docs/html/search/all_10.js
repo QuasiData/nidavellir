@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['update_0',['update',['../classnid_1_1Archetype.html#a5b24e2a0e60b24c96ab1a9a27dc5865a',1,'nid::Archetype']]],
-  ['usage_1',['Usage',['../index.html#autotoc_md3',1,'']]]
+  ['value_5ftype_0',['value_type',['../classnid_1_1RowIterator.html#a8b06d5d7769f2526ecddfe14b52472b6',1,'nid::RowIterator']]]
 ];

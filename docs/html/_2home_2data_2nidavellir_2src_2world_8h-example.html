@@ -94,20 +94,32 @@ $(document).ready(function(){initNavTree('_2home_2data_2nidavellir_2src_2world_8
   <div class="headertitle"><div class="title">/home/data/nidavellir/src/world.h</div></div>
 </div><!--header-->
 <div class="contents">
-<p>Despawns an entity from the world.</p>
-<p>Despawns an entity from the world.This function removes the specified entity from the world, along with all its associated components. The entity must exist in the world; attempting to despawn a non-existent entity will throw a <code>std::out_of_range</code> exception.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">entity</td><td>The ID of the entity to despawn.</td></tr>
-  </table>
-  </dd>
-</dl>
-<div class="fragment"><div class="line">ComponentType1 comp1;</div>
-<div class="line">ComponentType2 comp2;</div>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div>
+<div class="line">    <span class="keywordtype">int</span> x, y;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">struct </span>Vector {</div>
+<div class="line">    <span class="keywordtype">int</span> x, y;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line">Point p{.x = 10, .y = 10};</div>
+<div class="line">Vector v{.x = 20, .y = 20};</div>
 <div class="line"> </div>
 <div class="line">World world;</div>
-<div class="line">EntityId entity = world.spawn(comp1, comp2);</div>
-<div class="line">world.despawn(entity);</div>
+<div class="line">EntityId entity = world.spawn(p);</div>
+<div class="line">world.add(entity, v);</div>
+<div class="line"><span class="comment">// The entity now has the components Point and Vector with values from the variables p and v.</span></div>
+<div class="line"> </div>
+<div class="line">world.add(entity, Vector{.x = 100, .y = 100});</div>
+<div class="line"><span class="comment">// The entity will now have the same type of components but the value of the Vector component will be overwritten.</span></div>
+<div class="line"> </div>
+<div class="line">world.remove&lt;Point&gt;(entity);</div>
+<div class="line"><span class="comment">// The entity now only has a Vector component.</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Most functions on the world accept an arbitrary number of types</span></div>
+<div class="line">EntityId entity2 = world.spawn(<span class="keywordtype">int</span>{1}, <span class="keywordtype">float</span>{32.4f}, std::string(<span class="stringliteral">&quot;TestString&quot;</span>), std::vector&lt;int&gt;{1, 2, 3, 4, 5, 6});</div>
+<div class="line"> </div>
+<div class="line">world.add(entity2, <span class="keywordtype">double</span>{2.3}, std::unordered_map&lt;int, int&gt;{});</div>
 </div><!-- fragment --><div class="fragment"><div class="line"><span class="comment">// ReSharper disable CppUseStructuredBinding</span></div>
 <div class="line"><span class="preprocessor">#pragma once</span></div>
 <div class="line"><span class="preprocessor">#include &quot;archetype.h&quot;</span></div>

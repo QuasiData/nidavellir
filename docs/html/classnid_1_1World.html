@@ -98,16 +98,21 @@ $(document).ready(function(){initNavTree('classnid_1_1World.html',''); initResiz
   <div class="headertitle"><div class="title">nid::World Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A <a class="el" href="classnid_1_1World.html" title="A World which is the heart of the ECS.">World</a> which is the heart of the ECS.  
+ <a href="classnid_1_1World.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="world_8h_source.html">world.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a97af9fdbe4e80659f0e7d4b4b529cb68" id="r_a97af9fdbe4e80659f0e7d4b4b529cb68"><td class="memItemLeft" align="right" valign="top"><a id="a97af9fdbe4e80659f0e7d4b4b529cb68" name="a97af9fdbe4e80659f0e7d4b4b529cb68"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>World</b> ()=default</td></tr>
-<tr class="memdesc:a97af9fdbe4e80659f0e7d4b4b529cb68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="classnid_1_1World.html">World</a>. <br /></td></tr>
+<tr class="memdesc:a97af9fdbe4e80659f0e7d4b4b529cb68"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for <a class="el" href="classnid_1_1World.html" title="A World which is the heart of the ECS.">World</a>. <br /></td></tr>
 <tr class="separator:a97af9fdbe4e80659f0e7d4b4b529cb68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9ac9ec0b3b2d4249b91e96b87f0ff995" id="r_a9ac9ec0b3b2d4249b91e96b87f0ff995"><td class="memItemLeft" align="right" valign="top"><a id="a9ac9ec0b3b2d4249b91e96b87f0ff995" name="a9ac9ec0b3b2d4249b91e96b87f0ff995"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>~World</b> ()=default</td></tr>
-<tr class="memdesc:a9ac9ec0b3b2d4249b91e96b87f0ff995"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classnid_1_1World.html">World</a>. <br /></td></tr>
+<tr class="memdesc:a9ac9ec0b3b2d4249b91e96b87f0ff995"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for <a class="el" href="classnid_1_1World.html" title="A World which is the heart of the ECS.">World</a>. <br /></td></tr>
 <tr class="separator:a9ac9ec0b3b2d4249b91e96b87f0ff995"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92e68f5497da9185bde16292a2f0c1a0" id="r_a92e68f5497da9185bde16292a2f0c1a0"><td class="memItemLeft" align="right" valign="top"><a id="a92e68f5497da9185bde16292a2f0c1a0" name="a92e68f5497da9185bde16292a2f0c1a0"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>World</b> (const <a class="el" href="classnid_1_1World.html">World</a> &amp;)=delete</td></tr>
@@ -125,26 +130,330 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const 
 auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classnid_1_1World.html">World</a> &amp;&amp;)=delete</td></tr>
 <tr class="memdesc:aecac2d1a3726511a0020e149c6843f2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted move assignment operator. <br /></td></tr>
 <tr class="separator:aecac2d1a3726511a0020e149c6843f2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e4d5b2437b0aaa3f2a8d65aaaa5a12d" id="r_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"><td class="memItemLeft" align="right" valign="top"><a id="a6e4d5b2437b0aaa3f2a8d65aaaa5a12d" name="a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"></a>
-auto&#160;</td><td class="memItemRight" valign="bottom"><b>despawn</b> (EntityId entity) -&gt; void</td></tr>
+<tr class="memitem:a6e4d5b2437b0aaa3f2a8d65aaaa5a12d" id="r_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnid_1_1World.html#a6e4d5b2437b0aaa3f2a8d65aaaa5a12d">despawn</a> (EntityId entity) -&gt; void</td></tr>
+<tr class="memdesc:a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Despawns an entity from the world.  <br /></td></tr>
 <tr class="separator:a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7b9a881c3b27c73b9804dfd827bb084" id="r_ae7b9a881c3b27c73b9804dfd827bb084"><td class="memTemplParams" colspan="2"><a id="ae7b9a881c3b27c73b9804dfd827bb084" name="ae7b9a881c3b27c73b9804dfd827bb084"></a>
-template&lt;Component... Ts&gt; </td></tr>
-<tr class="memitem:ae7b9a881c3b27c73b9804dfd827bb084"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>spawn</b> (Ts &amp;&amp;... pack) -&gt; EntityId</td></tr>
+<tr class="memitem:ae7b9a881c3b27c73b9804dfd827bb084" id="r_ae7b9a881c3b27c73b9804dfd827bb084"><td class="memTemplParams" colspan="2">template&lt;Component... Ts&gt; </td></tr>
+<tr class="memitem:ae7b9a881c3b27c73b9804dfd827bb084"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">spawn</a> (Ts &amp;&amp;... pack) -&gt; EntityId</td></tr>
+<tr class="memdesc:ae7b9a881c3b27c73b9804dfd827bb084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Spawns a new entity with the given components.  <br /></td></tr>
 <tr class="separator:ae7b9a881c3b27c73b9804dfd827bb084"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45bc3cddff5b9963f34513038e0e8f1b" id="r_a45bc3cddff5b9963f34513038e0e8f1b"><td class="memTemplParams" colspan="2"><a id="a45bc3cddff5b9963f34513038e0e8f1b" name="a45bc3cddff5b9963f34513038e0e8f1b"></a>
-template&lt;Component... Ts&gt; </td></tr>
-<tr class="memitem:a45bc3cddff5b9963f34513038e0e8f1b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> (const EntityId entity) -&gt; decltype(auto)</td></tr>
+<tr class="memitem:a45bc3cddff5b9963f34513038e0e8f1b" id="r_a45bc3cddff5b9963f34513038e0e8f1b"><td class="memTemplParams" colspan="2">template&lt;Component... Ts&gt; </td></tr>
+<tr class="memitem:a45bc3cddff5b9963f34513038e0e8f1b"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnid_1_1World.html#a45bc3cddff5b9963f34513038e0e8f1b">get</a> (const EntityId entity) -&gt; decltype(auto)</td></tr>
+<tr class="memdesc:a45bc3cddff5b9963f34513038e0e8f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the components of the specified types for a given entity.  <br /></td></tr>
 <tr class="separator:a45bc3cddff5b9963f34513038e0e8f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab2291f375b044fe8d45247a00e77a1d6" id="r_ab2291f375b044fe8d45247a00e77a1d6"><td class="memTemplParams" colspan="2"><a id="ab2291f375b044fe8d45247a00e77a1d6" name="ab2291f375b044fe8d45247a00e77a1d6"></a>
-template&lt;Component... Ts&gt; </td></tr>
-<tr class="memitem:ab2291f375b044fe8d45247a00e77a1d6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>add</b> (const EntityId entity, Ts &amp;&amp;... pack) -&gt; void</td></tr>
+<tr class="memitem:ab2291f375b044fe8d45247a00e77a1d6" id="r_ab2291f375b044fe8d45247a00e77a1d6"><td class="memTemplParams" colspan="2">template&lt;Component... Ts&gt; </td></tr>
+<tr class="memitem:ab2291f375b044fe8d45247a00e77a1d6"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnid_1_1World.html#ab2291f375b044fe8d45247a00e77a1d6">add</a> (const EntityId entity, Ts &amp;&amp;... pack) -&gt; void</td></tr>
+<tr class="memdesc:ab2291f375b044fe8d45247a00e77a1d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds the specified components to a given entity.  <br /></td></tr>
 <tr class="separator:ab2291f375b044fe8d45247a00e77a1d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad29bd42efb428d3b17ec704b6e9bae2e" id="r_ad29bd42efb428d3b17ec704b6e9bae2e"><td class="memTemplParams" colspan="2"><a id="ad29bd42efb428d3b17ec704b6e9bae2e" name="ad29bd42efb428d3b17ec704b6e9bae2e"></a>
-template&lt;Component... Ts&gt; </td></tr>
-<tr class="memitem:ad29bd42efb428d3b17ec704b6e9bae2e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><b>remove</b> (const EntityId entity) -&gt; void</td></tr>
+<tr class="memitem:ad29bd42efb428d3b17ec704b6e9bae2e" id="r_ad29bd42efb428d3b17ec704b6e9bae2e"><td class="memTemplParams" colspan="2">template&lt;Component... Ts&gt; </td></tr>
+<tr class="memitem:ad29bd42efb428d3b17ec704b6e9bae2e"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnid_1_1World.html#ad29bd42efb428d3b17ec704b6e9bae2e">remove</a> (const EntityId entity) -&gt; void</td></tr>
+<tr class="memdesc:ad29bd42efb428d3b17ec704b6e9bae2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the specified components from a given entity.  <br /></td></tr>
 <tr class="separator:ad29bd42efb428d3b17ec704b6e9bae2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A <a class="el" href="classnid_1_1World.html" title="A World which is the heart of the ECS.">World</a> which is the heart of the ECS. </p>
+<p>INFO</p>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div>
+<div class="line">    <span class="keywordtype">int</span> x, y;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">struct </span>Vector {</div>
+<div class="line">    <span class="keywordtype">int</span> x, y;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line">Point p{.x = 10, .y = 10};</div>
+<div class="line">Vector v{.x = 20, .y = 20};</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="classnid_1_1World.html#a97af9fdbe4e80659f0e7d4b4b529cb68">World</a> world;</div>
+<div class="line">EntityId entity = world.spawn(p);</div>
+<div class="line">world.add(entity, v);</div>
+<div class="line"><span class="comment">// The entity now has the components Point and Vector with values from the variables p and v.</span></div>
+<div class="line"> </div>
+<div class="line">world.add(entity, Vector{.x = 100, .y = 100});</div>
+<div class="line"><span class="comment">// The entity will now have the same type of components but the value of the Vector component will be overwritten.</span></div>
+<div class="line"> </div>
+<div class="line">world.remove&lt;Point&gt;(entity);</div>
+<div class="line"><span class="comment">// The entity now only has a Vector component.</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Most functions on the world accept an arbitrary number of types</span></div>
+<div class="line">EntityId entity2 = world.spawn(<span class="keywordtype">int</span>{1}, <span class="keywordtype">float</span>{32.4f}, std::string(<span class="stringliteral">&quot;TestString&quot;</span>), std::vector&lt;int&gt;{1, 2, 3, 4, 5, 6});</div>
+<div class="line"> </div>
+<div class="line">world.add(entity2, <span class="keywordtype">double</span>{2.3}, std::unordered_map&lt;int, int&gt;{});</div>
+<div class="ttc" id="aclassnid_1_1World_html_a97af9fdbe4e80659f0e7d4b4b529cb68"><div class="ttname"><a href="classnid_1_1World.html#a97af9fdbe4e80659f0e7d4b4b529cb68">nid::World::World</a></div><div class="ttdeci">World()=default</div><div class="ttdoc">Default constructor for World.</div></div>
+</div><!-- fragment --> </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab2291f375b044fe8d45247a00e77a1d6" name="ab2291f375b044fe8d45247a00e77a1d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2291f375b044fe8d45247a00e77a1d6">&#9670;&#160;</a></span>add()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;Component... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto nid::World::add </td>
+          <td>(</td>
+          <td class="paramtype">const EntityId&#160;</td>
+          <td class="paramname"><em>entity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Ts &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>pack</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> -&gt; void </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds the specified components to a given entity. </p>
+<p>This function adds the specified components to the given entity. If the entity already has a component of one of the supplied types, the existing component will be overwritten with the new one provided in the pack. Throws a <code>std::out_of_range</code> exception if the entity does not exist.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ts</td><td>The types of the components to add. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The ID of the entity. </td></tr>
+    <tr><td class="paramname">pack</td><td>The components to add.</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div>
+<div class="line">    <span class="keywordtype">int</span> x, y;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">struct </span>Vector {</div>
+<div class="line">    <span class="keywordtype">int</span> x, y;</div>
+<div class="line">};</div>
+<div class="line"> </div>
+<div class="line">Point p{.x = 10, .y = 10};</div>
+<div class="line">Vector v{.x = 20, .y = 20};</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_function" href="classnid_1_1World.html#a97af9fdbe4e80659f0e7d4b4b529cb68">World</a> world;</div>
+<div class="line">EntityId entity = world.spawn(p);</div>
+<div class="line">world.add(entity, v);</div>
+<div class="line"><span class="comment">// The entity now has the components Point and Vector with values from the variables p and v.</span></div>
+<div class="line"> </div>
+<div class="line">world.add(entity, Vector{.x = 100, .y = 100});</div>
+<div class="line"><span class="comment">// The entity will now have the same type of components but the value of the Vector component will be overwritten.</span></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a6e4d5b2437b0aaa3f2a8d65aaaa5a12d" name="a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e4d5b2437b0aaa3f2a8d65aaaa5a12d">&#9670;&#160;</a></span>despawn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto nid::World::despawn </td>
+          <td>(</td>
+          <td class="paramtype">EntityId&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td> -&gt; void</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Despawns an entity from the world. </p>
+<p>This function removes the specified entity from the world, along with all its associated components. The entity must exist in the world; attempting to despawn a non-existent entity will throw a <code>std::out_of_range</code> exception.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The ID of the entity to despawn.</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line">ComponentType1 comp1;</div>
+<div class="line">ComponentType2 comp2;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_class" href="classnid_1_1World.html">World</a> world;</div>
+<div class="line">EntityId entity = world.<a class="code hl_function" href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">spawn</a>(comp1, comp2);</div>
+<div class="line">world.<a class="code hl_function" href="classnid_1_1World.html#a6e4d5b2437b0aaa3f2a8d65aaaa5a12d">despawn</a>(entity);</div>
+<div class="ttc" id="aclassnid_1_1World_html"><div class="ttname"><a href="classnid_1_1World.html">nid::World</a></div><div class="ttdoc">A World which is the heart of the ECS.</div><div class="ttdef"><b>Definition</b> world.h:52</div></div>
+<div class="ttc" id="aclassnid_1_1World_html_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d"><div class="ttname"><a href="classnid_1_1World.html#a6e4d5b2437b0aaa3f2a8d65aaaa5a12d">nid::World::despawn</a></div><div class="ttdeci">auto despawn(EntityId entity) -&gt; void</div><div class="ttdoc">Despawns an entity from the world.</div><div class="ttdef"><b>Definition</b> world.cpp:9</div></div>
+<div class="ttc" id="aclassnid_1_1World_html_ae7b9a881c3b27c73b9804dfd827bb084"><div class="ttname"><a href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">nid::World::spawn</a></div><div class="ttdeci">auto spawn(Ts &amp;&amp;... pack) -&gt; EntityId</div><div class="ttdoc">Spawns a new entity with the given components.</div><div class="ttdef"><b>Definition</b> world.h:154</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="a45bc3cddff5b9963f34513038e0e8f1b" name="a45bc3cddff5b9963f34513038e0e8f1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45bc3cddff5b9963f34513038e0e8f1b">&#9670;&#160;</a></span>get()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;Component... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto nid::World::get </td>
+          <td>(</td>
+          <td class="paramtype">const EntityId&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td> -&gt; decltype(auto) </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the components of the specified types for a given entity. </p>
+<p>This function retrieves the components of the specified types for the given entity. If only one component type is requested, a single reference is returned. If multiple component types are requested, a tuple of references is returned. Throws a <code>std::out_of_range</code> exception if the entity does not exist or if the specified components are not present on the entity.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ts</td><td>The types of the components to get. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The ID of the entity. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference or tuple of references to the requested components.</dd></dl>
+<div class="fragment"><div class="line">ComponentType1 comp1;</div>
+<div class="line">ComponentType2 comp2;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_class" href="classnid_1_1World.html">World</a> world;</div>
+<div class="line">EntityId entity = world.<a class="code hl_function" href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">spawn</a>(comp1, comp2);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Get a single component</span></div>
+<div class="line"><span class="keyword">auto</span>&amp; component1 = world.<a class="code hl_function" href="classnid_1_1World.html#a45bc3cddff5b9963f34513038e0e8f1b">get</a>&lt;ComponentType1&gt;(entity);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Get multiple components</span></div>
+<div class="line"><span class="keyword">auto</span>&amp; [component1, component2] = world.<a class="code hl_function" href="classnid_1_1World.html#a45bc3cddff5b9963f34513038e0e8f1b">get</a>&lt;ComponentType1, ComponentType2&gt;(entity);</div>
+<div class="ttc" id="aclassnid_1_1World_html_a45bc3cddff5b9963f34513038e0e8f1b"><div class="ttname"><a href="classnid_1_1World.html#a45bc3cddff5b9963f34513038e0e8f1b">nid::World::get</a></div><div class="ttdeci">auto get(const EntityId entity) -&gt; decltype(auto)</div><div class="ttdoc">Gets the components of the specified types for a given entity.</div><div class="ttdef"><b>Definition</b> world.h:195</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="ad29bd42efb428d3b17ec704b6e9bae2e" name="ad29bd42efb428d3b17ec704b6e9bae2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad29bd42efb428d3b17ec704b6e9bae2e">&#9670;&#160;</a></span>remove()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;Component... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto nid::World::remove </td>
+          <td>(</td>
+          <td class="paramtype">const EntityId&#160;</td>
+          <td class="paramname"><em>entity</em></td><td>)</td>
+          <td> -&gt; void </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes the specified components from a given entity. </p>
+<p>This function removes the specified components from the given entity. Throws a <code>std::out_of_range</code> exception if the entity does not exist. If the entity does not have all of the specified components, this function will cause undefined behavior.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ts</td><td>The types of the components to remove. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">entity</td><td>The ID of the entity.</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="fragment"><div class="line">ComponentType1 comp1;</div>
+<div class="line">ComponentType2 comp2;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_class" href="classnid_1_1World.html">World</a> world;</div>
+<div class="line">EntityId entity = world.<a class="code hl_function" href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">spawn</a>(comp1, comp2);</div>
+<div class="line"><span class="comment">// The entity has the components ComponentType1 and ComponentType2</span></div>
+<div class="line"> </div>
+<div class="line">world.<a class="code hl_function" href="classnid_1_1World.html#ad29bd42efb428d3b17ec704b6e9bae2e">remove</a>&lt;ComponentType2&gt;(entity);</div>
+<div class="line"><span class="comment">// The entity only has the component ComponentType1</span></div>
+<div class="ttc" id="aclassnid_1_1World_html_ad29bd42efb428d3b17ec704b6e9bae2e"><div class="ttname"><a href="classnid_1_1World.html#ad29bd42efb428d3b17ec704b6e9bae2e">nid::World::remove</a></div><div class="ttdeci">auto remove(const EntityId entity) -&gt; void</div><div class="ttdoc">Removes the specified components from a given entity.</div><div class="ttdef"><b>Definition</b> world.h:340</div></div>
+</div><!-- fragment --> 
+</div>
+</div>
+<a id="ae7b9a881c3b27c73b9804dfd827bb084" name="ae7b9a881c3b27c73b9804dfd827bb084"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae7b9a881c3b27c73b9804dfd827bb084">&#9670;&#160;</a></span>spawn()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;Component... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto nid::World::spawn </td>
+          <td>(</td>
+          <td class="paramtype">Ts &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>pack</em></td><td>)</td>
+          <td> -&gt; EntityId </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Spawns a new entity with the given components. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Ts</td><td>The types of the components. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pack</td><td>The components to add to the new entity. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The ID of the newly spawned entity.</dd></dl>
+<div class="fragment"><div class="line">ComponentType1 comp1;</div>
+<div class="line">ComponentType2 comp2;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_class" href="classnid_1_1World.html">World</a> world;</div>
+<div class="line"><span class="comment">// Spawn an entity with the components comp1 and comp2.</span></div>
+<div class="line">EntityId entity1 = world.<a class="code hl_function" href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">spawn</a>(comp1, comp2);</div>
+<div class="line"> </div>
+<div class="line">ComponentType3 comp3;</div>
+<div class="line">ComponentType4 comp4;</div>
+<div class="line"> </div>
+<div class="line"><a class="code hl_class" href="classnid_1_1World.html">World</a> world;</div>
+<div class="line"><span class="comment">// Spawn an entity with the components comp3 and comp4.</span></div>
+<div class="line">EntityId entity2 = world.<a class="code hl_function" href="classnid_1_1World.html#ae7b9a881c3b27c73b9804dfd827bb084">spawn</a>(comp3, comp4);</div>
+</div><!-- fragment --> 
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/<a class="el" href="world_8h_source.html">world.h</a></li>
 <li>src/<b>world.cpp</b></li>

@@ -1,21 +1,32 @@
 \doxysection{/home/data/nidavellir/src/world.\+h}
-\hypertarget{_2home_2data_2nidavellir_2src_2world_8h-example}{}\label{_2home_2data_2nidavellir_2src_2world_8h-example}Despawns an entity from the world.
-
-Despawns an entity from the world.\+This function removes the specified entity from the world, along with all its associated components. The entity must exist in the world; attempting to despawn a non-\/existent entity will throw a {\ttfamily std\+::out\+\_\+of\+\_\+range} exception.
-
-
-\begin{DoxyParams}{Parameters}
-{\em entity} & The ID of the entity to despawn.\\
-\hline
-\end{DoxyParams}
-
+\hypertarget{_2home_2data_2nidavellir_2src_2world_8h-example}{}\label{_2home_2data_2nidavellir_2src_2world_8h-example}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{ComponentType1\ comp1;}
-\DoxyCodeLine{ComponentType2\ comp2;}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Point\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Vector\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{Point\ p\{.x\ =\ 10,\ .y\ =\ 10\};}
+\DoxyCodeLine{Vector\ v\{.x\ =\ 20,\ .y\ =\ 20\};}
 \DoxyCodeLine{}
 \DoxyCodeLine{World\ world;}
-\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(comp1,\ comp2);}
-\DoxyCodeLine{world.despawn(entity);}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(p);}
+\DoxyCodeLine{world.add(entity,\ v);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ has\ the\ components\ Point\ and\ Vector\ with\ values\ from\ the\ variables\ p\ and\ v.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity,\ Vector\{.x\ =\ 100,\ .y\ =\ 100\});}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ will\ now\ have\ the\ same\ type\ of\ components\ but\ the\ value\ of\ the\ Vector\ component\ will\ be\ overwritten.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.remove<Point>(entity);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ only\ has\ a\ Vector\ component.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ Most\ functions\ on\ the\ world\ accept\ an\ arbitrary\ number\ of\ types}}
+\DoxyCodeLine{EntityId\ entity2\ =\ world.spawn(\textcolor{keywordtype}{int}\{1\},\ \textcolor{keywordtype}{float}\{32.4f\},\ std::string(\textcolor{stringliteral}{"{}TestString"{}}),\ std::vector<int>\{1,\ 2,\ 3,\ 4,\ 5,\ 6\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity2,\ \textcolor{keywordtype}{double}\{2.3\},\ std::unordered\_map<int,\ int>\{\});}
 
 \end{DoxyCode}
 

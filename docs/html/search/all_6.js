@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['get_5fcomponent_0',['get_component',['../classnid_1_1Archetype.html#a2c01cd9f678bd55d15782a726e051673',1,'nid::Archetype']]],
-  ['get_5fraw_1',['get_raw',['../classnid_1_1Archetype.html#a9875df5a3d91c7021820bc34a46a3c91',1,'nid::Archetype']]],
-  ['get_5frow_2',['get_row',['../classnid_1_1Archetype.html#ae6cac9a309d6c635168b1ee20ef329f8',1,'nid::Archetype']]],
-  ['grow_3',['grow',['../classnid_1_1Archetype.html#abcb786c7b09d4b30e8ac6f78c39c7eb7',1,'nid::Archetype']]]
+  ['id_0',['id',['../structnid_1_1CompTypeInfo.html#a7320950513d293a96cb955cfe23e1ead',1,'nid::CompTypeInfo']]],
+  ['increase_5fsize_1',['increase_size',['../classnid_1_1Archetype.html#aeeb332e7f6e7c68b5352316fa190cd67',1,'nid::Archetype']]],
+  ['iterator_5fcategory_2',['iterator_category',['../classnid_1_1RowIterator.html#aadd1c3806b1ccf7b6ddebc8bc605cc79',1,'nid::RowIterator']]]
 ];

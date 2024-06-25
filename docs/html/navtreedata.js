@@ -25,9 +25,6 @@
 var NAVTREE =
 [
   [ "Nidavellir", "index.html", [
-    [ "Features", "index.html#autotoc_md1", null ],
-    [ "Installation", "index.html#autotoc_md2", null ],
-    [ "Usage", "index.html#autotoc_md3", null ],
     [ "Concepts", "concepts.html", "concepts" ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -42,14 +39,13 @@ var NAVTREE =
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ]
-    ] ],
-    [ "Examples", "examples.html", "examples" ]
+    ] ]
   ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"_2home_2data_2nidavellir_2src_2world_8h-example.html"
+"annotated.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

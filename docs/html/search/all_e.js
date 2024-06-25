@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['size_0',['size',['../structnid_1_1CompTypeInfo.html#a52b0d1f0e7e59dc5a4b8337295fb2c3c',1,'nid::CompTypeInfo']]],
-  ['swap_1',['swap',['../classnid_1_1Archetype.html#abd4db1859cc3c42fefce2ea3ae5d30be',1,'nid::Archetype']]]
+  ['type_0',['type',['../classnid_1_1Archetype.html#a3749c0b29f128c8e5726f3799460cfb4',1,'nid::Archetype']]],
+  ['typehash_1',['TypeHash',['../structnid_1_1TypeHash.html',1,'nid']]]
 ];

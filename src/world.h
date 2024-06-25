@@ -14,6 +14,41 @@
 #include <ankerl/unordered_dense.h>
 
 namespace nid {
+/**
+ * @class World
+ * @brief A World which is the heart of the ECS.
+ *
+ * INFO
+ *
+ * \code{.cpp}
+ * struct Point {
+ *     int x, y;
+ * };
+ *
+ * struct Vector {
+ *     int x, y;
+ * };
+ *
+ * Point p{.x = 10, .y = 10};
+ * Vector v{.x = 20, .y = 20};
+ *
+ * World world;
+ * EntityId entity = world.spawn(p);
+ * world.add(entity, v);
+ * // The entity now has the components Point and Vector with values from the variables p and v.
+ *
+ * world.add(entity, Vector{.x = 100, .y = 100});
+ * // The entity will now have the same type of components but the value of the Vector component will be overwritten.
+ *
+ * world.remove<Point>(entity);
+ * // The entity now only has a Vector component.
+ *
+ * // Most functions on the world accept an arbitrary number of types
+ * EntityId entity2 = world.spawn(int{1}, float{32.4f}, std::string("TestString"), std::vector<int>{1, 2, 3, 4, 5, 6});
+ *
+ * world.add(entity2, double{2.3}, std::unordered_map<int, int>{});
+ * \endcode
+ */
 class World {
     struct ArchetypeRecord {
         Archetype archetype;
@@ -81,15 +116,15 @@ class World {
      * The entity must exist in the world; attempting to despawn a non-existent entity will throw a `std::out_of_range` exception.
      *
      * @param entity The ID of the entity to despawn.
-     * @example
-     * @code
+     *
+     * \code{.cpp}
      * ComponentType1 comp1;
      * ComponentType2 comp2;
      *
      * World world;
      * EntityId entity = world.spawn(comp1, comp2);
      * world.despawn(entity);
-     * @endcode
+     * \endcode
      */
     auto despawn(EntityId entity) -> void;
 
@@ -98,8 +133,8 @@ class World {
      * @tparam Ts The types of the components.
      * @param pack The components to add to the new entity.
      * @return The ID of the newly spawned entity.
-     * @example
-     * @code
+     *
+     * \code{.cpp}
      * ComponentType1 comp1;
      * ComponentType2 comp2;
      *
@@ -113,7 +148,7 @@ class World {
      * World world;
      * // Spawn an entity with the components comp3 and comp4.
      * EntityId entity2 = world.spawn(comp3, comp4);
-     * @endcode
+     * \endcode
      */
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
@@ -141,8 +176,8 @@ class World {
      * @tparam Ts The types of the components to get.
      * @param entity The ID of the entity.
      * @return A reference or tuple of references to the requested components.
-     * @example
-     * @code
+     *
+     * \code{.cpp}
      * ComponentType1 comp1;
      * ComponentType2 comp2;
      *
@@ -154,7 +189,7 @@ class World {
      *
      * // Get multiple components
      * auto& [component1, component2] = world.get<ComponentType1, ComponentType2>(entity);
-     * @endcode
+     * \endcode
      */
     template<Component... Ts>
     [[nodiscard]] auto get(const EntityId entity) -> decltype(auto) {
@@ -181,8 +216,8 @@ class World {
      * @tparam Ts The types of the components to add.
      * @param entity The ID of the entity.
      * @param pack The components to add.
-     * @example
-     * @code
+     *
+     * \code{.cpp}
      * struct Point {
      *     int x, y;
      * };
@@ -201,7 +236,7 @@ class World {
      *
      * world.add(entity, Vector{.x = 100, .y = 100});
      * // The entity will now have the same type of components but the value of the Vector component will be overwritten.
-     * @endcode
+     * \endcode
      */
     template<Component... Ts>
     auto add(const EntityId entity, Ts&&... pack) -> void {
@@ -288,8 +323,8 @@ class World {
      *
      * @tparam Ts The types of the components to remove.
      * @param entity The ID of the entity.
-     * @example
-     * @code
+     *
+     * \code{.cpp}
      * ComponentType1 comp1;
      * ComponentType2 comp2;
      *
@@ -299,7 +334,7 @@ class World {
      *
      * world.remove<ComponentType2>(entity);
      * // The entity only has the component ComponentType1
-     * @endcode
+     * \endcode
      */
     template<Component... Ts>
     auto remove(const EntityId entity) -> void {
