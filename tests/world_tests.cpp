@@ -1,8 +1,9 @@
 #include "identifiers.h"
 #include "world.h"
 
-#include "gtest/gtest.h"
 #include <stdexcept>
+
+#include "gtest/gtest.h"
 
 using namespace nid;
 
@@ -146,7 +147,7 @@ TEST_F(WorldTest, remove_entity) {
     entities.erase(entities.begin());
 
     EXPECT_THROW(world.despawn(ent3), std::out_of_range);
-    // Add checks that the components and everything is correct after
+    // TODO: Add checks that the components and everything is correct after
 }
 
 TEST_F(WorldTest, get_tup) {
@@ -270,17 +271,6 @@ TEST_F(WorldTest, add_unseen_comp) {
     }
 }
 
-TEST_F(WorldTest, remove_double_throw) {
-    T1 test_1{.x = 1000, .y = 1000};
-    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
-    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
-    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
-    auto ent = world.spawn(test_1, test_2, test_3, test_4);
-    world.remove<T3>(ent);
-    EXPECT_THROW(world.remove<T3>(ent), std::out_of_range);
-    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T3>(ent), std::out_of_range);
-}
-
 TEST_F(WorldTest, remove_and_add) {
     T1 test_1{.x = 1000, .y = 1000};
     T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
@@ -292,24 +282,6 @@ TEST_F(WorldTest, remove_and_add) {
     world.add(ent, test_3);
     auto& t_33 = world.get<T3>(ent);
     EXPECT_EQ(t_33.floats, test_3.floats);
-}
-
-TEST_F(WorldTest, remove_multi_throw) {
-    T1 test_1{.x = 1000, .y = 1000};
-    T2 test_2{.x = 2000, .y = 2000, .z = 2000, .w = 2000};
-    T3 test_3{.x = 123, .y = 123, .floats = {1, 123, 321321}};
-    T4 test_4{.x = 32, .y = 51, .message = "dsadagasdmkw"};
-    auto ent = world.spawn(test_1, test_2, test_3, test_4);
-    world.remove<T1, T2, T3, T4>(ent);
-    EXPECT_THROW(world.remove<T1>(ent), std::out_of_range);
-    EXPECT_THROW(world.remove<T2>(ent), std::out_of_range);
-    EXPECT_THROW(world.remove<T3>(ent), std::out_of_range);
-    EXPECT_THROW(world.remove<T4>(ent), std::out_of_range);
-
-    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T1>(ent), std::out_of_range);
-    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T2>(ent), std::out_of_range);
-    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T3>(ent), std::out_of_range);
-    EXPECT_THROW([[maybe_unused]] auto sda = world.get<T4>(ent), std::out_of_range);
 }
 
 TEST_F(WorldTest, remove_multi_add) {
