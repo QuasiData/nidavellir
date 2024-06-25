@@ -44,16 +44,77 @@ class World {
     EntityId next_entity_id{0};
 
   public:
+    /**
+     * @brief Default constructor for World.
+     */
     World() = default;
+
+    /**
+     * @brief Destructor for World.
+     */
     ~World() = default;
 
+    /**
+     * @brief Deleted copy constructor.
+     */
     World(const World&) = delete;
+
+    /**
+     * @brief Deleted copy assignment operator.
+     */
     auto operator=(const World&) = delete;
+
+    /**
+     * @brief Deleted move constructor.
+     */
     World(World&&) = delete;
+
+    /**
+     * @brief Deleted move assignment operator.
+     */
     auto operator=(World&&) = delete;
 
+    /**
+     * @brief Despawns an entity from the world.
+     * @param entity The ID of the entity to despawn.
+     *
+     * This function removes the specified entity from the world, along with all its associated components.
+     * The entity must exist in the world; attempting to despawn a non-existent entity will throw a `std::out_of_range` exception.
+     *
+     * @example
+     * @code
+     * ComponentType1 comp1;
+     * ComponentType2 comp2;
+     *
+     * World world;
+     * EntityId entity = world.spawn(comp1, comp2);
+     * world.despawn(entity);
+     * @endcode
+     */
     auto despawn(EntityId entity) -> void;
 
+    /**
+     * @brief Spawns a new entity with the given components.
+     * @tparam Ts The types of the components.
+     * @param pack The components to add to the new entity.
+     * @return The ID of the newly spawned entity.
+     * @example
+     * @code
+     * ComponentType1 comp1;
+     * ComponentType2 comp2;
+     *
+     * World world;
+     * // Spawn an entity with the components comp1 and comp2.
+     * EntityId entity1 = world.spawn(comp1, comp2);
+     *
+     * ComponentType3 comp3;
+     * ComponentType4 comp4;
+     *
+     * World world;
+     * // Spawn an entity with the components comp3 and comp4.
+     * EntityId entity2 = world.spawn(comp3, comp4);
+     * @endcode
+     */
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
         CompTypeList comp_ts = {get_component_info<Ts>()...};
@@ -69,6 +130,32 @@ class World {
         return new_entity_id;
     }
 
+    /**
+     * @brief Gets the components of the specified types for a given entity.
+     *
+     * This function retrieves the components of the specified types for the given entity.
+     * If only one component type is requested, a single reference is returned.
+     * If multiple component types are requested, a tuple of references is returned.
+     * Throws a `std::out_of_range` exception if the entity does not exist or if the specified components are not present on the entity.
+     *
+     * @tparam Ts The types of the components to get.
+     * @param entity The ID of the entity.
+     * @return A reference or tuple of references to the requested components.
+     * @example
+     * @code
+     * ComponentType1 comp1;
+     * ComponentType2 comp2;
+     *
+     * World world;
+     * EntityId entity = world.spawn(comp1, comp2);
+     *
+     * // Get a single component
+     * auto& component1 = world.get<ComponentType1>(entity);
+     *
+     * // Get multiple components
+     * auto& [component1, component2] = world.get<ComponentType1, ComponentType2>(entity);
+     * @endcode
+     */
     template<Component... Ts>
     [[nodiscard]] auto get(const EntityId entity) -> decltype(auto) {
         const auto [arch_id, col] = entity_map.at(entity);
@@ -84,6 +171,38 @@ class World {
         }
     }
 
+    /**
+     * @brief Adds the specified components to a given entity.
+     *
+     * This function adds the specified components to the given entity.
+     * If the entity already has a component of one of the supplied types, the existing component will be overwritten with the new one provided in the pack.
+     * Throws a `std::out_of_range` exception if the entity does not exist.
+     *
+     * @tparam Ts The types of the components to add.
+     * @param entity The ID of the entity.
+     * @param pack The components to add.
+     * @example
+     * @code
+     * struct Point {
+     *     int x, y;
+     * };
+     *
+     * struct Vector {
+     *     int x, y;
+     * };
+     *
+     * Point p{.x = 10, .y = 10};
+     * Vector v{.x = 20, .y = 20};
+     *
+     * World world;
+     * EntityId entity = world.spawn(p);
+     * world.add(entity, v);
+     * // The entity now has the components Point and Vector with values from the variables p and v.
+     *
+     * world.add(entity, Vector{.x = 100, .y = 100});
+     * // The entity will now have the same type of components but the value of the Vector component will be overwritten.
+     * @endcode
+     */
     template<Component... Ts>
     auto add(const EntityId entity, Ts&&... pack) -> void {
         static_assert(sizeof...(Ts) > 0);
@@ -160,6 +279,28 @@ class World {
         scratch_component_buffer.clear();
     }
 
+    /**
+     * @brief Removes the specified components from a given entity.
+     *
+     * This function removes the specified components from the given entity.
+     * Throws a `std::out_of_range` exception if the entity does not exist.
+     * If the entity does not have all of the specified components, this function will cause undefined behavior.
+     *
+     * @tparam Ts The types of the components to remove.
+     * @param entity The ID of the entity.
+     * @example
+     * @code
+     * ComponentType1 comp1;
+     * ComponentType2 comp2;
+     *
+     * World world;
+     * EntityId entity = world.spawn(comp1, comp2);
+     * // The entity has the components ComponentType1 and ComponentType2
+     *
+     * world.remove<ComponentType2>(entity);
+     * // The entity only has the component ComponentType1
+     * @endcode
+     */
     template<Component... Ts>
     auto remove(const EntityId entity) -> void {
         static_assert(sizeof...(Ts) > 0);
@@ -234,6 +375,11 @@ class World {
     }
 
   private:
+    /**
+     * @brief Finds or creates an archetype for the given component type list.
+     * @param comp_ts The component type list.
+     * @return A reference to the archetype record.
+     */
     auto find_or_create_archetype(const CompTypeList& comp_ts) -> ArchetypeRecord&;
 };
 } // namespace nid
