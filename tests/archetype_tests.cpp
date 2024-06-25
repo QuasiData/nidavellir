@@ -28,6 +28,67 @@ template<typename... Ts>
     return lst;
 }
 
+struct NonTrivialCopy {
+    std::vector<usize> vec{10};
+    usize copies{0};
+    usize moves{0};
+
+    NonTrivialCopy() = default;
+    ~NonTrivialCopy() = default;
+
+    NonTrivialCopy([[maybe_unused]] const NonTrivialCopy& other) : copies(other.copies) {
+        ++copies;
+    }
+
+    auto operator=([[maybe_unused]] const NonTrivialCopy& other) -> NonTrivialCopy& {
+        copies = other.copies;
+        ++copies;
+        return *this;
+    }
+
+    NonTrivialCopy([[maybe_unused]] NonTrivialCopy&& other) noexcept : moves(other.moves) {
+        ++moves;
+    }
+
+    auto operator=([[maybe_unused]] NonTrivialCopy&& other) noexcept -> NonTrivialCopy& {
+        moves = other.moves;
+        ++moves;
+        return *this;
+    }
+};
+
+static_assert(!std::is_trivially_copyable_v<NonTrivialCopy>);
+
+struct Relocatable {
+    using is_relocatable = void;
+    std::vector<usize> vec{10};
+    usize copies{0};
+    usize moves{0};
+
+    Relocatable() = default;
+    ~Relocatable() = default;
+
+    Relocatable([[maybe_unused]] const Relocatable& other) : copies(other.copies) {
+        ++copies;
+    }
+
+    auto operator=([[maybe_unused]] const Relocatable& other) -> Relocatable& {
+        copies = other.copies;
+        ++copies;
+        return *this;
+    }
+
+    Relocatable([[maybe_unused]] Relocatable&& other) noexcept : moves(other.moves) {
+        ++moves;
+    }
+
+    auto operator=([[maybe_unused]] Relocatable&& other) noexcept -> Relocatable& {
+        moves = other.moves;
+        ++moves;
+        return *this;
+    }
+};
+
 struct T1 {
     f32 x{0}, y{0};
 };
@@ -49,19 +110,19 @@ struct T4 {
 class ArchetypeTest : public testing::Test {
   protected:
     CompTypeList lst1 = get_sorted_infos<T1, T2>();
-    std::vector<usize> row1;
     Archetype arch1;
 
     CompTypeList lst2 = get_sorted_infos<T2, T3>();
-    std::vector<usize> row2;
     Archetype arch2;
 
     CompTypeList lst3 = get_sorted_infos<T3, T4>();
-    std::vector<usize> row3;
     Archetype arch3;
 
     CompTypeList lste = get_sorted_infos<>();
     Archetype arche;
+
+    CompTypeList lstcopy = get_sorted_infos<NonTrivialCopy, Relocatable>();
+    Archetype archcopy;
 
     T1 t1{.x = 1, .y = 1};
     T2 t2{.x = 2, .y = 2, .z = 2, .w = 2};
@@ -75,57 +136,28 @@ class ArchetypeTest : public testing::Test {
     std::uniform_int_distribution<std::mt19937::result_type> dist{1, num - 2};
 
     ArchetypeTest()
-        : arch1(lst1), arch2(lst2), arch3(lst3), arche(lste) {
+        : arch1(lst1), arch2(lst2), arch3(lst3), arche(lste), archcopy(lstcopy) {
 
         const auto l1 = get_infos<T1, T2>();
         const auto l2 = get_infos<T2, T3>();
         const auto l3 = get_infos<T3, T4>();
-
-        for (usize i{0}; i < l1.size(); ++i) {
-            for (usize j{0}; j < lst1.size(); ++j) {
-                if (l1[i].id == lst1[j].id) {
-                    row1.emplace_back(j);
-                    break;
-                }
-            }
-        }
-
-        for (usize i{0}; i < l2.size(); ++i) {
-            for (usize j{0}; j < lst2.size(); ++j) {
-                if (l2[i].id == lst2[j].id) {
-                    row2.emplace_back(j);
-                    break;
-                }
-            }
-        }
-
-        for (usize i{0}; i < l3.size(); ++i) {
-            for (usize j{0}; j < lst3.size(); ++j) {
-                if (l3[i].id == lst3[j].id) {
-                    row3.emplace_back(j);
-                    break;
-                }
-            }
-        }
-
-        assert(l1[0].id == lst1[row1[0]].id);
-        assert(l2[0].id == lst2[row2[0]].id);
-        assert(l3[0].id == lst3[row3[0]].id);
+        const auto lc = get_infos<NonTrivialCopy, Relocatable>();
 
         for (usize i{0}; i < num; ++i) {
-            [[maybe_unused]] auto _1 = arch1.emplace_back(row1, t1, t2);
-            [[maybe_unused]] auto _2 = arch2.emplace_back(row2, t2, t3);
-            [[maybe_unused]] auto _3 = arch3.emplace_back(row3, t3, t4);
-            [[maybe_unused]] auto _e = arche.emplace_back(std::vector<usize>{});
+            [[maybe_unused]] auto _1 = arch1.emplace_back(t1, t2);
+            [[maybe_unused]] auto _2 = arch2.emplace_back(t2, t3);
+            [[maybe_unused]] auto _3 = arch3.emplace_back(t3, t4);
+            [[maybe_unused]] auto _e = arche.emplace_back();
+            [[maybe_unused]] auto _c = archcopy.emplace_back(NonTrivialCopy{}, Relocatable{});
         }
     }
 };
 } // namespace
 
 TEST_F(ArchetypeTest, get1) {
-    const auto& [x, y] = arch1.get_component<T1>(0, row1[0]);
-    const auto& [x2, y2, z2, w2] = arch1.get_component<T2>(dist(rng), row1[1]);
-    const auto& [x3, y3, z3, w3] = arch1.get_component<T2>(num - 1, row1[1]);
+    const auto& [x, y] = arch1.get_component<T1>(0);
+    const auto& [x2, y2, z2, w2] = arch1.get_component<T2>(dist(rng));
+    const auto& [x3, y3, z3, w3] = arch1.get_component<T2>(num - 1);
 
     EXPECT_EQ(x, t1.x);
     EXPECT_EQ(y, t1.y);
@@ -140,9 +172,9 @@ TEST_F(ArchetypeTest, get1) {
 }
 
 TEST_F(ArchetypeTest, get2) {
-    const auto& [x, y, z, w] = arch2.get_component<T2>(0, row2[0]);
-    const auto& [x2, y2, floats2] = arch2.get_component<T3>(dist(rng), row2[1]);
-    const auto& [x3, y3, floats3] = arch2.get_component<T3>(num - 1, row2[1]);
+    const auto& [x, y, z, w] = arch2.get_component<T2>(0);
+    const auto& [x2, y2, floats2] = arch2.get_component<T3>(dist(rng));
+    const auto& [x3, y3, floats3] = arch2.get_component<T3>(num - 1);
 
     EXPECT_EQ(x, t2.x);
     EXPECT_EQ(y, t2.y);
@@ -157,9 +189,9 @@ TEST_F(ArchetypeTest, get2) {
 }
 
 TEST_F(ArchetypeTest, get3) {
-    const auto& [x, y, floats] = arch3.get_component<T3>(0, row3[0]);
-    const auto& [x2, y2, message2] = arch3.get_component<T4>(dist(rng), row3[1]);
-    const auto& [x3, y3, message3] = arch3.get_component<T4>(num - 1, row3[1]);
+    const auto& [x, y, floats] = arch3.get_component<T3>(0);
+    const auto& [x2, y2, message2] = arch3.get_component<T4>(dist(rng));
+    const auto& [x3, y3, message3] = arch3.get_component<T4>(num - 1);
 
     EXPECT_EQ(x, t3.x);
     EXPECT_EQ(y, t3.y);
@@ -174,7 +206,7 @@ TEST_F(ArchetypeTest, get3) {
 
 TEST_F(ArchetypeTest, iterators1) {
     usize count{0};
-    for (auto it = arch1.begin<T1>(row1[0]); it != arch1.end<T1>(row1[0]); ++it) {
+    for (auto it = arch1.begin<T1>(); it != arch1.end<T1>(); ++it) {
         ++count;
         EXPECT_EQ(it->x, t1.x);
         EXPECT_EQ(it->y, t1.y);
@@ -184,7 +216,7 @@ TEST_F(ArchetypeTest, iterators1) {
 
 TEST_F(ArchetypeTest, iterators2) {
     usize count{0};
-    for (auto it = arch2.begin<T3>(row2[1]); it != arch2.end<T3>(row2[1]); ++it) {
+    for (auto it = arch2.begin<T3>(); it != arch2.end<T3>(); ++it) {
         ++count;
         EXPECT_EQ(it->x, t3.x);
         EXPECT_EQ(it->y, t3.y);
@@ -195,7 +227,7 @@ TEST_F(ArchetypeTest, iterators2) {
 
 TEST_F(ArchetypeTest, iterators3) {
     usize count{0};
-    for (auto it = arch3.begin<T4>(row3[1]); it != arch3.end<T4>(row3[1]); ++it) {
+    for (auto it = arch3.begin<T4>(); it != arch3.end<T4>(); ++it) {
         ++count;
         EXPECT_EQ(it->x, t4.x);
         EXPECT_EQ(it->y, t4.y);
@@ -207,10 +239,10 @@ TEST_F(ArchetypeTest, iterators3) {
 TEST_F(ArchetypeTest, remove1) {
     T1 l_t1{.x = 100, .y = 100};
     T2 l_t2{.x = 1000, .y = 1000, .z = 1000, .w = 1000};
-    [[maybe_unused]] auto _1 = arch1.emplace_back(row1, l_t1, l_t2);
+    [[maybe_unused]] auto _1 = arch1.emplace_back(l_t1, l_t2);
     [[maybe_unused]] auto _2 = arch1.remove(0);
-    const auto& [x, y] = arch1.get_component<T1>(0, row1[0]);
-    const auto& [x2, y2, z2, w2] = arch1.get_component<T2>(0, row1[1]);
+    const auto& [x, y] = arch1.get_component<T1>(0);
+    const auto& [x2, y2, z2, w2] = arch1.get_component<T2>(0);
     EXPECT_EQ(x, l_t1.x);
     EXPECT_EQ(y, l_t1.y);
     EXPECT_EQ(x2, l_t2.x);
@@ -221,9 +253,9 @@ TEST_F(ArchetypeTest, remove1) {
 
 TEST_F(ArchetypeTest, remove2) {
     T3 l_t3{.x = 100, .y = 100, .floats = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}};
-    [[maybe_unused]] auto _1 = arch2.emplace_back(row2, T2{.x = 1, .y = 1, .z = 1, .w = 1}, l_t3);
+    [[maybe_unused]] auto _1 = arch2.emplace_back(T2{.x = 1, .y = 1, .z = 1, .w = 1}, l_t3);
     [[maybe_unused]] auto _2 = arch2.remove(0);
-    const auto& [x, y, floats] = arch2.get_component<T3>(0, row2[1]);
+    const auto& [x, y, floats] = arch2.get_component<T3>(0);
     EXPECT_EQ(x, l_t3.x);
     EXPECT_EQ(y, l_t3.y);
     EXPECT_EQ(floats, l_t3.floats);
@@ -241,7 +273,7 @@ TEST_F(ArchetypeTest, move_constructor) {
     EXPECT_EQ(arch1.len(), 0);
     EXPECT_EQ(arch1.cap(), 0);
     EXPECT_EQ(arch.len(), num);
-    const auto& [x, y] = arch.get_component<T1>(0, row1[0]);
+    const auto& [x, y] = arch.get_component<T1>(0);
     EXPECT_EQ(x, t1.x);
     EXPECT_EQ(y, t1.y);
 }
@@ -252,7 +284,7 @@ TEST_F(ArchetypeTest, move_assign1) {
     EXPECT_EQ(arch1.len(), 0);
     EXPECT_EQ(arch1.cap(), 0);
     EXPECT_EQ(arch.len(), num);
-    const auto& [x, y] = arch.get_component<T1>(0, row1[0]);
+    const auto& [x, y] = arch.get_component<T1>(0);
     EXPECT_EQ(x, t1.x);
     EXPECT_EQ(y, t1.y);
 }
@@ -263,7 +295,7 @@ TEST_F(ArchetypeTest, move_assign2) {
     EXPECT_EQ(arch1.len(), 0);
     EXPECT_EQ(arch1.cap(), 0);
     EXPECT_EQ(arch2.len(), num);
-    const auto& [x, y] = arch2.get_component<T1>(0, row1[0]);
+    const auto& [x, y] = arch2.get_component<T1>(0);
     EXPECT_EQ(x, t1.x);
     EXPECT_EQ(y, t1.y);
 }
@@ -278,7 +310,7 @@ TEST_F(ArchetypeTest, move_assign4) {
     EXPECT_EQ(arch1.len(), 0);
     EXPECT_EQ(arch1.cap(), 0);
     EXPECT_EQ(arche.len(), num);
-    const auto& [x, y] = arche.get_component<T1>(0, row1[0]);
+    const auto& [x, y] = arche.get_component<T1>(0);
     EXPECT_EQ(x, t1.x);
     EXPECT_EQ(y, t1.y);
 }
@@ -286,14 +318,14 @@ TEST_F(ArchetypeTest, move_assign4) {
 TEST_F(ArchetypeTest, swap) {
     T3 l_t3{.x = 10, .y = 10, .floats = {1, 2, 3, 4}};
     T4 l_t4{.x = 20, .y = 20, .message = "SwapTest"};
-    const auto col = arch3.emplace_back(row3, l_t3, l_t4);
+    const auto col = arch3.emplace_back(l_t3, l_t4);
     const auto rnd = dist(rng);
     arch3.swap(rnd, col);
-    auto [x1, y1, floats] = arch3.get_component<T3>(rnd, row3[0]);
+    auto [x1, y1, floats] = arch3.get_component<T3>(rnd);
     EXPECT_EQ(x1, l_t3.x);
     EXPECT_EQ(y1, l_t3.y);
     EXPECT_EQ(floats, l_t3.floats);
-    auto [x2, y2, message] = arch3.get_component<T4>(rnd, row3[1]);
+    auto [x2, y2, message] = arch3.get_component<T4>(rnd);
     EXPECT_EQ(x2, l_t4.x);
     EXPECT_EQ(y2, l_t4.y);
     EXPECT_EQ(message, l_t4.message);
@@ -306,7 +338,7 @@ TEST_F(ArchetypeTest, remove_and_emplace) {
     }
     EXPECT_EQ(arch3.len(), 0);
     for (usize i{0}; i < num; ++i) {
-        [[maybe_unused]] auto _ = arch3.emplace_back(row3, t3, t4);
+        [[maybe_unused]] auto _ = arch3.emplace_back(t3, t4);
     }
     EXPECT_EQ(arch3.len(), num);
 }
@@ -317,7 +349,7 @@ TEST_F(ArchetypeTest, swap_same_and_full) {
     const auto cap = arch3.cap();
     const auto len = arch3.len();
     for (usize i{0}; i < cap - len; ++i) {
-        [[maybe_unused]] auto _ = arch3.emplace_back(row3, l_t3, l_t4);
+        [[maybe_unused]] auto _ = arch3.emplace_back(l_t3, l_t4);
     }
     EXPECT_EQ(arch3.cap(), arch3.len());
     arch3.swap(arch3.len() - 1, arch3.len() - 1);
@@ -326,4 +358,26 @@ TEST_F(ArchetypeTest, swap_same_and_full) {
 
 TEST_F(ArchetypeTest, swap_empty) {
     arche.swap(0, arche.len() - 1);
+}
+
+TEST_F(ArchetypeTest, no_copies) {
+    const auto& n_c = archcopy.get_component<NonTrivialCopy>(archcopy.len() - 1);
+    const auto& r_c = archcopy.get_component<Relocatable>(archcopy.len() - 1);
+
+    EXPECT_EQ(n_c.copies, 0);
+    EXPECT_EQ(n_c.moves, 1);
+
+    EXPECT_EQ(r_c.copies, 0);
+    EXPECT_EQ(r_c.moves, 1);
+
+    archcopy.swap(archcopy.len() - 1, 0);
+    const auto& n_c2 = archcopy.get_component<NonTrivialCopy>(0);
+    const auto& r_c2 = archcopy.get_component<Relocatable>(0);
+
+    EXPECT_EQ(n_c2.copies, 0);
+    EXPECT_GT(n_c2.moves, 1);
+    EXPECT_LT(n_c2.moves, 4);
+
+    EXPECT_EQ(r_c2.copies, 0);
+    EXPECT_EQ(r_c2.moves, 1);
 }

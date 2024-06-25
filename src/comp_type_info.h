@@ -23,8 +23,9 @@ namespace nid {
  */
 template<typename T>
 concept Component = std::is_move_assignable_v<std::decay_t<T>>
-                    and std::is_move_constructible_v<std::decay_t<T>>
-                    and std::is_destructible_v<std::decay_t<T>>;
+                    and std::is_nothrow_move_constructible_v<std::decay_t<T>>
+                    and std::is_destructible_v<std::decay_t<T>>
+                    and !std::is_pointer_v<std::decay_t<T>>;
 // clang-format on
 
 /**
@@ -120,6 +121,10 @@ struct CompTypeInfo {
      * @brief The size of the component type in bytes.
      */
     usize size;
+
+    [[nodiscard]] auto operator==(const CompTypeInfo& rhs) const noexcept -> bool {
+        return id == rhs.id and move_assign == rhs.move_assign;
+    }
 };
 
 /**
@@ -167,7 +172,7 @@ struct TypeHash {
  */
 template<typename T>
 auto ctor_impl(void* ptr, const usize count) -> void {
-    assert(ptr);
+    NIDAVELLIR_ASSERT(ptr, "The pointer should always be valid");
 
     T* arr = static_cast<T*>(ptr);
     for (usize i{0}; i < count; ++i) {
@@ -186,7 +191,7 @@ auto ctor_impl(void* ptr, const usize count) -> void {
  */
 template<typename T>
 auto dtor_impl(void* ptr, const usize count) -> void {
-    assert(ptr);
+    NIDAVELLIR_ASSERT(ptr, "The pointer should always be valid");
 
     if constexpr (!std::is_trivially_destructible_v<T>) {
         T* arr = static_cast<T*>(ptr);
@@ -208,7 +213,7 @@ auto dtor_impl(void* ptr, const usize count) -> void {
  */
 template<typename T>
 auto copy_ctor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -234,7 +239,7 @@ auto copy_ctor_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto copy_assgin_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -260,7 +265,7 @@ auto copy_assgin_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_ctor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -286,7 +291,7 @@ auto move_ctor_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_assign_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -313,7 +318,7 @@ auto move_assign_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_ctor_dtor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -343,7 +348,7 @@ auto move_ctor_dtor_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -367,6 +372,62 @@ auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
 }
 
 /**
+ * @brief Computes the FNV-1a hash for a given string at compile time.
+ *
+ * This function uses the FNV-1a hash algorithm to generate a hash value for the provided
+ * null-terminated string. It is a constexpr function, allowing it to be evaluated at compile time.
+ *
+ * @param str A pointer to a null-terminated string to be hashed.
+ * @return The computed hash value as a `usize`.
+ */
+constexpr auto fnv1a_hash(const char* str) -> usize {
+    usize hash = 0xcbf29ce484222325;
+    while (*str != 0) {
+        hash ^= static_cast<std::size_t>(*str);
+        hash *= 0x100000001b3;
+        ++str;
+    }
+    return hash;
+}
+
+/**
+ * @brief Generates a unique ID for a given type at compile time.
+ *
+ * This function uses the FNV-1a hash algorithm to generate a unique ID based on the type's
+ * signature. It utilizes compiler-specific macros to obtain the type signature, ensuring(with high probability anyway)
+ * uniqueness across different types.
+ *
+ * @tparam T The type for which to generate a unique ID.
+ * @return The computed unique ID as a `usize`.
+ */
+template<Component T>
+constexpr auto type_id_impl() -> usize {
+#if defined(_MSC_VER)
+    return fnv1a_hash(__FUNCSIG__);
+#elif defined(__GNUC__) || defined(__clang__)
+    return fnv1a_hash(__PRETTY_FUNCTION__);
+#else
+    // Runtime fallback
+    return fnv1a_hash(typeid(T).name());
+#endif
+}
+
+/**
+ * @brief Wrapper function to generate a unique ID for a given type.
+ *
+ * This function calls the `type_id_impl` function, passing the decayed type
+ * to ensure that the unique ID is consistent across all type variations
+ * (e.g., references, const, volatile).
+ *
+ * @tparam T The type for which to generate a unique ID.
+ * @return The computed unique ID as a `usize`.
+ */
+template<Component T>
+constexpr auto type_id() -> usize {
+    return type_id_impl<std::decay_t<T>>();
+}
+
+/**
  * @brief Retrieves the component type information for type `T`.
  *
  * Constructs a `CompTypeInfo` object that contains type information and function pointers
@@ -376,12 +437,12 @@ auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
  * @return A `CompTypeInfo` object containing the type information and lifecycle functions for type `T`.
  */
 template<Component T>
-[[nodiscard]] auto get_component_info() -> CompTypeInfo {
+[[nodiscard]] constexpr auto get_component_info() -> CompTypeInfo {
     using Ty = std::decay_t<T>;
 
     auto info = CompTypeInfo{
-        .id = typeid(Ty).hash_code(),
-        .alignment = alignof(T),
+        .id = type_id<Ty>(),
+        .alignment = alignof(Ty),
         .ctor = &ctor_impl<Ty>,
         .dtor = &dtor_impl<Ty>,
         .copy_ctor = nullptr,

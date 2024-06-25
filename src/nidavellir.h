@@ -3,3 +3,4 @@
 #include "identifiers.h"
 #include "comp_type_info.h"
 #include "archetype.h"
+#include "world.h"
