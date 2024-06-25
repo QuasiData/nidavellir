@@ -1,0 +1,206 @@
+\doxysection{nid\+::Comp\+Type\+Info Struct Reference}
+\hypertarget{structnid_1_1CompTypeInfo}{}\label{structnid_1_1CompTypeInfo}\index{nid::CompTypeInfo@{nid::CompTypeInfo}}
+
+
+A structure containing type information and operations for a component.  
+
+
+
+
+{\ttfamily \#include $<$comp\+\_\+type\+\_\+info.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structnid_1_1CompTypeInfo_a546c448fef49ab5b0140b7a5e23a4bbf}\label{structnid_1_1CompTypeInfo_a546c448fef49ab5b0140b7a5e23a4bbf} 
+auto {\bfseries operator==} (const \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}} \&rhs) const noexcept -\/$>$ bool
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structnid_1_1CompTypeInfo_a7320950513d293a96cb955cfe23e1ead}\label{structnid_1_1CompTypeInfo_a7320950513d293a96cb955cfe23e1ead} 
+Component\+Id {\bfseries id}
+\begin{DoxyCompactList}\small\item\em The unique identifier for the component type. \end{DoxyCompactList}\item 
+\Hypertarget{structnid_1_1CompTypeInfo_af7d5ec9fc412b3803afc1d30b534700e}\label{structnid_1_1CompTypeInfo_af7d5ec9fc412b3803afc1d30b534700e} 
+usize {\bfseries alignment}
+\begin{DoxyCompactList}\small\item\em The alignment of the component type. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a75992ec5c636c81b234f8deb2c2a8b27}{ctor}} )(void \texorpdfstring{$\ast$}{*}dst, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the default constructor. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a9d9f26da2bfdd8e9133a869d269189c9}{dtor}} )(void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the destructor. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a0f62e5a50eba3a5d0d3dae078ff6f17c}{copy\+\_\+ctor}} )(void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the copy constructor. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a03690e4fd28ab28e88d26ad7a8565df4}{copy\+\_\+assign}} )(void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the copy assignment operator. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_aa7ff21195a3953ab5accb37fdc92fd02}{move\+\_\+ctor}} )(void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the move constructor. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a002d29eb0ef77e6a72092f8363233174}{move\+\_\+assign}} )(void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the move assignment operator. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a89bcf2f11be6695e9ac3f387992ebe05}{move\+\_\+ctor\+\_\+dtor}} )(void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the combined move constructor and destructor. \end{DoxyCompactList}\item 
+void(\texorpdfstring{$\ast$}{*} \mbox{\hyperlink{structnid_1_1CompTypeInfo_a4ac16d83081f193d0f8fc474c7d48eb7}{move\+\_\+assign\+\_\+dtor}} )(void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)
+\begin{DoxyCompactList}\small\item\em Function pointer for the combined move assignment and destructor. \end{DoxyCompactList}\item 
+\Hypertarget{structnid_1_1CompTypeInfo_a52b0d1f0e7e59dc5a4b8337295fb2c3c}\label{structnid_1_1CompTypeInfo_a52b0d1f0e7e59dc5a4b8337295fb2c3c} 
+usize {\bfseries size}
+\begin{DoxyCompactList}\small\item\em The size of the component type in bytes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A structure containing type information and operations for a component. 
+
+This structure holds metadata and function pointers for managing the lifecycle of a component type. It includes functions for construction, destruction, copy construction, copy assignment, move construction, move assignment, and combined move and destruct operations. 
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{structnid_1_1CompTypeInfo_a03690e4fd28ab28e88d26ad7a8565df4}\label{structnid_1_1CompTypeInfo_a03690e4fd28ab28e88d26ad7a8565df4} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!copy\_assign@{copy\_assign}}
+\index{copy\_assign@{copy\_assign}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{copy\_assign}{copy\_assign}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::copy\+\_\+assign) (void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the copy assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are assigned. \\
+\hline
+{\em src} & The source from where the components are copied. \\
+\hline
+{\em count} & The number of components to copy assign. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_a0f62e5a50eba3a5d0d3dae078ff6f17c}\label{structnid_1_1CompTypeInfo_a0f62e5a50eba3a5d0d3dae078ff6f17c} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!copy\_ctor@{copy\_ctor}}
+\index{copy\_ctor@{copy\_ctor}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{copy\_ctor}{copy\_ctor}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::copy\+\_\+ctor) (void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the copy constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are constructed. \\
+\hline
+{\em src} & The source from where the components are copied. \\
+\hline
+{\em count} & The number of components to copy construct. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_a75992ec5c636c81b234f8deb2c2a8b27}\label{structnid_1_1CompTypeInfo_a75992ec5c636c81b234f8deb2c2a8b27} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!ctor@{ctor}}
+\index{ctor@{ctor}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{ctor}{ctor}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::ctor) (void \texorpdfstring{$\ast$}{*}dst, usize count)}
+
+
+
+Function pointer for the default constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are constructed. \\
+\hline
+{\em count} & The number of components to construct. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_a9d9f26da2bfdd8e9133a869d269189c9}\label{structnid_1_1CompTypeInfo_a9d9f26da2bfdd8e9133a869d269189c9} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!dtor@{dtor}}
+\index{dtor@{dtor}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{dtor}{dtor}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::dtor) (void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the destructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em src} & The source from where the components are destructed. \\
+\hline
+{\em count} & The number of components to destruct. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_a002d29eb0ef77e6a72092f8363233174}\label{structnid_1_1CompTypeInfo_a002d29eb0ef77e6a72092f8363233174} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!move\_assign@{move\_assign}}
+\index{move\_assign@{move\_assign}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{move\_assign}{move\_assign}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::move\+\_\+assign) (void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the move assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are move assigned. \\
+\hline
+{\em src} & The source from where the components are moved. \\
+\hline
+{\em count} & The number of components to move assign. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_a4ac16d83081f193d0f8fc474c7d48eb7}\label{structnid_1_1CompTypeInfo_a4ac16d83081f193d0f8fc474c7d48eb7} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!move\_assign\_dtor@{move\_assign\_dtor}}
+\index{move\_assign\_dtor@{move\_assign\_dtor}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{move\_assign\_dtor}{move\_assign\_dtor}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::move\+\_\+assign\+\_\+dtor) (void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the combined move assignment and destructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are move assigned. \\
+\hline
+{\em src} & The source from where the components are moved and destructed. \\
+\hline
+{\em count} & The number of components to move assign and destruct. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_aa7ff21195a3953ab5accb37fdc92fd02}\label{structnid_1_1CompTypeInfo_aa7ff21195a3953ab5accb37fdc92fd02} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!move\_ctor@{move\_ctor}}
+\index{move\_ctor@{move\_ctor}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{move\_ctor}{move\_ctor}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::move\+\_\+ctor) (void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the move constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are move constructed. \\
+\hline
+{\em src} & The source from where the components are moved. \\
+\hline
+{\em count} & The number of components to move construct. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{structnid_1_1CompTypeInfo_a89bcf2f11be6695e9ac3f387992ebe05}\label{structnid_1_1CompTypeInfo_a89bcf2f11be6695e9ac3f387992ebe05} 
+\index{nid::CompTypeInfo@{nid::CompTypeInfo}!move\_ctor\_dtor@{move\_ctor\_dtor}}
+\index{move\_ctor\_dtor@{move\_ctor\_dtor}!nid::CompTypeInfo@{nid::CompTypeInfo}}
+\doxysubsubsection{\texorpdfstring{move\_ctor\_dtor}{move\_ctor\_dtor}}
+{\footnotesize\ttfamily void(\texorpdfstring{$\ast$}{*} nid\+::\+Comp\+Type\+Info\+::move\+\_\+ctor\+\_\+dtor) (void \texorpdfstring{$\ast$}{*}dst, void \texorpdfstring{$\ast$}{*}src, usize count)}
+
+
+
+Function pointer for the combined move constructor and destructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dst} & The destination where the components are move constructed. \\
+\hline
+{\em src} & The source from where the components are moved and destructed. \\
+\hline
+{\em count} & The number of components to move construct and destruct. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/comp\+\_\+type\+\_\+info.\+h\end{DoxyCompactItemize}

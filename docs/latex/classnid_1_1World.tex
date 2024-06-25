@@ -1,0 +1,44 @@
+\doxysection{nid\+::World Class Reference}
+\hypertarget{classnid_1_1World}{}\label{classnid_1_1World}\index{nid::World@{nid::World}}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}\label{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68} 
+{\bfseries World} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor for \doxylink{classnid_1_1World}{World}. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a9ac9ec0b3b2d4249b91e96b87f0ff995}\label{classnid_1_1World_a9ac9ec0b3b2d4249b91e96b87f0ff995} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+World} ()=default
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classnid_1_1World}{World}. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a92e68f5497da9185bde16292a2f0c1a0}\label{classnid_1_1World_a92e68f5497da9185bde16292a2f0c1a0} 
+{\bfseries World} (const \mbox{\hyperlink{classnid_1_1World}{World}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539}\label{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539} 
+auto {\bfseries operator=} (const \mbox{\hyperlink{classnid_1_1World}{World}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy assignment operator. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_ae97f4f2d26ffb741787fc87d7dc85ed7}\label{classnid_1_1World_ae97f4f2d26ffb741787fc87d7dc85ed7} 
+{\bfseries World} (\mbox{\hyperlink{classnid_1_1World}{World}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted move constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_aecac2d1a3726511a0020e149c6843f2b}\label{classnid_1_1World_aecac2d1a3726511a0020e149c6843f2b} 
+auto {\bfseries operator=} (\mbox{\hyperlink{classnid_1_1World}{World}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted move assignment operator. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d}\label{classnid_1_1World_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d} 
+auto {\bfseries despawn} (Entity\+Id entity) -\/$>$ void
+\item 
+\Hypertarget{classnid_1_1World_ae7b9a881c3b27c73b9804dfd827bb084}\label{classnid_1_1World_ae7b9a881c3b27c73b9804dfd827bb084} 
+{\footnotesize template$<$Component... Ts$>$ }\\auto {\bfseries spawn} (Ts \&\&... pack) -\/$>$ Entity\+Id
+\item 
+\Hypertarget{classnid_1_1World_a45bc3cddff5b9963f34513038e0e8f1b}\label{classnid_1_1World_a45bc3cddff5b9963f34513038e0e8f1b} 
+{\footnotesize template$<$Component... Ts$>$ }\\auto {\bfseries get} (const Entity\+Id entity) -\/$>$ decltype(auto)
+\item 
+\Hypertarget{classnid_1_1World_ab2291f375b044fe8d45247a00e77a1d6}\label{classnid_1_1World_ab2291f375b044fe8d45247a00e77a1d6} 
+{\footnotesize template$<$Component... Ts$>$ }\\auto {\bfseries add} (const Entity\+Id entity, Ts \&\&... pack) -\/$>$ void
+\item 
+\Hypertarget{classnid_1_1World_ad29bd42efb428d3b17ec704b6e9bae2e}\label{classnid_1_1World_ad29bd42efb428d3b17ec704b6e9bae2e} 
+{\footnotesize template$<$Component... Ts$>$ }\\auto {\bfseries remove} (const Entity\+Id entity) -\/$>$ void
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/world.\+h\item 
+src/world.\+cpp\end{DoxyCompactItemize}

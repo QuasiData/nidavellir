@@ -1,4 +1,10 @@
 var annotated_dup =
 [
-    [ "CompTypeInfo", "struct_comp_type_info.html", "struct_comp_type_info" ]
+    [ "nid", null, [
+      [ "Archetype", "classnid_1_1Archetype.html", "classnid_1_1Archetype" ],
+      [ "CompTypeInfo", "structnid_1_1CompTypeInfo.html", "structnid_1_1CompTypeInfo" ],
+      [ "RowIterator", "classnid_1_1RowIterator.html", "classnid_1_1RowIterator" ],
+      [ "TypeHash", "structnid_1_1TypeHash.html", "structnid_1_1TypeHash" ],
+      [ "World", "classnid_1_1World.html", "classnid_1_1World" ]
+    ] ]
 ];

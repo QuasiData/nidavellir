@@ -1,0 +1,252 @@
+\doxysection{comp\+\_\+type\+\_\+info.\+h}
+\hypertarget{comp__type__info_8h_source}{}\label{comp__type__info_8h_source}\index{src/comp\_type\_info.h@{src/comp\_type\_info.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ ReSharper\ disable\ CppDFANullDereference}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}core.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}identifiers.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <cstring>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}ankerl/unordered\_dense.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{namespace\ }nid\ \{}
+\DoxyCodeLine{00014\ \textcolor{comment}{//\ clang-\/format\ off}}
+\DoxyCodeLine{00024\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00025\ \textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptnid_1_1Component}{Component}}\ =\ std::is\_move\_assignable\_v<std::decay\_t<T>>}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ std::is\_nothrow\_move\_constructible\_v<std::decay\_t<T>>}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ std::is\_destructible\_v<std::decay\_t<T>>}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ !std::is\_pointer\_v<std::decay\_t<T>>;}
+\DoxyCodeLine{00029\ \textcolor{comment}{//\ clang-\/format\ on}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00039\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\ \{}
+\DoxyCodeLine{00043\ \ \ \ \ ComponentId\ \mbox{\hyperlink{structnid_1_1CompTypeInfo_a7320950513d293a96cb955cfe23e1ead}{id}};}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00048\ \ \ \ \ usize\ \mbox{\hyperlink{structnid_1_1CompTypeInfo_af7d5ec9fc412b3803afc1d30b534700e}{alignment}};}
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00056\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a75992ec5c636c81b234f8deb2c2a8b27}{ctor}})(\textcolor{keywordtype}{void}*\ dst,\ usize\ count);}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00064\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a9d9f26da2bfdd8e9133a869d269189c9}{dtor}})(\textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00073\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a0f62e5a50eba3a5d0d3dae078ff6f17c}{copy\_ctor}})(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00082\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a03690e4fd28ab28e88d26ad7a8565df4}{copy\_assign}})(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00091\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_aa7ff21195a3953ab5accb37fdc92fd02}{move\_ctor}})(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00100\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a002d29eb0ef77e6a72092f8363233174}{move\_assign}})(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00109\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a89bcf2f11be6695e9ac3f387992ebe05}{move\_ctor\_dtor}})(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00118\ \ \ \ \ void\ (*\mbox{\hyperlink{structnid_1_1CompTypeInfo_a4ac16d83081f193d0f8fc474c7d48eb7}{move\_assign\_dtor}})(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ usize\ count);}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00123\ \ \ \ \ usize\ \mbox{\hyperlink{structnid_1_1CompTypeInfo_a52b0d1f0e7e59dc5a4b8337295fb2c3c}{size}};}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ operator==(\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ rhs)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keywordtype}{id}\ ==\ rhs.id\ and\ \mbox{\hyperlink{structnid_1_1CompTypeInfo_a002d29eb0ef77e6a72092f8363233174}{move\_assign}}\ ==\ rhs.move\_assign;}
+\DoxyCodeLine{00127\ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \};}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00136\ \textcolor{keyword}{using\ }CompTypeList\ =\ std::vector<CompTypeInfo>;}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00145\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structnid_1_1TypeHash}{TypeHash}}\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{structnid_1_1TypeHash_acc92bb44233a56f6b2f71f3ae525a887}{operator()}}(\textcolor{keyword}{const}\ CompTypeList\&\ x)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ -\/>\ u64\ \{}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ u64\ h\{0\};}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ x.size();\ ++i)\ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ h\ +=\ ankerl::unordered\_dense::detail::wyhash::hash(x[i].\textcolor{keywordtype}{id});}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ h;}
+\DoxyCodeLine{00161\ \ \ \ \ \}}
+\DoxyCodeLine{00162\ \};}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00173\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00174\ \textcolor{keyword}{auto}\ ctor\_impl(\textcolor{keywordtype}{void}*\ ptr,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00175\ \ \ \ \ NIDAVELLIR\_ASSERT(ptr,\ \textcolor{stringliteral}{"{}The\ pointer\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ T*\ arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(ptr);}
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (std::addressof(arr[i]))\ T();}
+\DoxyCodeLine{00180\ \ \ \ \ \}}
+\DoxyCodeLine{00181\ \}}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00192\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00193\ \textcolor{keyword}{auto}\ dtor\_impl(\textcolor{keywordtype}{void}*\ ptr,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00194\ \ \ \ \ NIDAVELLIR\_ASSERT(ptr,\ \textcolor{stringliteral}{"{}The\ pointer\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (!std::is\_trivially\_destructible\_v<T>)\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ T*\ arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(ptr);}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ arr[i].\string~T();}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00201\ \ \ \ \ \}}
+\DoxyCodeLine{00202\ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00214\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00215\ \textcolor{keyword}{auto}\ copy\_ctor\_impl(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ NIDAVELLIR\_ASSERT(dst\ \&\&\ src,\ \textcolor{stringliteral}{"{}The\ pointers\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \ \ \ \ T*\ src\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00219\ \ \ \ \ T*\ dst\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(dst);}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_trivially\_copyable\_v<T>)\ \{}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ std::memcpy(dst,\ src,\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{00223\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (std::addressof(dst\_arr[i]))\ T(src\_arr[i]);}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00227\ \ \ \ \ \}}
+\DoxyCodeLine{00228\ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00240\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00241\ \textcolor{keyword}{auto}\ copy\_assgin\_impl(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00242\ \ \ \ \ NIDAVELLIR\_ASSERT(dst\ \&\&\ src,\ \textcolor{stringliteral}{"{}The\ pointers\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ T*\ src\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00245\ \ \ \ \ T*\ dst\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(dst);}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_trivially\_copyable\_v<T>)\ \{}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ std::memcpy(dst,\ src,\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{00249\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ dst\_arr[i]\ =\ src\_arr[i];}
+\DoxyCodeLine{00252\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00253\ \ \ \ \ \}}
+\DoxyCodeLine{00254\ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00266\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00267\ \textcolor{keyword}{auto}\ move\_ctor\_impl(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ NIDAVELLIR\_ASSERT(dst\ \&\&\ src,\ \textcolor{stringliteral}{"{}The\ pointers\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ T*\ src\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00271\ \ \ \ \ T*\ dst\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(dst);}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_trivially\_copyable\_v<T>)\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ std::memcpy(dst,\ src,\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{00275\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00277\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (std::addressof(dst\_arr[i]))\ T(std::move(src\_arr[i]));}
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00279\ \ \ \ \ \}}
+\DoxyCodeLine{00280\ \}}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00292\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00293\ \textcolor{keyword}{auto}\ move\_assign\_impl(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ NIDAVELLIR\_ASSERT(dst\ \&\&\ src,\ \textcolor{stringliteral}{"{}The\ pointers\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ T*\ src\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00297\ \ \ \ \ T*\ dst\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(dst);}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_trivially\_copyable\_v<T>)\ \{}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ std::memcpy(dst,\ src,\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{00301\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ dst\_arr[i]\ =\ std::move(src\_arr[i]);}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00305\ \ \ \ \ \}}
+\DoxyCodeLine{00306\ \}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00319\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00320\ \textcolor{keyword}{auto}\ move\_ctor\_dtor\_impl(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00321\ \ \ \ \ NIDAVELLIR\_ASSERT(dst\ \&\&\ src,\ \textcolor{stringliteral}{"{}The\ pointers\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00322\ }
+\DoxyCodeLine{00323\ \ \ \ \ T*\ src\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00324\ \ \ \ \ T*\ dst\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(dst);}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_trivially\_copyable\_v<T>\ or\ \textcolor{keyword}{requires}(T)\ \{\ \textcolor{keyword}{typename}\ T::is\_relocatable;\ \})\ \{}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ std::memcpy(dst,\ src,\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{00328\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (std::addressof(dst\_arr[i]))\ T(std::move(src\_arr[i]));}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (!std::is\_trivially\_destructible\_v<T>)\ \{}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_arr[i].\string~T();}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00335\ \ \ \ \ \}}
+\DoxyCodeLine{00336\ \}}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00349\ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{00350\ \textcolor{keyword}{auto}\ move\_assign\_dtor\_impl(\textcolor{keywordtype}{void}*\ dst,\ \textcolor{keywordtype}{void}*\ src,\ \textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00351\ \ \ \ \ NIDAVELLIR\_ASSERT(dst\ \&\&\ src,\ \textcolor{stringliteral}{"{}The\ pointers\ should\ always\ be\ valid"{}});}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ T*\ src\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(src);}
+\DoxyCodeLine{00354\ \ \ \ \ T*\ dst\_arr\ =\ \textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(dst);}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00356\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_trivially\_copyable\_v<T>\ or\ \textcolor{keyword}{requires}(T)\ \{\ \textcolor{keyword}{typename}\ T::is\_relocatable;\ \})\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (!std::is\_trivially\_destructible\_v<T>)\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ dst\_arr[i].\string~T();}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ std::memcpy(dst,\ src,\ \textcolor{keyword}{sizeof}(T)\ *\ count);}
+\DoxyCodeLine{00364\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ count;\ ++i)\ \{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ dst\_arr[i]\ =\ std::move(src\_arr[i]);}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (!std::is\_trivially\_destructible\_v<T>)\ \{}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_arr[i].\string~T();}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00371\ \ \ \ \ \}}
+\DoxyCodeLine{00372\ \}}
+\DoxyCodeLine{00373\ }
+\DoxyCodeLine{00383\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ fnv1a\_hash(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ str)\ -\/>\ usize\ \{}
+\DoxyCodeLine{00384\ \ \ \ \ usize\ hash\ =\ 0xcbf29ce484222325;}
+\DoxyCodeLine{00385\ \ \ \ \ \textcolor{keywordflow}{while}\ (*str\ !=\ 0)\ \{}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ hash\ \string^=\ \textcolor{keyword}{static\_cast<}std::size\_t\textcolor{keyword}{>}(*str);}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ hash\ *=\ 0x100000001b3;}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ ++str;}
+\DoxyCodeLine{00389\ \ \ \ \ \}}
+\DoxyCodeLine{00390\ \ \ \ \ \textcolor{keywordflow}{return}\ hash;}
+\DoxyCodeLine{00391\ \}}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00403\ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00404\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ type\_id\_impl()\ -\/>\ usize\ \{}
+\DoxyCodeLine{00405\ \textcolor{preprocessor}{\#if\ defined(\_MSC\_VER)}}
+\DoxyCodeLine{00406\ \ \ \ \ \textcolor{keywordflow}{return}\ fnv1a\_hash(\_\_FUNCSIG\_\_);}
+\DoxyCodeLine{00407\ \textcolor{preprocessor}{\#elif\ defined(\_\_GNUC\_\_)\ ||\ defined(\_\_clang\_\_)}}
+\DoxyCodeLine{00408\ \ \ \ \ \textcolor{keywordflow}{return}\ fnv1a\_hash(\_\_PRETTY\_FUNCTION\_\_);}
+\DoxyCodeLine{00409\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00410\ \ \ \ \ \textcolor{comment}{//\ Runtime\ fallback}}
+\DoxyCodeLine{00411\ \ \ \ \ \textcolor{keywordflow}{return}\ fnv1a\_hash(\textcolor{keyword}{typeid}(T).name());}
+\DoxyCodeLine{00412\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00413\ \}}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00425\ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00426\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ type\_id()\ -\/>\ usize\ \{}
+\DoxyCodeLine{00427\ \ \ \ \ \textcolor{keywordflow}{return}\ type\_id\_impl<std::decay\_t<T>>();}
+\DoxyCodeLine{00428\ \}}
+\DoxyCodeLine{00429\ }
+\DoxyCodeLine{00439\ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00440\ [[nodiscard]]\ \textcolor{keyword}{constexpr}\ \textcolor{keyword}{auto}\ get\_component\_info()\ -\/>\ CompTypeInfo\ \{}
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{keyword}{using\ }Ty\ =\ std::decay\_t<T>;}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \ \ \ \ \textcolor{keyword}{auto}\ info\ =\ CompTypeInfo\{}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ .id\ =\ type\_id<Ty>(),}
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ .alignment\ =\ \textcolor{keyword}{alignof}(Ty),}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ .ctor\ =\ \&ctor\_impl<Ty>,}
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ .dtor\ =\ \&dtor\_impl<Ty>,}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ .copy\_ctor\ =\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ .copy\_assign\ =\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ .move\_ctor\ =\ \&move\_ctor\_impl<Ty>,}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ .move\_assign\ =\ \&move\_assign\_impl<Ty>,}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ .move\_ctor\_dtor\ =\ \&move\_ctor\_dtor\_impl<Ty>,}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ .move\_assign\_dtor\ =\ \&move\_assign\_dtor\_impl<Ty>,}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ .size\ =\ \textcolor{keyword}{sizeof}(Ty)\};}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_copy\_constructible\_v<Ty>)\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ info.copy\_ctor\ =\ \&copy\_ctor\_impl<Ty>;}
+\DoxyCodeLine{00458\ \ \ \ \ \}}
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00460\ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (std::is\_copy\_assignable\_v<Ty>)\ \{}
+\DoxyCodeLine{00461\ \ \ \ \ \ \ \ \ info.copy\_assign\ =\ \&copy\_assgin\_impl<Ty>;}
+\DoxyCodeLine{00462\ \ \ \ \ \}}
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \ \ \ \ \textcolor{keywordflow}{return}\ info;}
+\DoxyCodeLine{00465\ \}}
+\DoxyCodeLine{00466\ \}\ \textcolor{comment}{//\ namespace\ nid}}
+
+\end{DoxyCode}

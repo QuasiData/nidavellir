@@ -76,11 +76,11 @@ class World {
 
     /**
      * @brief Despawns an entity from the world.
-     * @param entity The ID of the entity to despawn.
      *
      * This function removes the specified entity from the world, along with all its associated components.
      * The entity must exist in the world; attempting to despawn a non-existent entity will throw a `std::out_of_range` exception.
      *
+     * @param entity The ID of the entity to despawn.
      * @example
      * @code
      * ComponentType1 comp1;

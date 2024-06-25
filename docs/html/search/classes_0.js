@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['comptypeinfo_0',['CompTypeInfo',['../struct_comp_type_info.html',1,'']]]
+  ['archetype_0',['Archetype',['../classnid_1_1Archetype.html',1,'nid']]]
 ];

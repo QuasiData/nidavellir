@@ -1,0 +1,432 @@
+\doxysection{nid\+::Row\+Iterator\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\hypertarget{classnid_1_1RowIterator}{}\label{classnid_1_1RowIterator}\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+
+
+A custom iterator class for iterating over rows of components.  
+
+
+
+
+{\ttfamily \#include $<$archetype.\+h$>$}
+
+\doxysubsubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classnid_1_1RowIterator_aadd1c3806b1ccf7b6ddebc8bc605cc79}{iterator\+\_\+category}} = std\+::contiguous\+\_\+iterator\+\_\+tag
+\item 
+using \mbox{\hyperlink{classnid_1_1RowIterator_a8b06d5d7769f2526ecddfe14b52472b6}{value\+\_\+type}} = T
+\item 
+using \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} = std\+::ptrdiff\+\_\+t
+\item 
+using \mbox{\hyperlink{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6}{pointer}} = T \texorpdfstring{$\ast$}{*}
+\item 
+using \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}} = T \&
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classnid_1_1RowIterator_a7fbfd9d942affbb0135e899d8077a336}\label{classnid_1_1RowIterator_a7fbfd9d942affbb0135e899d8077a336} 
+{\bfseries Row\+Iterator} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. Initializes the pointer to nullptr. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1RowIterator_a74aaa7e42cde5d016cc0ccb16b728ed4}\label{classnid_1_1RowIterator_a74aaa7e42cde5d016cc0ccb16b728ed4} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Row\+Iterator} ()=default
+\begin{DoxyCompactList}\small\item\em Default destructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classnid_1_1RowIterator_a51be21d3108f6af79d0d42d16f02422a}{Row\+Iterator}} (T \texorpdfstring{$\ast$}{*}p)
+\begin{DoxyCompactList}\small\item\em Constructs the iterator with a pointer to the component type. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1RowIterator_a2a242d4a7d6b18452e65781b234f85d5}\label{classnid_1_1RowIterator_a2a242d4a7d6b18452e65781b234f85d5} 
+{\bfseries Row\+Iterator} (const \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&)=default
+\begin{DoxyCompactList}\small\item\em Default copy constructor. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_ad0185e7418705957f7dfca9d846006dd}{operator=}} (const \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&=default
+\begin{DoxyCompactList}\small\item\em Default copy assignment operator. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1RowIterator_aeeab5a21cecd5ca87e8a45024d6825cb}\label{classnid_1_1RowIterator_aeeab5a21cecd5ca87e8a45024d6825cb} 
+{\bfseries Row\+Iterator} (\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&\&)=default
+\begin{DoxyCompactList}\small\item\em Default move constructor. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_ad53571d295ad2070639175cb32317adf}{operator=}} (\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&\&) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&=default
+\begin{DoxyCompactList}\small\item\em Default move assignment operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a009c9957b97a5fbb2b3d560997cfc5d9}{operator-\/$>$}} () const -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6}{pointer}}
+\begin{DoxyCompactList}\small\item\em Arrow operator for accessing the component pointer. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a49dfc46c84b3a149f3d3ee117969935a}{operator\texorpdfstring{$\ast$}{*}}} () const -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}}
+\begin{DoxyCompactList}\small\item\em Dereference operator for accessing the component reference. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a341832d17a4e97cf1dee374b08d5bcec}{operator\mbox{[}$\,$\mbox{]}}} (const \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} index) const -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}}
+\begin{DoxyCompactList}\small\item\em Subscript operator for accessing the component at the given index. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_ab169014f96ea034de27584c4ba687e26}{operator++}} () -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&
+\begin{DoxyCompactList}\small\item\em Pre-\/increment operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a3d2d6adff8c107045e0139e805e77558}{operator++}} (int) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Post-\/increment operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a3cbb393fa0b5db91b1c8cfbf47ba1ef1}{operator-\/-\/}} () -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&
+\begin{DoxyCompactList}\small\item\em Pre-\/decrement operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a33522613f0733f4172d6466ee0f06f50}{operator-\/-\/}} (int) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Post-\/decrement operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a2cfc42b96be730fbea6ad0f628b02546}{operator+=}} (const \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} steps) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&
+\begin{DoxyCompactList}\small\item\em Addition assignment operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_add9f074d97c1ff8924f38ae4db991be4}{operator-\/=}} (const \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} steps) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&
+\begin{DoxyCompactList}\small\item\em Subtraction assignment operator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_aae34d2d5da6014260243b9654d37474b}{operator$<$=$>$}} (\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} lhs, \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} rhs)=default
+\begin{DoxyCompactList}\small\item\em Three-\/way comparison operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a8b270a3703721ff21ffa8921309f45e2}{operator-\/}} (\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} lhs, \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} rhs) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}
+\begin{DoxyCompactList}\small\item\em Subtraction operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_ab087a0af20197b6d5869c67803555465}{operator+}} (\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} lhs, \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} rhs) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Addition operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_a1f6f30f164f3d547eeff2ea070571b44}{operator-\/}} (\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} lhs, \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} rhs) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Subtraction operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1RowIterator_ac78f58da4a473432f0924457e3022dbe}{operator+}} (\mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} lhs, \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} rhs) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}
+\begin{DoxyCompactList}\small\item\em Addition operator. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$Component T$>$\newline
+class nid\+::\+Row\+Iterator$<$ T $>$}
+A custom iterator class for iterating over rows of components. 
+
+This class defines an iterator for a range of components of type T. It provides the necessary iterator traits and implements the standard iterator operations, including increment, decrement, and random access.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The component type to iterate over. Must satisfy the Component concept. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Member Typedef Documentation}
+\Hypertarget{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}\label{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!difference\_type@{difference\_type}}
+\index{difference\_type@{difference\_type}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{difference\_type}{difference\_type}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+using \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::difference\+\_\+type =  std\+::ptrdiff\+\_\+t}
+
+The type used to represent the difference between iterators. \Hypertarget{classnid_1_1RowIterator_aadd1c3806b1ccf7b6ddebc8bc605cc79}\label{classnid_1_1RowIterator_aadd1c3806b1ccf7b6ddebc8bc605cc79} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!iterator\_category@{iterator\_category}}
+\index{iterator\_category@{iterator\_category}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{iterator\_category}{iterator\_category}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+using \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::iterator\+\_\+category =  std\+::contiguous\+\_\+iterator\+\_\+tag}
+
+The iterator category tag. \Hypertarget{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6}\label{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!pointer@{pointer}}
+\index{pointer@{pointer}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{pointer}{pointer}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+using \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::pointer =  T\texorpdfstring{$\ast$}{*}}
+
+The pointer type of the iterator. \Hypertarget{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}\label{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!reference@{reference}}
+\index{reference@{reference}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{reference}{reference}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+using \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::reference =  T\&}
+
+The reference type of the iterator. \Hypertarget{classnid_1_1RowIterator_a8b06d5d7769f2526ecddfe14b52472b6}\label{classnid_1_1RowIterator_a8b06d5d7769f2526ecddfe14b52472b6} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!value\_type@{value\_type}}
+\index{value\_type@{value\_type}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{value\_type}{value\_type}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+using \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::value\+\_\+type =  T}
+
+The value type of the iterator. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classnid_1_1RowIterator_a51be21d3108f6af79d0d42d16f02422a}\label{classnid_1_1RowIterator_a51be21d3108f6af79d0d42d16f02422a} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!RowIterator@{RowIterator}}
+\index{RowIterator@{RowIterator}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{RowIterator()}{RowIterator()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+\mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::\+Row\+Iterator (\begin{DoxyParamCaption}\item[{T \texorpdfstring{$\ast$}{*}}]{p }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Constructs the iterator with a pointer to the component type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & Pointer to the component type. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classnid_1_1RowIterator_a49dfc46c84b3a149f3d3ee117969935a}\label{classnid_1_1RowIterator_a49dfc46c84b3a149f3d3ee117969935a} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}}
+\index{operator\texorpdfstring{$\ast$}{*}@{operator\texorpdfstring{$\ast$}{*}}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator\texorpdfstring{$\ast$}{*}()}{operator*()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator\texorpdfstring{$\ast$}{*} (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}} \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Dereference operator for accessing the component reference. 
+
+\begin{DoxyReturn}{Returns}
+Reference to the component. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_ab169014f96ea034de27584c4ba687e26}\label{classnid_1_1RowIterator_ab169014f96ea034de27584c4ba687e26} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator++ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}\& \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pre-\/increment operator. 
+
+\begin{DoxyReturn}{Returns}
+A reference to the incremented iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a3d2d6adff8c107045e0139e805e77558}\label{classnid_1_1RowIterator_a3d2d6adff8c107045e0139e805e77558} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator++@{operator++}}
+\index{operator++@{operator++}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator++()}{operator++()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator++ (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Post-\/increment operator. 
+
+\begin{DoxyReturn}{Returns}
+The iterator before increment. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a2cfc42b96be730fbea6ad0f628b02546}\label{classnid_1_1RowIterator_a2cfc42b96be730fbea6ad0f628b02546} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}}]{steps }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}\& \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Addition assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em steps} & The number of steps to move the iterator forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A reference to the modified iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a3cbb393fa0b5db91b1c8cfbf47ba1ef1}\label{classnid_1_1RowIterator_a3cbb393fa0b5db91b1c8cfbf47ba1ef1} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator-\/-\/@{operator-\/-\/}}
+\index{operator-\/-\/@{operator-\/-\/}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/-\/()}{operator--()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator-\/-\/ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}\& \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Pre-\/decrement operator. 
+
+\begin{DoxyReturn}{Returns}
+A reference to the decremented iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a33522613f0733f4172d6466ee0f06f50}\label{classnid_1_1RowIterator_a33522613f0733f4172d6466ee0f06f50} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator-\/-\/@{operator-\/-\/}}
+\index{operator-\/-\/@{operator-\/-\/}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/-\/()}{operator--()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator-\/-\/ (\begin{DoxyParamCaption}\item[{int}]{ }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Post-\/decrement operator. 
+
+\begin{DoxyReturn}{Returns}
+The iterator before decrement. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_add9f074d97c1ff8924f38ae4db991be4}\label{classnid_1_1RowIterator_add9f074d97c1ff8924f38ae4db991be4} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/=()}{operator-=()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}}]{steps }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}\& \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Subtraction assignment operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em steps} & The number of steps to move the iterator backward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A reference to the modified iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a009c9957b97a5fbb2b3d560997cfc5d9}\label{classnid_1_1RowIterator_a009c9957b97a5fbb2b3d560997cfc5d9} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator-\/$>$@{operator-\/$>$}}
+\index{operator-\/$>$@{operator-\/$>$}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/$>$()}{operator->()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator-\/$>$ (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6}{pointer}} \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Arrow operator for accessing the component pointer. 
+
+\begin{DoxyReturn}{Returns}
+Pointer to the component. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_ad0185e7418705957f7dfca9d846006dd}\label{classnid_1_1RowIterator_ad0185e7418705957f7dfca9d846006dd} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$ \&}]{ }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&=default\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default copy assignment operator. 
+
+\begin{DoxyReturn}{Returns}
+A reference to the assigned \doxylink{classnid_1_1RowIterator}{Row\+Iterator}. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_ad53571d295ad2070639175cb32317adf}\label{classnid_1_1RowIterator_ad53571d295ad2070639175cb32317adf} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator=@{operator=}}
+\index{operator=@{operator=}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$ \&\&}]{ }\end{DoxyParamCaption}) -\/$>$  \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \&=default\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default move assignment operator. 
+
+\begin{DoxyReturn}{Returns}
+A reference to the assigned \doxylink{classnid_1_1RowIterator}{Row\+Iterator}. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a341832d17a4e97cf1dee374b08d5bcec}\label{classnid_1_1RowIterator_a341832d17a4e97cf1dee374b08d5bcec} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator\mbox{[}\mbox{]}@{operator[]}}
+\index{operator\mbox{[}\mbox{]}@{operator[]}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator[]()}{operator[]()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto \mbox{\hyperlink{classnid_1_1RowIterator}{nid\+::\+Row\+Iterator}}$<$ T $>$\+::operator\mbox{[}$\,$\mbox{]} (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}}]{index }\end{DoxyParamCaption}) const -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}} \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Subscript operator for accessing the component at the given index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & The index of the component to access. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the component at the given index. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Friends And Related Symbol Documentation}
+\Hypertarget{classnid_1_1RowIterator_ac78f58da4a473432f0924457e3022dbe}\label{classnid_1_1RowIterator_ac78f58da4a473432f0924457e3022dbe} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator+}{operator+}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto operator+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}}]{lhs,  }\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{rhs }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Addition operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & The number of steps to move forward. \\
+\hline
+{\em rhs} & The iterator. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The modified iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_ab087a0af20197b6d5869c67803555465}\label{classnid_1_1RowIterator_ab087a0af20197b6d5869c67803555465} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator+@{operator+}}
+\index{operator+@{operator+}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator+}{operator+}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto operator+ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{lhs,  }\item[{\mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}}]{rhs }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Addition operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & The iterator. \\
+\hline
+{\em rhs} & The number of steps to move forward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The modified iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a1f6f30f164f3d547eeff2ea070571b44}\label{classnid_1_1RowIterator_a1f6f30f164f3d547eeff2ea070571b44} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto operator-\/ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{lhs,  }\item[{\mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}}}]{rhs }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}} \hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Subtraction operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & The iterator. \\
+\hline
+{\em rhs} & The number of steps to move backward. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The modified iterator. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_a8b270a3703721ff21ffa8921309f45e2}\label{classnid_1_1RowIterator_a8b270a3703721ff21ffa8921309f45e2} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator-\/}{operator-}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto operator-\/ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{lhs,  }\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{rhs }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\+\_\+type}} \hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Subtraction operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & The left-\/hand side iterator. \\
+\hline
+{\em rhs} & The right-\/hand side iterator. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The difference in steps between the two iterators. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1RowIterator_aae34d2d5da6014260243b9654d37474b}\label{classnid_1_1RowIterator_aae34d2d5da6014260243b9654d37474b} 
+\index{nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}!operator$<$=$>$@{operator$<$=$>$}}
+\index{operator$<$=$>$@{operator$<$=$>$}!nid::RowIterator$<$ T $>$@{nid::RowIterator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{operator$<$=$>$}{operator<=>}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto operator$<$=$>$ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{lhs,  }\item[{\mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$}]{rhs }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Three-\/way comparison operator. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em lhs} & The left-\/hand side iterator. \\
+\hline
+{\em rhs} & The right-\/hand side iterator. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The result of the three-\/way comparison. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/archetype.\+h\end{DoxyCompactItemize}

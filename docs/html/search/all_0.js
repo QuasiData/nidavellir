@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['comptypeinfo_0',['CompTypeInfo',['../struct_comp_type_info.html',1,'']]],
-  ['copy_5fassign_1',['copy_assign',['../struct_comp_type_info.html#a41fa5fa4d6a160be0587ffd2f4327397',1,'CompTypeInfo']]],
-  ['copy_5fctor_2',['copy_ctor',['../struct_comp_type_info.html#a0cd30d61549a8ef8397f90cf50ac0f56',1,'CompTypeInfo']]],
-  ['ctor_3',['ctor',['../struct_comp_type_info.html#ad8e3107b86f903aeaf399d7c1b8761cb',1,'CompTypeInfo']]]
+  ['alignment_0',['alignment',['../structnid_1_1CompTypeInfo.html#af7d5ec9fc412b3803afc1d30b534700e',1,'nid::CompTypeInfo']]],
+  ['archetype_1',['archetype',['../classnid_1_1Archetype.html',1,'nid::Archetype'],['../classnid_1_1Archetype.html#a6126c9d2839101e7f939943f2e1062a2',1,'nid::Archetype::Archetype(CompTypeList comp_infos)'],['../classnid_1_1Archetype.html#ad73dd1563b9f132d39cc08fa852c7465',1,'nid::Archetype::Archetype(Archetype &amp;&amp;other) noexcept']]]
 ];
