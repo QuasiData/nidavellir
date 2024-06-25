@@ -1,5 +1,6 @@
 // ReSharper disable CppUseStructuredBinding
 #include "archetype.h"
+
 #include <cassert>
 
 namespace nid {
@@ -21,8 +22,8 @@ Archetype::Archetype(Archetype&& other) noexcept
     : rows(std::move(other.rows)), infos(std::move(other.infos)), comp_map(std::move(other.comp_map)), capacity(other.capacity), size(other.size) {
     other.capacity = 0;
     other.size = 0;
-    assert(other.rows.empty());
-    assert(other.infos.empty());
+    NIDAVELLIR_ASSERT(other.rows.empty(), "The rows of the other archetype should be empty after move");
+    NIDAVELLIR_ASSERT(other.infos.empty(), "The infos of the other archetype should be empty after move");
 }
 
 auto Archetype::operator=(Archetype&& other) noexcept -> Archetype& {
@@ -39,14 +40,14 @@ auto Archetype::operator=(Archetype&& other) noexcept -> Archetype& {
 
     other.capacity = 0;
     other.size = 0;
-    assert(other.rows.empty());
-    assert(other.infos.empty());
+    NIDAVELLIR_ASSERT(other.rows.empty(), "The rows of the other archetype should be empty after move");
+    NIDAVELLIR_ASSERT(other.infos.empty(), "The infos of the other archetype should be empty after move");
 
     return *this;
 }
 
 auto Archetype::reserve(const usize new_capacity) -> void {
-    assert(new_capacity > capacity);
+    NIDAVELLIR_ASSERT(new_capacity > capacity, "The reserve function is expected to be called with a larger capacity than the current one");
     std::vector<void*> new_rows(rows.size());
 
     for (usize row{0}; row < new_rows.size(); ++row) {
@@ -73,7 +74,7 @@ auto Archetype::prepare_push(const usize count) -> void {
 }
 
 auto Archetype::swap(const usize first, const usize second) noexcept -> void {
-    assert(first < size and second < size);
+    NIDAVELLIR_ASSERT(first < size and second < size, "A swap can only be made between initialized columns");
     if (first == second) {
         return;
     }
@@ -100,7 +101,7 @@ auto Archetype::swap(const usize first, const usize second) noexcept -> void {
 
 auto Archetype::remove(const usize col) -> usize {
     const auto last_col = --size;
-    assert(col <= last_col);
+    NIDAVELLIR_ASSERT(col <= last_col, "Only an initialized column can be removed");
     for (usize row{0}; row < rows.size(); ++row) {
         if (col == last_col) {
             void* last = get_raw(last_col, row);

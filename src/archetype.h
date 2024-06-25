@@ -3,11 +3,11 @@
 #include "comp_type_info.h"
 #include "identifiers.h"
 
-#include <ankerl/unordered_dense.h>
-#include <ranges>
 #include <algorithm>
 #include <vector>
 #include <cassert>
+
+#include <ankerl/unordered_dense.h>
 
 namespace nid {
 /**
@@ -323,7 +323,7 @@ class Archetype {
      * @param count The number of columns to remove from the current size.
      */
     auto decrease_size(const usize count) -> void {
-        assert(count <= size and size > 0);
+        NIDAVELLIR_ASSERT(count <= size and size > 0, "The size needs to be larger than 0 before a decrease and needs to be non-negative after");
         size -= count;
     }
 
@@ -358,6 +358,10 @@ class Archetype {
     /**
      * @brief Adds a new column to the Archetype.
      *
+     * This function adds a new column to the archetype, initializing it with the provided components.
+     * If the current capacity is reached, the function will grow the underlying storage before adding
+     * the new column. The components are constructed in place at the appropriate locations.
+     *
      * @tparam Ts Types of the components.
      * @param pack Components to be added.
      * @return Index of the added column.
@@ -381,6 +385,54 @@ class Archetype {
     }
 
     /**
+     * @brief Updates components in an existing column of the Archetype.
+     *
+     * This function updates the specified column with new components, destroying the existing components
+     * in the column before constructing the new ones in place. The column index must be valid (less than the current size).
+     * The provided components (`pack`) may only cover part of the column, not necessarily all the rows.
+     *
+     * @tparam Ts Types of the components to update.
+     * @param col The column to be updated.
+     * @param pack New components to update the column with.
+     */
+    template<Component... Ts>
+    [[nodiscard]] auto update(const usize col, Ts&&... pack) {
+        NIDAVELLIR_ASSERT(col < size, "An update can only happen in an initialized column");
+        if constexpr (sizeof...(Ts) > 0) {
+            auto func = [&]<Component Ty>(const usize index, Ty&& t) {
+                void* dst = static_cast<u8*>(rows[index]) + infos[index].size * col;
+                infos[index].dtor(dst, 1);
+                new (dst) std::decay_t<Ty>(std::forward<Ty>(t));
+            };
+
+            (..., func(get_row(type_id<Ts>()), std::forward<Ts>(pack)));
+        }
+    }
+
+    /**
+     * @brief Creates components in an existing column of the Archetype.
+     *
+     * This function constructs new components in the specified column at the appropriate locations.
+     * The column index must be valid (less than the current capacity). The provided components (`pack`)
+     * may only cover part of the column, not necessarily all the rows.
+     *
+     * @tparam Ts Types of the components to create.
+     * @param col The column where the components will be created.
+     * @param pack New components to create in the specified column.
+     */
+    template<Component... Ts>
+    [[nodiscard]] auto create(const usize col, Ts&&... pack) {
+        NIDAVELLIR_ASSERT(col < capacity, "A create can only happen in an initialized column");
+        if constexpr (sizeof...(Ts) > 0) {
+            auto func = [&]<Component Ty>(const usize index, Ty&& t) {
+                new (static_cast<u8*>(rows[index]) + infos[index].size * col) std::decay_t<Ty>(std::forward<Ty>(t));
+            };
+
+            (..., func(get_row(type_id<Ts>()), std::forward<Ts>(pack)));
+        }
+    }
+
+    /**
      * @brief Gets a reference to a component at the specified position.
      * @tparam T Type of the component.
      * @param col Column index of the component.
@@ -388,7 +440,7 @@ class Archetype {
      */
     template<Component T>
     [[nodiscard]] auto get_component(const usize col) -> T& {
-        assert(col < size);
+        NIDAVELLIR_ASSERT(col < size, "Can only get components from initialized columns");
         return *static_cast<T*>(get_raw(col, comp_map.at(type_id<T>())));
     }
 
@@ -419,7 +471,7 @@ class Archetype {
      * @return Pointer to the memory.
      */
     [[nodiscard]] auto get_raw(const usize col, const usize row) const -> void* {
-        assert(row < rows.size());
+        NIDAVELLIR_ASSERT(row < rows.size(), "Row should never be less than the amount of rows in the archetype");
         return static_cast<u8*>(rows[row]) + infos[row].size * col;
     }
 };

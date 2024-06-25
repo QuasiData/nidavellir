@@ -4,12 +4,14 @@
 #include "comp_type_info.h"
 #include "identifiers.h"
 
-#include <numeric>
-#include <ranges>
+#include <algorithm>
+#include <cassert>
+#include <iterator>
+#include <memory_resource>
 #include <tuple>
+#include <vector>
 
 #include <ankerl/unordered_dense.h>
-#include <type_traits>
 
 namespace nid {
 class World {
@@ -36,7 +38,7 @@ class World {
     ankerl::unordered_dense::map<ComponentId, ArchetypeMap> component_map;
     ankerl::unordered_dense::map<CompTypeList, ArchetypeId, TypeHash> type_map;
 
-    CompTypeList scratch_comp_ts;
+    CompTypeList scratch_component_buffer;
 
     ArchetypeId next_archetype_id{0};
     EntityId next_entity_id{0};
@@ -52,41 +54,19 @@ class World {
 
     auto despawn(EntityId entity) -> void;
 
-    auto find_or_create_archetype(const CompTypeList& comp_ts) -> ArchetypeRecord&;
-
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
-#if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
-#endif
-        /*
-        Create a list of component infos and corresponding indices
-        Then sort them together
-        Do a linear search to create a list where the entry at index 'i'
-        is the index that the 'i:th' component has after the sort
-        */
         CompTypeList comp_ts = {get_component_info<Ts>()...};
         sort_component_list(comp_ts);
 
-        /*
-        Create and entity.
-        If the archetype corresponding to this set of component is found
-            Get the archetype and a new column to it, add any components that didnt exist already
-
-        Else
-            Create an Archetype and add a new column, add any components that didnt exist already
-        */
-        const auto new_entity_id = next_entity_id++;
         auto& arch_rec = find_or_create_archetype(comp_ts);
         const auto col = arch_rec.archetype.emplace_back(std::forward<Ts>(pack)...);
+
+        const auto new_entity_id = next_entity_id++;
         arch_rec.entities.push_back(new_entity_id);
         entity_map.insert({new_entity_id, EntityRecord{.archetype = arch_rec.id, .col = col}});
 
         return new_entity_id;
-#if defined(__GNUC__) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
-#pragma GCC diagnostic pop
-#endif
     }
 
     template<Component... Ts>
@@ -94,11 +74,7 @@ class World {
         const auto [arch_id, col] = entity_map.at(entity);
         auto& [arch, _1, _2] = archetype_map.at(arch_id);
 
-        auto func = [&]<typename T>() -> T& {
-            return arch.get_component<T>(col);
-        };
-
-        auto tup = std::tie(func.template operator()<Ts>()...);
+        auto tup = std::tie(arch.get_component<Ts>(col)...);
         static_assert(std::same_as<decltype(tup), std::tuple<Ts&...>>);
 
         if constexpr (sizeof...(Ts) == 1) {
@@ -111,155 +87,153 @@ class World {
     template<Component... Ts>
     auto add(const EntityId entity, Ts&&... pack) -> void {
         static_assert(sizeof...(Ts) > 0);
-        const auto [src_arch_id, col] = entity_map.at(entity);
-        auto& [src_arch, src_entities, _] = archetype_map.at(src_arch_id);
-        const auto& src_arch_comps = src_arch.type();
+        NIDAVELLIR_ASSERT(scratch_component_buffer.size() == 0, "The scratch buffer has not been cleared");
 
-        scratch_comp_ts.insert(scratch_comp_ts.begin(), {get_component_info<Ts>()...});
+        auto& [src_id, src_col] = entity_map.at(entity);
+        const auto& entity_types = archetype_map.at(src_id).archetype.type();
 
-        constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
+        constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 64;
         std::array<u8, stack_buffer_size> buffer{};
         std::pmr::monotonic_buffer_resource resource(buffer.data(), stack_buffer_size);
         std::pmr::vector<CompTypeInfo> in_pack_types{&resource};
         std::pmr::vector<CompTypeInfo> not_in_pack_types{&resource};
 
+        std::array<CompTypeInfo, sizeof...(Ts)> pack_infos = {get_component_info<Ts>()...};
         auto in_pack = [&](const CompTypeInfo& info1) {
-            return std::ranges::find_if(scratch_comp_ts, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != scratch_comp_ts.end();
+            return std::ranges::find_if(pack_infos, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != pack_infos.end();
         };
 
-        for (const auto& item : src_arch_comps) {
-            if (in_pack(item)) {
-                in_pack_types.push_back(item);
+        for (const auto& info : entity_types) {
+            if (in_pack(info)) {
+                in_pack_types.push_back(info);
             } else {
-                not_in_pack_types.push_back(item);
+                not_in_pack_types.push_back(info);
             }
         }
 
-        std::ranges::copy(not_in_pack_types, std::back_inserter(scratch_comp_ts));
-        sort_component_list(scratch_comp_ts);
+        scratch_component_buffer.reserve(sizeof...(Ts) + not_in_pack_types.size());
+        std::ranges::copy(pack_infos, std::back_inserter(scratch_component_buffer));
+        std::ranges::copy(not_in_pack_types, std::back_inserter(scratch_component_buffer));
+        sort_component_list(scratch_component_buffer);
 
-        auto& [arch, entities, arch_id] = find_or_create_archetype(scratch_comp_ts);
-        auto& [moved_src_arch, moved_src_entities, _2] = archetype_map.at(src_arch_id);
+        auto& [target_arch, target_entities, target_id] = find_or_create_archetype(scratch_component_buffer);
+        auto& [src_arch, src_entities, _] = archetype_map.at(src_id);
 
-        usize target_col = 0;
-        if (src_arch_id == arch_id) {
-            target_col = col;
+        if (src_id == target_id) {
+            src_arch.update(src_col, std::forward<Ts>(pack)...);
         } else {
-            target_col = arch.len();
-            arch.prepare_push(1);
+            target_arch.prepare_push(1);
+            const usize target_col{target_arch.len()};
 
             for (const auto& info : not_in_pack_types) {
-                void* src_ptr = moved_src_arch.get_raw(col, moved_src_arch.get_row(info.id));
-                void* dst_ptr = arch.get_raw(target_col, arch.get_row(info.id));
+                void* src_ptr = src_arch.get_raw(src_col, src_arch.get_row(info.id));
+                void* dst_ptr = target_arch.get_raw(target_col, target_arch.get_row(info.id));
 
                 info.move_ctor_dtor(dst_ptr, src_ptr, 1);
             }
-        }
 
-        for (const auto& info : in_pack_types) {
-            void* src_ptr = moved_src_arch.get_raw(col, moved_src_arch.get_row(info.id));
+            for (const auto& info : in_pack_types) {
+                void* src_ptr = src_arch.get_raw(src_col, src_arch.get_row(info.id));
 
-            info.dtor(src_ptr, 1);
-        }
-
-        auto func = [&]<Component T>(T&& t) {
-            void* dst_ptr = arch.get_raw(target_col, arch.get_row(type_id<T>()));
-            new (dst_ptr) std::decay_t<T>(std::forward<T>(t));
-        };
-
-        (func(std::forward<Ts>(pack)), ...);
-
-        if (src_arch_id != arch_id) {
-            entity_map.at(entity) = EntityRecord{.archetype = arch_id, .col = target_col};
-            entities.push_back(entity);
-            arch.increase_size(1);
-
-            if (col < moved_src_entities.size() - 1) {
-                moved_src_arch.swap(col, moved_src_arch.len() - 1);
-                std::swap(moved_src_entities[col], moved_src_entities.back());
-                entity_map.at(moved_src_entities[col]).col = col;
+                info.dtor(src_ptr, 1);
             }
-            moved_src_entities.pop_back();
-            moved_src_arch.decrease_size(1);
+
+            target_arch.create(target_col, std::forward<Ts>(pack)...);
+
+            target_entities.push_back(entity);
+            target_arch.increase_size(1);
+
+            const usize src_last_col{src_arch.len() - 1};
+            if (src_col < src_last_col) {
+                src_arch.swap(src_col, src_last_col);
+                std::swap(src_entities[src_col], src_entities[src_last_col]);
+                entity_map.at(src_entities[src_col]).col = src_col;
+            }
+
+            src_entities.pop_back();
+            src_arch.decrease_size(1);
+
+            src_id = target_id;
+            src_col = target_col;
         }
 
-        scratch_comp_ts.clear();
+        scratch_component_buffer.clear();
     }
 
     template<Component... Ts>
     auto remove(const EntityId entity) -> void {
         static_assert(sizeof...(Ts) > 0);
-        const auto [src_arch_id, col] = entity_map.at(entity);
-        auto& [src_arch, src_entities, _] = archetype_map.at(src_arch_id);
-        const auto& src_arch_comps = src_arch.type();
+        NIDAVELLIR_ASSERT(scratch_component_buffer.size() == 0, "The scratch buffer has not been cleared");
 
-        scratch_comp_ts.insert(scratch_comp_ts.begin(), {get_component_info<Ts>()...});
+        auto& [src_id, src_col] = entity_map.at(entity);
+        const auto& entity_types = archetype_map.at(src_id).archetype.type();
 
-        constexpr usize stack_buffer_size = sizeof(CompTypeInfo) * 30;
-        std::array<u8, stack_buffer_size> buffer{};
-        std::pmr::monotonic_buffer_resource resource(buffer.data(), stack_buffer_size);
-        std::pmr::vector<CompTypeInfo> remain_types{&resource};
+        std::array<CompTypeInfo, sizeof...(Ts)> pack_infos = {get_component_info<Ts>()...};
+        auto not_in_pack = [&](const CompTypeInfo& info1) {
+            return std::ranges::find_if(pack_infos, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) == pack_infos.end();
+        };
 
-        for (const auto& info1 : src_arch_comps) {
-            auto it = std::ranges::find_if(scratch_comp_ts, [&](const CompTypeInfo& info2) {
-                return info2.id == info1.id;
-            });
+        scratch_component_buffer.reserve(sizeof...(Ts));
 
-            if (it == scratch_comp_ts.end()) {
-                remain_types.push_back(info1);
+        for (const auto& info : entity_types) {
+            if (not_in_pack(info)) {
+                scratch_component_buffer.push_back(info);
             }
         }
 
-        for (const auto& info : scratch_comp_ts) {
-            void* src_ptr = src_arch.get_raw(col, src_arch.get_row(info.id));
+#ifndef NDEBUG
+        auto in_entity_type = [&](const CompTypeInfo& info1) {
+            return std::ranges::find_if(entity_types, [info1](const CompTypeInfo& info2) { return info1.id == info2.id; }) != entity_types.end();
+        };
 
-            info.dtor(src_ptr, 1);
+        for (const auto& info : pack_infos) {
+            NIDAVELLIR_ASSERT(in_entity_type(info), "Tried removing a component from an entity that did not have it");
         }
+#endif
 
-        scratch_comp_ts.clear();
+        sort_component_list(scratch_component_buffer);
 
-        std::ranges::copy(remain_types, std::back_inserter(scratch_comp_ts));
-        sort_component_list(scratch_comp_ts);
+        auto& [target_arch, target_entities, target_id] = find_or_create_archetype(scratch_component_buffer);
+        auto& [src_arch, src_entities, _] = archetype_map.at(src_id);
 
-        auto& [arch, entities, arch_id] = find_or_create_archetype(scratch_comp_ts);
-        auto& [moved_src_arch, moved_src_entities, _2] = archetype_map.at(src_arch_id);
+        NIDAVELLIR_ASSERT(src_id != target_id, "When removing components there should be no way of ending up in the same archetype again");
 
-        assert(arch_id != src_arch_id);
+        target_arch.prepare_push(1);
+        const usize target_col{target_arch.len()};
 
-        const usize target_col = arch.len();
-        arch.prepare_push(1);
-
-        for (const auto& info : remain_types) {
-            void* src_ptr = moved_src_arch.get_raw(col, moved_src_arch.get_row(info.id));
-            void* dst_ptr = arch.get_raw(target_col, arch.get_row(info.id));
+        for (const auto& info : scratch_component_buffer) {
+            void* src_ptr = src_arch.get_raw(src_col, src_arch.get_row(info.id));
+            void* dst_ptr = target_arch.get_raw(target_col, target_arch.get_row(info.id));
 
             info.move_ctor_dtor(dst_ptr, src_ptr, 1);
         }
 
-        entity_map.at(entity) = EntityRecord{.archetype = arch_id, .col = target_col};
-        entities.push_back(entity);
-        arch.increase_size(1);
+        for (const auto& info : pack_infos) {
+            void* src_ptr = src_arch.get_raw(src_col, src_arch.get_row(info.id));
 
-        if (col < moved_src_entities.size() - 1) {
-            moved_src_arch.swap(col, moved_src_arch.len() - 1);
-            std::swap(moved_src_entities[col], moved_src_entities.back());
-            entity_map.at(moved_src_entities[col]).col = col;
+            info.dtor(src_ptr, 1);
         }
-        moved_src_entities.pop_back();
-        moved_src_arch.decrease_size(1);
 
-        scratch_comp_ts.clear();
+        target_entities.push_back(entity);
+        target_arch.increase_size(1);
+
+        const usize src_last_col{src_arch.len() - 1};
+        if (src_col < src_last_col) {
+            src_arch.swap(src_col, src_last_col);
+            std::swap(src_entities[src_col], src_entities[src_last_col]);
+            entity_map.at(src_entities[src_col]).col = src_col;
+        }
+
+        src_entities.pop_back();
+        src_arch.decrease_size(1);
+
+        src_id = target_id;
+        src_col = target_col;
+
+        scratch_component_buffer.clear();
     }
 
   private:
-    auto archetype_from_entity(const EntityId entity) -> Archetype& {
-        const auto [src_arch_id, col] = entity_map.at(entity);
-        return archetype_map.at(src_arch_id).archetype;
-    }
-
-    auto archetype_record_from_entity(const EntityId entity) -> ArchetypeRecord& {
-        const auto [src_arch_id, col] = entity_map.at(entity);
-        return archetype_map.at(src_arch_id);
-    }
+    auto find_or_create_archetype(const CompTypeList& comp_ts) -> ArchetypeRecord&;
 };
 } // namespace nid

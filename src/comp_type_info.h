@@ -172,7 +172,7 @@ struct TypeHash {
  */
 template<typename T>
 auto ctor_impl(void* ptr, const usize count) -> void {
-    assert(ptr);
+    NIDAVELLIR_ASSERT(ptr, "The pointer should always be valid");
 
     T* arr = static_cast<T*>(ptr);
     for (usize i{0}; i < count; ++i) {
@@ -191,7 +191,7 @@ auto ctor_impl(void* ptr, const usize count) -> void {
  */
 template<typename T>
 auto dtor_impl(void* ptr, const usize count) -> void {
-    assert(ptr);
+    NIDAVELLIR_ASSERT(ptr, "The pointer should always be valid");
 
     if constexpr (!std::is_trivially_destructible_v<T>) {
         T* arr = static_cast<T*>(ptr);
@@ -213,7 +213,7 @@ auto dtor_impl(void* ptr, const usize count) -> void {
  */
 template<typename T>
 auto copy_ctor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -239,7 +239,7 @@ auto copy_ctor_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto copy_assgin_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -265,7 +265,7 @@ auto copy_assgin_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_ctor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -291,7 +291,7 @@ auto move_ctor_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_assign_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -318,7 +318,7 @@ auto move_assign_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_ctor_dtor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);
@@ -348,7 +348,7 @@ auto move_ctor_dtor_impl(void* dst, void* src, const usize count) -> void {
  */
 template<typename T>
 auto move_assign_dtor_impl(void* dst, void* src, const usize count) -> void {
-    assert(dst && src);
+    NIDAVELLIR_ASSERT(dst && src, "The pointers should always be valid");
 
     T* src_arr = static_cast<T*>(src);
     T* dst_arr = static_cast<T*>(dst);

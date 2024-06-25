@@ -19,4 +19,13 @@ using f64 = double;
 
 using usize = std::size_t;
 using isize = std::conditional_t<sizeof(usize) == 8, i64, i32>;
+
+auto nidavellir_assert(const char* expr_str, bool expr, const char* file, int line, const char* msg) -> void;
+
+#ifndef NDEBUG
+#define NIDAVELLIR_ASSERT(expr, msg) \
+    nidavellir_assert(#expr, expr, __FILE__, __LINE__, msg)
+#else
+#define NIDAVELLIR_ASSERT(expr, msg) (void)0
+#endif
 } // namespace nid
