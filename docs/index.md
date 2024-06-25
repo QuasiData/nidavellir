@@ -2,7 +2,7 @@
 
 ## Components
 Components are any C++ type that satisfied the 'Component' concept. Which roughly means the component needs to be moveable and destructible.
-```cpp
+```c++
 struct Point {
     float x, y;
 };
@@ -23,7 +23,7 @@ struct Polygon {
 
 ## Worlds
 Worlds store entites and components and allows spawning entities, adding and removing components etc.
-```cpp
+```c++
 #include "nidavellir.h"
 
 nid::World world;
@@ -31,7 +31,7 @@ nid::World world;
 
 ## Entities
 Entities are nothing more than unique ids used for storing components.
-```cpp
+```c++
 #include "nidavellir.h"
 
 struct Point {
@@ -53,7 +53,7 @@ auto& [point, person] = world.get<Point, Person>(entity);
 ```
 
 ## Example
-```cpp
+```c++
 #include "nidavellir.h"
 
 struct Point {
