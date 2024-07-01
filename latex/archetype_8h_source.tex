@@ -1,0 +1,220 @@
+\doxysection{archetype.\+h}
+\hypertarget{archetype_8h_source}{}\label{archetype_8h_source}\index{src/archetype.h@{src/archetype.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ "{}core.h"{}}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}comp\_type\_info.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}identifiers.h"{}}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <ankerl/unordered\_dense.h>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{namespace\ }nid\ \{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{inline}\ \textcolor{keyword}{auto}\ sort\_component\_list(CompTypeList\&\ lst)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00026\ \ \ \ \ std::ranges::sort(lst,\ [](\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ lhs,\ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ rhs)\ \{}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ lhs.id\ >\ rhs.id;}
+\DoxyCodeLine{00028\ \ \ \ \ \});}
+\DoxyCodeLine{00029\ \}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00041\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ \{}
+\DoxyCodeLine{00042\ \ \ \ \ T*\ ptr\{\textcolor{keyword}{nullptr}\};}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classnid_1_1RowIterator_aadd1c3806b1ccf7b6ddebc8bc605cc79}{iterator\_category}}\ =\ std::contiguous\_iterator\_tag;\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classnid_1_1RowIterator_a8b06d5d7769f2526ecddfe14b52472b6}{value\_type}}\ =\ T;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ =\ std::ptrdiff\_t;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6}{pointer}}\ =\ T*;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}}\ =\ T\&;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \mbox{\hyperlink{classnid_1_1RowIterator_a7fbfd9d942affbb0135e899d8077a336}{RowIterator}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00059\ \ \ \ \ \mbox{\hyperlink{classnid_1_1RowIterator_a74aaa7e42cde5d016cc0ccb16b728ed4}{\string~RowIterator}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classnid_1_1RowIterator_a51be21d3108f6af79d0d42d16f02422a}{RowIterator}}(T*\ p)\ :\ ptr(p)\ \{\}}
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00071\ \ \ \ \ \mbox{\hyperlink{classnid_1_1RowIterator_a2a242d4a7d6b18452e65781b234f85d5}{RowIterator}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_ad0185e7418705957f7dfca9d846006dd}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00083\ \ \ \ \ \mbox{\hyperlink{classnid_1_1RowIterator_aeeab5a21cecd5ca87e8a45024d6825cb}{RowIterator}}(\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_ad53571d295ad2070639175cb32317adf}{operator=}}(\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\&)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00097\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a009c9957b97a5fbb2b3d560997cfc5d9}{operator-\/>}}()\ const\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator_a4e03556f20d165a78e4e80ef3eef45d6}{pointer}}\ \{\ \textcolor{keywordflow}{return}\ ptr;\ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a49dfc46c84b3a149f3d3ee117969935a}{operator*}}()\ const\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}}\ \{\ \textcolor{keywordflow}{return}\ *ptr;\ \}}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00112\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a341832d17a4e97cf1dee374b08d5bcec}{operator[]}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ index)\ \textcolor{keyword}{const}\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator_a469b4697438baf5c990f22689f59ccca}{reference}}\ \{\ \textcolor{keywordflow}{return}\ ptr[index];\ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_ab169014f96ea034de27584c4ba687e26}{operator++}}()\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\ \{}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ ++ptr;}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00122\ \ \ \ \ \}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a3d2d6adff8c107045e0139e805e77558}{operator++}}([[maybe\_unused]]\ \textcolor{keywordtype}{int})\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ \{}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ temp(*\textcolor{keyword}{this});}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ ++ptr;}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ temp;}
+\DoxyCodeLine{00133\ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00140\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a3cbb393fa0b5db91b1c8cfbf47ba1ef1}{operator-\/-\/}}()\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\ \{}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ -\/-\/ptr;}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00143\ \ \ \ \ \}}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a33522613f0733f4172d6466ee0f06f50}{operator-\/-\/}}([[maybe\_unused]]\ \textcolor{keywordtype}{int})\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ temp(*\textcolor{keyword}{this});}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ -\/-\/ptr;}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ temp;}
+\DoxyCodeLine{00154\ \ \ \ \ \}}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a2cfc42b96be730fbea6ad0f628b02546}{operator+=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ steps)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\ \{}
+\DoxyCodeLine{00163\ \ \ \ \ \ \ \ \ ptr\ +=\ steps;}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00165\ \ \ \ \ \}}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_add9f074d97c1ff8924f38ae4db991be4}{operator-\/=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ steps)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\&\ \{}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ ptr\ -\/=\ steps;}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00176\ \ \ \ \ \}}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_aae34d2d5da6014260243b9654d37474b}{operator<=>}}(\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ lhs,\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ rhs)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a8b270a3703721ff21ffa8921309f45e2}{operator-\/}}(\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ lhs,\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ rhs)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ \{\ \textcolor{keywordflow}{return}\ lhs.ptr\ -\/\ rhs.ptr;\ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_ab087a0af20197b6d5869c67803555465}{operator+}}(\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ lhs,\ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ rhs)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ lhs\ +=\ rhs;}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ lhs;}
+\DoxyCodeLine{00206\ \ \ \ \ \}}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00215\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_a1f6f30f164f3d547eeff2ea070571b44}{operator-\/}}(\mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ lhs,\ \mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ rhs)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ \{}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ lhs\ -\/=\ rhs;}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ lhs;}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1RowIterator_ac78f58da4a473432f0924457e3022dbe}{operator+}}(\mbox{\hyperlink{classnid_1_1RowIterator_a1bb53c714ba5cbe89eb741ab5417c90d}{difference\_type}}\ lhs,\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ rhs)\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator}}\ \{}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ rhs\ +=\ lhs;}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ rhs;}
+\DoxyCodeLine{00230\ \ \ \ \ \}}
+\DoxyCodeLine{00231\ \};}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00233\ \textcolor{keyword}{static\_assert}(std::contiguous\_iterator<RowIterator<usize>>);}
+\DoxyCodeLine{00234\ \textcolor{keyword}{static\_assert}(std::contiguous\_iterator<RowIterator<std::vector<f32>>>);}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00240\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\ \{}
+\DoxyCodeLine{00241\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ usize\ start\_capacity\{10\};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00242\ \ \ \ \ std::vector<void*>\ rows;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00243\ \ \ \ \ CompTypeList\ infos;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00244\ \ \ \ \ ankerl::unordered\_dense::map<ComponentId,\ usize>\ comp\_map;\ }
+\DoxyCodeLine{00245\ \ \ \ \ usize\ capacity;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00246\ \ \ \ \ usize\ size\{0\};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00253\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}(CompTypeList\ comp\_infos);}
+\DoxyCodeLine{00254\ }
+\DoxyCodeLine{00258\ \ \ \ \ \mbox{\hyperlink{classnid_1_1Archetype_a29d1ea82e3610a5a27a51992235f7ff0}{\string~Archetype}}();}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keyword}{auto}\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&)\ -\/>\ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00267\ \ \ \ \ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}(\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&\&\ other)\ \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00274\ \ \ \ \ \textcolor{keyword}{auto}\ operator=(\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&\&\ other)\ \textcolor{keyword}{noexcept}\ -\/>\ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&;}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00280\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a9519436e6b2eccbf318466d927eac5c9}{cap}}()\ const\ noexcept\ -\/>\ usize\ \{\ \textcolor{keywordflow}{return}\ capacity;\ \}}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00286\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a9aa8461c3e08a139c17d9e5c2111a896}{len}}()\ const\ noexcept\ -\/>\ usize\ \{\ \textcolor{keywordflow}{return}\ size;\ \}}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a898491aa34d1d9ae4b95eb2fb3aac171}{reserve}}(usize\ new\_capacity)\ -\/>\ void;}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_abcb786c7b09d4b30e8ac6f78c39c7eb7}{grow}}()\ -\/>\ void;}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_af68e18ac7370c5f79e7669433e024072}{prepare\_push}}(usize\ count)\ -\/>\ void;}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_aeeb332e7f6e7c68b5352316fa190cd67}{increase\_size}}(\textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{\ size\ +=\ count;\ \}}
+\DoxyCodeLine{00317\ }
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_ac571f000f903826dc307e6830069b735}{decrease\_size}}(\textcolor{keyword}{const}\ usize\ count)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(count\ <=\ size\ and\ size\ >\ 0,\ \textcolor{stringliteral}{"{}The\ size\ needs\ to\ be\ larger\ than\ 0\ before\ a\ decrease\ and\ needs\ to\ be\ non-\/negative\ after"{}});}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ size\ -\/=\ count;}
+\DoxyCodeLine{00328\ \ \ \ \ \}}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00335\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_abd4db1859cc3c42fefce2ea3ae5d30be}{swap}}(usize\ first,\ usize\ second)\ \textcolor{keyword}{noexcept}\ -\/>\ void;}
+\DoxyCodeLine{00336\ }
+\DoxyCodeLine{00342\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_ae60592a7e488d14b2a97fcea6f8a893c}{remove}}(usize\ col)\ -\/>\ usize;}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00348\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a3749c0b29f128c8e5726f3799460cfb4}{type}}()\ -\/>\ \textcolor{keyword}{const}\ CompTypeList\&\ \{\ \textcolor{keywordflow}{return}\ infos;\ \}}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00356\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8}{get\_row}}(\textcolor{keyword}{const}\ ComponentId\ \textcolor{keywordtype}{id})\ \textcolor{keyword}{const}\ -\/>\ usize\ \{\ \textcolor{keywordflow}{return}\ comp\_map.at(\textcolor{keywordtype}{id});\ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00369\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00370\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a47e39eb43ca5b41ac8ea56105b9fca24}{emplace\_back}}(Ts\&\&...\ pack)\ -\/>\ usize\ \{}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (capacity\ ==\ size)\ \{}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1Archetype_abcb786c7b09d4b30e8ac6f78c39c7eb7}{grow}}();}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Ts)\ >\ 0)\ \{}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ func\ =\ [\&]<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}\ Ty>(\textcolor{keyword}{const}\ usize\ index,\ Ty\&\&\ t)\ \{}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (\textcolor{keyword}{static\_cast<}u8*\textcolor{keyword}{>}(rows[index])\ +\ infos[index].size\ *\ size)\ std::decay\_t<Ty>(std::forward<Ty>(t));}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ (...,\ func(\mbox{\hyperlink{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8}{get\_row}}(type\_id<Ts>()),\ std::forward<Ts>(pack)));}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ col\ =\ size++;}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ col;}
+\DoxyCodeLine{00385\ \ \ \ \ \}}
+\DoxyCodeLine{00386\ }
+\DoxyCodeLine{00398\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00399\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a5b24e2a0e60b24c96ab1a9a27dc5865a}{update}}(\textcolor{keyword}{const}\ usize\ col,\ Ts\&\&...\ pack)\ \{}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(col\ <\ size,\ \textcolor{stringliteral}{"{}An\ update\ can\ only\ happen\ in\ an\ initialized\ column"{}});}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Ts)\ >\ 0)\ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ func\ =\ [\&]<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}\ Ty>(\textcolor{keyword}{const}\ usize\ index,\ Ty\&\&\ t)\ \{}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ dst\ =\ \textcolor{keyword}{static\_cast<}u8*\textcolor{keyword}{>}(rows[index])\ +\ infos[index].size\ *\ col;}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ infos[index].dtor(dst,\ 1);}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (dst)\ std::decay\_t<Ty>(std::forward<Ty>(t));}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00407\ }
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ (...,\ func(\mbox{\hyperlink{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8}{get\_row}}(type\_id<Ts>()),\ std::forward<Ts>(pack)));}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00410\ \ \ \ \ \}}
+\DoxyCodeLine{00411\ }
+\DoxyCodeLine{00423\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00424\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_ac839dd431e38a59dbea67ce7164f942c}{create}}(\textcolor{keyword}{const}\ usize\ col,\ Ts\&\&...\ pack)\ \{}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(col\ <\ capacity,\ \textcolor{stringliteral}{"{}A\ create\ can\ only\ happen\ in\ an\ initialized\ column"{}});}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Ts)\ >\ 0)\ \{}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ func\ =\ [\&]<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}\ Ty>(\textcolor{keyword}{const}\ usize\ index,\ Ty\&\&\ t)\ \{}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}\ (\textcolor{keyword}{static\_cast<}u8*\textcolor{keyword}{>}(rows[index])\ +\ infos[index].size\ *\ col)\ std::decay\_t<Ty>(std::forward<Ty>(t));}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00430\ }
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ (...,\ func(\mbox{\hyperlink{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8}{get\_row}}(type\_id<Ts>()),\ std::forward<Ts>(pack)));}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00433\ \ \ \ \ \}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00441\ \ \ \ \ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00442\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a2c01cd9f678bd55d15782a726e051673}{get\_component}}(\textcolor{keyword}{const}\ usize\ col)\ -\/>\ T\&\ \{}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(col\ <\ size,\ \textcolor{stringliteral}{"{}Can\ only\ get\ components\ from\ initialized\ columns"{}});}
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(\mbox{\hyperlink{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}{get\_raw}}(col,\ comp\_map.at(type\_id<T>())));}
+\DoxyCodeLine{00445\ \ \ \ \ \}}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00452\ \ \ \ \ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00453\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a064068357589d4ea04eecb8e14565214}{begin}}()\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator<T>}}\ \{}
+\DoxyCodeLine{00454\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator<T>}}(\textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(\mbox{\hyperlink{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}{get\_raw}}(0,\ comp\_map.at(type\_id<T>()))));}
+\DoxyCodeLine{00455\ \ \ \ \ \}}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00462\ \ \ \ \ \textcolor{keyword}{template}<Component\ T>}
+\DoxyCodeLine{00463\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a0103dc5cdf2aeff660f685f8eb700309}{end}}()\ -\/>\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator<T>}}\ \{}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{classnid_1_1RowIterator}{RowIterator<T>}}(\textcolor{keyword}{static\_cast<}T*\textcolor{keyword}{>}(\mbox{\hyperlink{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}{get\_raw}}(size,\ comp\_map.at(type\_id<T>()))));}
+\DoxyCodeLine{00465\ \ \ \ \ \}}
+\DoxyCodeLine{00466\ }
+\DoxyCodeLine{00473\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}{get\_raw}}(\textcolor{keyword}{const}\ usize\ col,\ \textcolor{keyword}{const}\ usize\ row)\ \textcolor{keyword}{const}\ -\/>\ \textcolor{keywordtype}{void}*\ \{}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(row\ <\ rows.size(),\ \textcolor{stringliteral}{"{}Row\ should\ never\ be\ less\ than\ the\ amount\ of\ rows\ in\ the\ archetype"{}});}
+\DoxyCodeLine{00475\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{static\_cast<}u8*\textcolor{keyword}{>}(rows[row])\ +\ infos[row].size\ *\ col;}
+\DoxyCodeLine{00476\ \ \ \ \ \}}
+\DoxyCodeLine{00477\ \};}
+\DoxyCodeLine{00478\ \}\ \textcolor{comment}{//\ namespace\ nid}}
+
+\end{DoxyCode}

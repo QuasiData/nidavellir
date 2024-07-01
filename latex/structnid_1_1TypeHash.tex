@@ -1,0 +1,49 @@
+\doxysection{nid\+::Type\+Hash Struct Reference}
+\hypertarget{structnid_1_1TypeHash}{}\label{structnid_1_1TypeHash}\index{nid::TypeHash@{nid::TypeHash}}
+
+
+A hash function object for {\ttfamily Type\+List}.  
+
+
+
+
+{\ttfamily \#include $<$comp\+\_\+type\+\_\+info.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+auto \mbox{\hyperlink{structnid_1_1TypeHash_acc92bb44233a56f6b2f71f3ae525a887}{operator()}} (const Comp\+Type\+List \&x) const noexcept -\/$>$ u64
+\begin{DoxyCompactList}\small\item\em Computes the hash value for a given {\ttfamily Type\+List}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A hash function object for {\ttfamily Type\+List}. 
+
+This structure defines a hash function for {\ttfamily Type\+List} objects. It computes a hash value by iterating over the elements of the list and combining their individual hash values. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structnid_1_1TypeHash_acc92bb44233a56f6b2f71f3ae525a887}\label{structnid_1_1TypeHash_acc92bb44233a56f6b2f71f3ae525a887} 
+\index{nid::TypeHash@{nid::TypeHash}!operator()@{operator()}}
+\index{operator()@{operator()}!nid::TypeHash@{nid::TypeHash}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily auto nid\+::\+Type\+Hash\+::operator() (\begin{DoxyParamCaption}\item[{const Comp\+Type\+List \&}]{x }\end{DoxyParamCaption}) const -\/$>$ u64 \hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Computes the hash value for a given {\ttfamily Type\+List}. 
+
+This operator computes a hash value for a {\ttfamily Type\+List} by iterating through its elements and accumulating their individual hash values using {\ttfamily wyhash}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The {\ttfamily Type\+List} to hash. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The computed hash value of type {\ttfamily u64}. 
+\end{DoxyReturn}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/comp\+\_\+type\+\_\+info.\+h\end{DoxyCompactItemize}
