@@ -339,7 +339,7 @@ class World {
     template<Component... Ts>
     auto remove(const EntityId entity) -> void {
         static_assert(sizeof...(Ts) > 0);
-        NIDAVELLIR_ASSERT(scratch_component_buffer.size() == 0, "The scratch buffer has not been cleared");
+        NIDAVELLIR_ASSERT(scratch_component_buffer.empty(), "The scratch buffer has not been cleared");
 
         auto& [src_id, src_col] = entity_map.at(entity);
         const auto& entity_types = archetype_map.at(src_id).archetype.type();
