@@ -155,6 +155,7 @@ struct TypeHash {
     auto operator()(const CompTypeList& x) const noexcept -> u64 {
         u64 h{0};
         for (usize i{0}; i < x.size(); ++i) {
+            // TODO: Implement hash function instead of depending on library detail
             h += ankerl::unordered_dense::detail::wyhash::hash(x[i].id);
         }
         return h;

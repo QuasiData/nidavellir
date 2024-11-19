@@ -7,8 +7,7 @@
 
 namespace nid {
 auto World::despawn(const EntityId entity) -> void {
-    const auto opt = entity_map.extract(entity);
-    if (opt.has_value()) {
+    if (const auto opt = entity_map.extract(entity); opt.has_value()) {
         const auto [id, col] = opt.value().second;
         auto& [arch, entities, _] = archetype_map.at(id);
 

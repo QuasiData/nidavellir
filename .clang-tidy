@@ -24,6 +24,7 @@ Checks: "*,
         -cppcoreguidelines-owning-memory,
         -cppcoreguidelines-pro-bounds-pointer-arithmetic,
         -bugprone-sizeof-expression,
-        -*-pro-bounds-constant-array-index"
+        -*-pro-bounds-constant-array-index,
+        -math-missing-parentheses"
 WarningsAsErrors: ""
 HeaderFilterRegex: ""
