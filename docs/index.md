@@ -30,7 +30,7 @@ nid::World world;
 ```
 
 ## Entities
-Entities are nothing more than unique ids used for storing components.
+Entities are unique ids used for storing components.
 ```c++
 #include "nidavellir.h"
 
@@ -66,6 +66,7 @@ struct Person {
 };
 
 struct Polygon {
+    // Tell nidavellir to use memcpy to move this component
     using is_relocatable = void;
     std::vector<Point> vertices;
 };
