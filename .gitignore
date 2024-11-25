@@ -2,6 +2,7 @@
 .idea
 .vs
 .vsc
+.vscode
 build
 /benches/gbench/__pycache__
 compile_commands.json

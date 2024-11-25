@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <concepts>
 #include <iterator>
 #include <memory_resource>
 #include <tuple>
@@ -79,6 +80,39 @@ class World {
     EntityId next_entity_id{0};
 
   public:
+    template<Component... Ts>
+    class Query {
+        friend class World;
+
+        using table_match = std::tuple<usize, Ts*...>;
+        World* world;
+        std::vector<table_match> table_args;
+
+      public:
+        explicit Query(World* world) : world(world) {
+            table_args.reserve(sizeof(usize) * 100);
+        }
+
+        ~Query() = default;
+
+        Query(const Query&) = delete;
+        auto operator=(const Query&) -> Query& = delete;
+        Query(Query&&) = default;
+        auto operator=(Query&&) noexcept -> Query& = default;
+
+        template<std::invocable<usize, Ts*...> Func>
+        auto run(Func&& func) -> void {
+            for (const auto& tup : table_args) {
+                std::apply(std::forward<Func>(func), tup);
+            }
+        }
+
+      private:
+        auto push_args(table_match table) -> void {
+            table_args.emplace_back(table);
+        }
+    };
+
     /**
      * @brief Default constructor for World.
      */
@@ -152,6 +186,7 @@ class World {
      */
     template<Component... Ts>
     auto spawn(Ts&&... pack) -> EntityId {
+        static_assert(!pack_has_duplicates<Ts...>());
         CompTypeList comp_ts = {get_component_info<Ts>()...};
         sort_component_list(comp_ts);
 
@@ -193,6 +228,7 @@ class World {
      */
     template<Component... Ts>
     [[nodiscard]] auto get(const EntityId entity) -> decltype(auto) {
+        static_assert(!pack_has_duplicates<Ts...>());
         const auto [arch_id, col] = entity_map.at(entity);
         auto& [arch, _1, _2] = archetype_map.at(arch_id);
 
@@ -204,6 +240,26 @@ class World {
         } else {
             return tup;
         }
+    }
+
+    /**
+     * @brief Checks if the specified entity has the components.
+     *
+     * This function determines whether the given entity, identified by its EntityId,
+     * possesses the components specified by the template parameters Ts.
+     *
+     * @tparam Ts The types of components to check for.
+     * @param entity The identifier of the entity to check.
+     * @return true if the entity has all the specified components, false otherwise.
+     */
+    template<Component... Ts>
+    [[nodiscard]] auto has(const EntityId entity) -> bool {
+        static_assert(!pack_has_duplicates<Ts...>());
+        const auto [arch_id, col] = entity_map.at(entity);
+        const auto& [arch, _1, _2] = archetype_map.at(arch_id);
+
+        std::array<CompTypeInfo, sizeof...(Ts)> pack_infos = {get_component_info<Ts>()...};
+        return arch.partial_match(pack_infos);
     }
 
     /**
@@ -240,6 +296,7 @@ class World {
      */
     template<Component... Ts>
     auto add(const EntityId entity, Ts&&... pack) -> void {
+        static_assert(!pack_has_duplicates<Ts...>());
         static_assert(sizeof...(Ts) > 0);
         NIDAVELLIR_ASSERT(scratch_component_buffer.size() == 0, "The scratch buffer has not been cleared");
 
@@ -338,6 +395,7 @@ class World {
      */
     template<Component... Ts>
     auto remove(const EntityId entity) -> void {
+        static_assert(!pack_has_duplicates<Ts...>());
         static_assert(sizeof...(Ts) > 0);
         NIDAVELLIR_ASSERT(scratch_component_buffer.empty(), "The scratch buffer has not been cleared");
 
@@ -407,6 +465,23 @@ class World {
         src_col = target_col;
 
         scratch_component_buffer.clear();
+    }
+
+    template<Component... Ts>
+    auto query() -> Query<Ts...> {
+        static_assert(sizeof...(Ts) > 0);
+        auto que = Query<Ts...>(this);
+
+        std::array<CompTypeInfo, sizeof...(Ts)> pack_infos = {get_component_info<Ts>()...};
+
+        for (const auto& [key, val] : archetype_map) {
+            if (const auto& arch = val.archetype; arch.partial_match(pack_infos)) {
+                typename Query<Ts...>::table_match table = {arch.len(), static_cast<Ts*>(arch.get_raw(0, component_map.at(type_id<Ts>()).at(key).row))...};
+                que.push_args(table);
+            }
+        }
+
+        return que;
     }
 
   private:

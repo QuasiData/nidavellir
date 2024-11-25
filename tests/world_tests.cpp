@@ -21,8 +21,10 @@ struct NonTrivialCopy {
     }
 
     auto operator=([[maybe_unused]] const NonTrivialCopy& other) -> NonTrivialCopy& {
-        copies = other.copies;
-        ++copies;
+        if (this != &other) {
+            copies = other.copies;
+            ++copies;
+        }
         return *this;
     }
 
@@ -53,8 +55,10 @@ struct Relocatable {
     }
 
     auto operator=([[maybe_unused]] const Relocatable& other) -> Relocatable& {
-        copies = other.copies;
-        ++copies;
+        if (this != &other) {
+            copies = other.copies;
+            ++copies;
+        }
         return *this;
     }
 
@@ -294,4 +298,13 @@ TEST_F(WorldTest, remove_multi_add) {
     world.remove<T1, T2, T3, T4>(ent);
 
     EXPECT_NO_THROW(world.add(ent, test_1, test_2, test_3, test_4));
+}
+
+TEST_F(WorldTest, has) {
+    auto ent = world.spawn(t1, t2, t3, t4);
+    EXPECT_TRUE((world.has<T1, T2, T3, T4>(ent)));
+    EXPECT_TRUE((world.has<T1, T2, T3>(ent)));
+    EXPECT_TRUE((world.has<T1, T2>(ent)));
+    EXPECT_TRUE((world.has<T1>(ent)));
+    EXPECT_FALSE((world.has<usize, u32, f32, i8>(ent)));
 }

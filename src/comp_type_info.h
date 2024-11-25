@@ -464,4 +464,24 @@ template<Component T>
 
     return info;
 }
+
+/**
+ * @brief Helper function to check for duplicate types in a parameter pack.
+ *
+ * This function checks if there are any duplicate types in the parameter pack `Types...`.
+ *
+ * @tparam Types The parameter pack to check for duplicates.
+ * @return `true` if there are duplicate types, `false` otherwise.
+ */
+template<typename... Ts>
+consteval auto pack_has_duplicates() -> bool {
+    auto count = []<typename T, typename... Rest>() {
+        return ((std::is_same_v<T, Rest> ? 1 : 0) + ...);
+    };
+    return ((count.template operator()<Ts, Ts...>() > 1) || ...);
+}
+
+static_assert(!pack_has_duplicates<i32, f32, f64>());
+static_assert(pack_has_duplicates<f32, f32>());
+static_assert(pack_has_duplicates<f32, i32, f32, f64>());
 } // namespace nid

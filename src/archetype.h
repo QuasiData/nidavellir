@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <vector>
 #include <cassert>
+#include <span>
 
 #include <ankerl/unordered_dense.h>
 
@@ -22,7 +23,7 @@ namespace nid {
  * The comparator prioritizes the `alignment` field of the component type infos in descending order,
  * and in case of a tie, it prioritizes the `id` field in descending order.
  */
-inline auto sort_component_list(CompTypeList& lst) -> void {
+inline auto sort_component_list(std::span<CompTypeInfo> lst) -> void {
     std::ranges::sort(lst, [](const auto& lhs, const auto& rhs) {
         return lhs.id > rhs.id;
     });
@@ -354,6 +355,25 @@ class Archetype {
      * @throws std::out_of_range if the component ID is not found in the map.
      */
     [[nodiscard]] auto get_row(const ComponentId id) const -> usize { return comp_map.at(id); }
+
+    /**
+     * @brief Checks if there is a partial match with the given type list.
+     *
+     * This function determines whether the provided type list partially matches
+     * the types within the archetype.
+     *
+     * @param type_list A span representing the list of types to be checked.
+     * @return true if there is a partial match, false otherwise.
+     */
+    [[nodiscard]] auto partial_match(std::span<CompTypeInfo> type_list) const -> bool;
+
+    /**
+     * @brief Checks if the given type list matches the types within the archetype.
+     *
+     * @param type_list A span representing the list of types to be matched.
+     * @return true if its is a match, false otherwise.
+     */
+    [[nodiscard]] auto match(std::span<CompTypeInfo> type_list) const -> bool;
 
     /**
      * @brief Adds a new column to the Archetype.

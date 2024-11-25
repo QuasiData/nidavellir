@@ -1,4 +1,6 @@
+#include "core.h"
 #include "nidavellir.h"
+#include <iostream>
 
 using namespace nid;
 
@@ -33,6 +35,8 @@ auto main() -> int {
     static constexpr usize num{32};
     World world;
 
+    /*
+     */
     for (usize i{0}; i < num; ++i) {
         entities.emplace_back(world.spawn(t1));
         entities.emplace_back(world.spawn(t1, t2));
@@ -41,7 +45,7 @@ auto main() -> int {
     }
 
     EntityId id{};
-    for (usize i{0}; i < 10000000; ++i) {
+    for (usize i{0}; i < 100; ++i) {
         id = world.spawn();
         world.add(id, t1);
 
@@ -60,6 +64,14 @@ auto main() -> int {
         id = world.spawn(t1, t2);
         world.add(id, t1, t2);
     }
+
+    world.query<T1, T2>().run([](usize len, T1* t1, T2* t2) {
+        std::cout << len << "\n";
+        for (usize i{0}; i < len; ++i) {
+            // std::cout << t1[0].x << "\n";
+            // std::cout << t2[0].z << "\n";
+        }
+    });
 
     return 0;
 }

@@ -116,4 +116,46 @@ auto Archetype::remove(const usize col) -> usize {
 
     return last_col;
 }
+
+auto Archetype::partial_match(const std::span<CompTypeInfo> type_list) const -> bool {
+    if (type_list.size() > infos.size()) {
+        return false;
+    }
+
+    for (const auto& type : type_list) {
+        bool found = false;
+        for (const auto& info : infos) {
+            if (type.id == info.id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+auto Archetype::match(const std::span<CompTypeInfo> type_list) const -> bool {
+    if (type_list.size() != infos.size()) {
+        return false;
+    }
+
+    for (const auto& type : type_list) {
+        bool found = false;
+        for (const auto& info : infos) {
+            if (type.id == info.id) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            return false;
+        }
+    }
+
+    return true;
+}
 } // namespace nid
