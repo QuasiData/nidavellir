@@ -475,9 +475,14 @@ template<Component T>
  */
 template<typename... Ts>
 consteval auto pack_has_duplicates() -> bool {
+    if constexpr (sizeof...(Ts) == 0) {
+        return false;
+    }
+
     auto count = []<typename T, typename... Rest>() {
         return ((std::is_same_v<T, Rest> ? 1 : 0) + ...);
     };
+
     return ((count.template operator()<Ts, Ts...>() > 1) || ...);
 }
 

@@ -41,8 +41,10 @@ struct NonTrivialCopy {
     }
 
     auto operator=([[maybe_unused]] const NonTrivialCopy& other) -> NonTrivialCopy& {
-        copies = other.copies;
-        ++copies;
+        if (this != &other) {
+            copies = other.copies;
+            ++copies;
+        }
         return *this;
     }
 
@@ -73,8 +75,10 @@ struct Relocatable {
     }
 
     auto operator=([[maybe_unused]] const Relocatable& other) -> Relocatable& {
-        copies = other.copies;
-        ++copies;
+        if (this != &other) {
+            copies = other.copies;
+            ++copies;
+        }
         return *this;
     }
 

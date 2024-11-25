@@ -90,56 +90,49 @@ def run(build_type: str, compiler, platform, san):
         ), shell=True)
 
 
-def do_bench(build_type: str, compiler, platform, project):
+def do_bench(build_type: str, compiler, platform):
     print(
-        f"{Fore.MAGENTA}{Style.BRIGHT}\nRUNNING BENCHMARKS FOR {project} -------------------------------------------------\n{Style.RESET_ALL}")
+        f"{Fore.MAGENTA}{Style.BRIGHT}\nRUNNING BENCHMARKS -------------------------------------------------\n{Style.RESET_ALL}")
     if platform == "windows":
         subprocess.run((
-            f"./build/x64-{platform}-{compiler}/benches/{project}/{build_type}/{project}_benches.exe --benchmark_out=benches/results/{project}_benches.json --benchmark_out_format=json"
+            f"./build/x64-{platform}-{compiler}/benches/{build_type}/benches.exe --benchmark_out=benches/results/benches.json --benchmark_out_format=json"
         ))
     else:
         subprocess.run((
-            f"./build/x64-{platform}-{compiler}/benches/{project}/{build_type}/{project}_benches --benchmark_out=benches/results/{project}_benches.json --benchmark_out_format=json"
+            f"./build/x64-{platform}-{compiler}/benches/{build_type}/benches --benchmark_out=benches/results/benches.json --benchmark_out_format=json"
         ), shell=True)
 
 
-def compare_benches(project):
+def compare_benches():
     subprocess.run((
-        f"py benches/compare.py benchmarks benches/results/{project}_baseline.json benches/results/{project}_benches.json"
+        f"py benches/compare.py benchmarks benches/results/baseline.json benches/results/benches.json"
     ), shell=True)
 
 
-def make_baseline(project):
-    if os.path.exists(f"benches/results/{project}_baseline.json"):
+def make_baseline():
+    if os.path.exists(f"benches/results/baseline.json"):
         now = datetime.now().strftime("%Y_%m_%d-%I_%M_%S_%p")
-        shutil.copyfile(f"benches/results/{project}_baseline.json",
-                        f"benches/results/old_baselines/{now}_{project}_baseline.json")
+        
+        if not os.path.exists("benches/results/old_baselines"):
+            os.makedirs("benches/results/old_baselines")
+            
+        shutil.copyfile(f"benches/results/baseline.json",
+                        f"benches/results/old_baselines/{now}_baseline.json")
 
-    shutil.copyfile(f"benches/results/{project}_benches.json", f"benches/results/{project}_baseline.json")
+    shutil.copyfile(f"benches/results/benches.json", f"benches/results/baseline.json")
 
 
-def bench(build_type: str, compiler, platform, project, create_baseline):
-    dirs = os.listdir(f"./build/x64-{platform}-{compiler}/benches/")
-    if project == "all":
-        for dir in dirs:
-            if dir != "CMakeFiles" and os.path.isdir(dir):
-                do_bench(build_type, compiler, platform, dir)
-                if os.path.exists(f"benches/results/{dir}_baseline.json"):
-                    print()
-                    compare_benches(dir)
-                if create_baseline:
-                    make_baseline(dir)
-    else:
-        if project in dirs:
-            do_bench(build_type, compiler, platform, project)
-            if os.path.exists(f"benches/results/{project}_baseline.json"):
-                print()
-                compare_benches(project)
-            if create_baseline:
-                make_baseline(project)
-        else:
-            print(
-                f"{Fore.RED}Error:{Style.RESET_ALL} Tried running benches for project: {project} but it does not exist. Run cmake configure or check spelling.")
+def bench(build_type: str, compiler, platform, create_baseline):
+    if not os.path.exists("benches/results"):
+        os.makedirs("benches/results")
+        
+    do_bench(build_type, compiler, platform)
+    if os.path.exists(f"benches/results/baseline.json"):
+        print()
+        compare_benches()
+        
+    if create_baseline:
+        make_baseline()
 
 
 def copy_compile_commands(compiler, platform, san):
@@ -155,7 +148,6 @@ if __name__ == "__main__":
     build_type = args.build_type
     compiler = args.compiler
     platform = args.platform
-    project = "nidavellir"
     san = args.san
     cb = args.create_baseline_bench
 
@@ -177,4 +169,4 @@ if __name__ == "__main__":
             copy_compile_commands(compiler, platform, san)
     elif args.mode == "bench":
         cmake_build(build_type, compiler, platform, san)
-        bench(build_type, compiler, platform, project, cb)
+        bench(build_type, compiler, platform, cb)
