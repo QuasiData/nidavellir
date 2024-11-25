@@ -1,0 +1,33 @@
+\doxysection{nid\+::Component Concept Reference}
+\hypertarget{conceptnid_1_1Component}{}\label{conceptnid_1_1Component}\index{nid::Component@{nid::Component}}
+
+
+Concept that defines the requirements for a component type.  
+
+
+
+
+{\ttfamily \#include $<$comp\+\_\+type\+\_\+info.\+h$>$}
+
+\doxysubsection{Concept definition}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>}
+\DoxyCodeLine{\textcolor{keyword}{concept\ }\mbox{\hyperlink{conceptnid_1_1Component}{nid::Component}}\ =\ \ std::is\_move\_assignable\_v<std::decay\_t<T>>}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ std::is\_nothrow\_move\_constructible\_v<std::decay\_t<T>>}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ std::is\_destructible\_v<std::decay\_t<T>>}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ and\ !std::is\_pointer\_v<std::decay\_t<T>>}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Detailed Description}
+Concept that defines the requirements for a component type. 
+
+This concept ensures that a type {\ttfamily T} satisfies several properties, making it suitable for use as a component in systems that rely on type-\/erased contiguous storage and other similar mechanisms.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & The type to check against the component requirements. \\
+\hline
+\end{DoxyTemplParams}
