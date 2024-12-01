@@ -1,0 +1,281 @@
+\doxysection{/home/data/nidavellir/src/world.\+h}
+\hypertarget{_2home_2data_2nidavellir_2src_2world_8h-example}{}\label{_2home_2data_2nidavellir_2src_2world_8h-example}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Point\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Vector\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{Point\ p\{.x\ =\ 10,\ .y\ =\ 10\};}
+\DoxyCodeLine{Vector\ v\{.x\ =\ 20,\ .y\ =\ 20\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{World\ world;}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(p);}
+\DoxyCodeLine{world.add(entity,\ v);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ has\ the\ components\ Point\ and\ Vector\ with\ values\ from\ the\ variables\ p\ and\ v.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity,\ Vector\{.x\ =\ 100,\ .y\ =\ 100\});}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ will\ now\ have\ the\ same\ type\ of\ components\ but\ the\ value\ of\ the\ Vector\ component\ will\ be\ overwritten.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.remove<Point>(entity);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ only\ has\ a\ Vector\ component.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ Most\ functions\ on\ the\ world\ accept\ an\ arbitrary\ number\ of\ types}}
+\DoxyCodeLine{EntityId\ entity2\ =\ world.spawn(\textcolor{keywordtype}{int}\{1\},\ \textcolor{keywordtype}{float}\{32.4f\},\ std::string(\textcolor{stringliteral}{"{}TestString"{}}),\ std::vector<int>\{1,\ 2,\ 3,\ 4,\ 5,\ 6\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity2,\ \textcolor{keywordtype}{double}\{2.3\},\ std::unordered\_map<int,\ int>\{\});}
+
+\end{DoxyCode}
+
+
+
+\begin{DoxyCodeInclude}{0}
+\DoxyCodeLine{\textcolor{comment}{//\ ReSharper\ disable\ CppUseStructuredBinding}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}archetype.h"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}comp\_type\_info.h"{}}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ "{}identifiers.h"{}}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <iterator>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <memory\_resource>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#include\ <ankerl/unordered\_dense.h>}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{namespace\ }nid\ \{}
+\DoxyCodeLine{\textcolor{keyword}{class\ }World\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{struct\ }ArchetypeRecord\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ Archetype\ archetype;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::vector<EntityId>\ entities;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ArchetypeId\ id;}
+\DoxyCodeLine{\ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{struct\ }EntityRecord\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ ArchetypeId\ archetype;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ usize\ col;}
+\DoxyCodeLine{\ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{struct\ }RowRecord\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ usize\ row;}
+\DoxyCodeLine{\ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{using\ }ArchetypeMap\ =\ ankerl::unordered\_dense::map<ArchetypeId,\ RowRecord>;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ ankerl::unordered\_dense::map<ArchetypeId,\ ArchetypeRecord>\ archetype\_map;}
+\DoxyCodeLine{\ \ \ \ ankerl::unordered\_dense::map<EntityId,\ EntityRecord>\ entity\_map;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ ankerl::unordered\_dense::map<ComponentId,\ ArchetypeMap>\ component\_map;}
+\DoxyCodeLine{\ \ \ \ ankerl::unordered\_dense::map<CompTypeList,\ ArchetypeId,\ TypeHash>\ type\_map;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ CompTypeList\ scratch\_component\_buffer;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ ArchetypeId\ next\_archetype\_id\{0\};}
+\DoxyCodeLine{\ \ \ \ EntityId\ next\_entity\_id\{0\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{classnid_1_1World_a9ac9ec0b3b2d4249b91e96b87f0ff995}{\string~World}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}(\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539}{operator=}}(\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ despawn(EntityId\ entity)\ -\/>\ void;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{template}<Component...\ Ts>}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ spawn(Ts\&\&...\ pack)\ -\/>\ EntityId\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ CompTypeList\ comp\_ts\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ sort\_component\_list(comp\_ts);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ arch\_rec\ =\ find\_or\_create\_archetype(comp\_ts);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ col\ =\ arch\_rec.archetype.emplace\_back(std::forward<Ts>(pack)...);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ new\_entity\_id\ =\ next\_entity\_id++;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ arch\_rec.entities.push\_back(new\_entity\_id);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ entity\_map.insert(\{new\_entity\_id,\ EntityRecord\{.archetype\ =\ arch\_rec.id,\ .col\ =\ col\}\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ new\_entity\_id;}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{template}<Component...\ Ts>}
+\DoxyCodeLine{\ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ get(\textcolor{keyword}{const}\ EntityId\ entity)\ -\/>\ \textcolor{keyword}{decltype}(\textcolor{keyword}{auto})\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ [arch\_id,\ col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [arch,\ \_1,\ \_2]\ =\ archetype\_map.at(arch\_id);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ tup\ =\ std::tie(arch.get\_component<Ts>(col)...);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::same\_as<\textcolor{keyword}{decltype}(tup),\ std::tuple<Ts\&...>>);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Ts)\ ==\ 1)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::get<0>(tup);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tup;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{template}<Component...\ Ts>}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ add(\textcolor{keyword}{const}\ EntityId\ entity,\ Ts\&\&...\ pack)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}...(Ts)\ >\ 0);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(scratch\_component\_buffer.size()\ ==\ 0,\ \textcolor{stringliteral}{"{}The\ scratch\ buffer\ has\ not\ been\ cleared"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_id,\ src\_col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ entity\_types\ =\ archetype\_map.at(src\_id).archetype.type();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ usize\ stack\_buffer\_size\ =\ \textcolor{keyword}{sizeof}(CompTypeInfo)\ *\ 64;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::array<u8,\ stack\_buffer\_size>\ buffer\{\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::pmr::monotonic\_buffer\_resource\ resource(buffer.data(),\ stack\_buffer\_size);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::pmr::vector<CompTypeInfo>\ in\_pack\_types\{\&resource\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::pmr::vector<CompTypeInfo>\ not\_in\_pack\_types\{\&resource\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::array<CompTypeInfo,\ \textcolor{keyword}{sizeof}...(Ts)>\ pack\_infos\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ in\_pack\ =\ [\&](\textcolor{keyword}{const}\ CompTypeInfo\&\ info1)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ranges::find\_if(pack\_infos,\ [info1](\textcolor{keyword}{const}\ CompTypeInfo\&\ info2)\ \{\ \textcolor{keywordflow}{return}\ info1.id\ ==\ info2.id;\ \})\ !=\ pack\_infos.end();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ entity\_types)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (in\_pack(info))\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\_pack\_types.push\_back(info);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ not\_in\_pack\_types.push\_back(info);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ scratch\_component\_buffer.reserve(\textcolor{keyword}{sizeof}...(Ts)\ +\ not\_in\_pack\_types.size());}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::ranges::copy(pack\_infos,\ std::back\_inserter(scratch\_component\_buffer));}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::ranges::copy(not\_in\_pack\_types,\ std::back\_inserter(scratch\_component\_buffer));}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ sort\_component\_list(scratch\_component\_buffer);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [target\_arch,\ target\_entities,\ target\_id]\ =\ find\_or\_create\_archetype(scratch\_component\_buffer);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_arch,\ src\_entities,\ \_]\ =\ archetype\_map.at(src\_id);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (src\_id\ ==\ target\_id)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ src\_arch.update(src\_col,\ std::forward<Ts>(pack)...);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ target\_arch.prepare\_push(1);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ target\_col\{target\_arch.len()\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ not\_in\_pack\_types)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ dst\_ptr\ =\ target\_arch.get\_raw(target\_col,\ target\_arch.get\_row(info.id));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ info.move\_ctor\_dtor(dst\_ptr,\ src\_ptr,\ 1);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ in\_pack\_types)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ info.dtor(src\_ptr,\ 1);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ target\_arch.create(target\_col,\ std::forward<Ts>(pack)...);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ target\_entities.push\_back(entity);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ target\_arch.increase\_size(1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ src\_last\_col\{src\_arch.len()\ -\/\ 1\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (src\_col\ <\ src\_last\_col)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_arch.swap(src\_col,\ src\_last\_col);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(src\_entities[src\_col],\ src\_entities[src\_last\_col]);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entity\_map.at(src\_entities[src\_col]).col\ =\ src\_col;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ src\_entities.pop\_back();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ src\_arch.decrease\_size(1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ src\_id\ =\ target\_id;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ src\_col\ =\ target\_col;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ scratch\_component\_buffer.clear();}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{template}<Component...\ Ts>}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ remove(\textcolor{keyword}{const}\ EntityId\ entity)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}...(Ts)\ >\ 0);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(scratch\_component\_buffer.size()\ ==\ 0,\ \textcolor{stringliteral}{"{}The\ scratch\ buffer\ has\ not\ been\ cleared"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_id,\ src\_col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ entity\_types\ =\ archetype\_map.at(src\_id).archetype.type();}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ std::array<CompTypeInfo,\ \textcolor{keyword}{sizeof}...(Ts)>\ pack\_infos\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ not\_in\_pack\ =\ [\&](\textcolor{keyword}{const}\ CompTypeInfo\&\ info1)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ranges::find\_if(pack\_infos,\ [info1](\textcolor{keyword}{const}\ CompTypeInfo\&\ info2)\ \{\ \textcolor{keywordflow}{return}\ info1.id\ ==\ info2.id;\ \})\ ==\ pack\_infos.end();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ scratch\_component\_buffer.reserve(\textcolor{keyword}{sizeof}...(Ts));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ entity\_types)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (not\_in\_pack(info))\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scratch\_component\_buffer.push\_back(info);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{preprocessor}{\#ifndef\ NDEBUG}}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ in\_entity\_type\ =\ [\&](\textcolor{keyword}{const}\ CompTypeInfo\&\ info1)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ranges::find\_if(entity\_types,\ [info1](\textcolor{keyword}{const}\ CompTypeInfo\&\ info2)\ \{\ \textcolor{keywordflow}{return}\ info1.id\ ==\ info2.id;\ \})\ !=\ entity\_types.end();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ pack\_infos)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(in\_entity\_type(info),\ \textcolor{stringliteral}{"{}Tried\ removing\ a\ component\ from\ an\ entity\ that\ did\ not\ have\ it"{}});}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ sort\_component\_list(scratch\_component\_buffer);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [target\_arch,\ target\_entities,\ target\_id]\ =\ find\_or\_create\_archetype(scratch\_component\_buffer);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_arch,\ src\_entities,\ \_]\ =\ archetype\_map.at(src\_id);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(src\_id\ !=\ target\_id,\ \textcolor{stringliteral}{"{}When\ removing\ components\ there\ should\ be\ no\ way\ of\ ending\ up\ in\ the\ same\ archetype\ again"{}});}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ target\_arch.prepare\_push(1);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ target\_col\{target\_arch.len()\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ scratch\_component\_buffer)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ dst\_ptr\ =\ target\_arch.get\_raw(target\_col,\ target\_arch.get\_row(info.id));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ info.move\_ctor\_dtor(dst\_ptr,\ src\_ptr,\ 1);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ pack\_infos)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ info.dtor(src\_ptr,\ 1);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ target\_entities.push\_back(entity);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ target\_arch.increase\_size(1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ src\_last\_col\{src\_arch.len()\ -\/\ 1\};}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (src\_col\ <\ src\_last\_col)\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ src\_arch.swap(src\_col,\ src\_last\_col);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ std::swap(src\_entities[src\_col],\ src\_entities[src\_last\_col]);}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ entity\_map.at(src\_entities[src\_col]).col\ =\ src\_col;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ src\_entities.pop\_back();}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ src\_arch.decrease\_size(1);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ src\_id\ =\ target\_id;}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ src\_col\ =\ target\_col;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ scratch\_component\_buffer.clear();}
+\DoxyCodeLine{\ \ \ \ \}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\ \ \ \ \textcolor{keyword}{auto}\ find\_or\_create\_archetype(\textcolor{keyword}{const}\ CompTypeList\&\ comp\_ts)\ -\/>\ ArchetypeRecord\&;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{\}\ \textcolor{comment}{//\ namespace\ nid}}
+
+\end{DoxyCodeInclude}
+ 

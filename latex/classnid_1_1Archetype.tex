@@ -1,0 +1,492 @@
+\doxysection{nid\+::Archetype Class Reference}
+\hypertarget{classnid_1_1Archetype}{}\label{classnid_1_1Archetype}\index{nid::Archetype@{nid::Archetype}}
+
+
+Manages a collection of components arranged in a contiguous memory layout.  
+
+
+
+
+{\ttfamily \#include $<$archetype.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classnid_1_1Archetype_a6126c9d2839101e7f939943f2e1062a2}{Archetype}} (Comp\+Type\+List comp\+\_\+infos)
+\begin{DoxyCompactList}\small\item\em Constructs an \doxylink{classnid_1_1Archetype}{Archetype} with the given component type list. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1Archetype_a29d1ea82e3610a5a27a51992235f7ff0}\label{classnid_1_1Archetype_a29d1ea82e3610a5a27a51992235f7ff0} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+Archetype} ()
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1Archetype_aeeb3c18bfc2f2546f2b9b7cb8eb24a00}\label{classnid_1_1Archetype_aeeb3c18bfc2f2546f2b9b7cb8eb24a00} 
+{\bfseries Archetype} (const \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&)=delete
+\item 
+\Hypertarget{classnid_1_1Archetype_a56ce2c3a672303037d0e8d9e7d21af53}\label{classnid_1_1Archetype_a56ce2c3a672303037d0e8d9e7d21af53} 
+auto {\bfseries operator=} (const \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&) -\/$>$ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&=delete
+\item 
+\mbox{\hyperlink{classnid_1_1Archetype_ad73dd1563b9f132d39cc08fa852c7465}{Archetype}} (\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&\&other) noexcept
+\begin{DoxyCompactList}\small\item\em Move constructor for \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_a94783bc1af20c4e6f3078b04ceeee120}{operator=}} (\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&\&other) noexcept -\/$>$ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&
+\begin{DoxyCompactList}\small\item\em Move assignment operator for \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_a9519436e6b2eccbf318466d927eac5c9}{cap}} () const noexcept -\/$>$ usize
+\begin{DoxyCompactList}\small\item\em Gets the capacity of the \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_a9aa8461c3e08a139c17d9e5c2111a896}{len}} () const noexcept -\/$>$ usize
+\begin{DoxyCompactList}\small\item\em Gets the number of columns in the \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_a898491aa34d1d9ae4b95eb2fb3aac171}{reserve}} (usize new\+\_\+capacity) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Reserves additional capacity for the \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1Archetype_abcb786c7b09d4b30e8ac6f78c39c7eb7}\label{classnid_1_1Archetype_abcb786c7b09d4b30e8ac6f78c39c7eb7} 
+auto {\bfseries grow} () -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Grows the \doxylink{classnid_1_1Archetype}{Archetype} by some amount. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_af68e18ac7370c5f79e7669433e024072}{prepare\+\_\+push}} (usize count) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Prepares the \doxylink{classnid_1_1Archetype}{Archetype} to push new components by ensuring sufficient capacity. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_aeeb332e7f6e7c68b5352316fa190cd67}{increase\+\_\+size}} (const usize count) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Increases the current size of the \doxylink{classnid_1_1Archetype}{Archetype} by the specified count. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_ac571f000f903826dc307e6830069b735}{decrease\+\_\+size}} (const usize count) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Decrease the current size of the \doxylink{classnid_1_1Archetype}{Archetype} by the specified count. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_abd4db1859cc3c42fefce2ea3ae5d30be}{swap}} (usize first, usize second) noexcept -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Swaps the components at two specified columns. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_ae60592a7e488d14b2a97fcea6f8a893c}{remove}} (usize col) -\/$>$ usize
+\begin{DoxyCompactList}\small\item\em Removes the component at the specified column. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_ad145f0384ee4bd84856219b199ff3a4a}{type}} () const -\/$>$ std\+::span$<$ const \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}} $>$
+\begin{DoxyCompactList}\small\item\em Retrieves the component type list. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8}{get\+\_\+row}} (const Component\+Id id) const -\/$>$ usize
+\begin{DoxyCompactList}\small\item\em Gets the row index associated with the specified component ID. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_a7438b457c6bfbf79c92098cf9a5ac948}{partial\+\_\+match}} (std\+::span$<$ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}} $>$ type\+\_\+list) const -\/$>$ bool
+\begin{DoxyCompactList}\small\item\em Checks if there is a partial match with the given type list. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_ac2753e2b236738a373a569004dd6e3d7}{match}} (std\+::span$<$ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}} $>$ type\+\_\+list) const -\/$>$ bool
+\begin{DoxyCompactList}\small\item\em Checks if the given type list matches the types within the archetype. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1Archetype_a47e39eb43ca5b41ac8ea56105b9fca24}{emplace\+\_\+back}} (Ts \&\&... pack) -\/$>$ usize
+\begin{DoxyCompactList}\small\item\em Adds a new column to the \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1Archetype_a5b24e2a0e60b24c96ab1a9a27dc5865a}{update}} (const usize col, Ts \&\&... pack)
+\begin{DoxyCompactList}\small\item\em Updates components in an existing column of the \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1Archetype_ac839dd431e38a59dbea67ce7164f942c}{create}} (const usize col, Ts \&\&... pack)
+\begin{DoxyCompactList}\small\item\em Creates components in an existing column of the \doxylink{classnid_1_1Archetype}{Archetype}. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component T$>$ }\\auto \mbox{\hyperlink{classnid_1_1Archetype_a2c01cd9f678bd55d15782a726e051673}{get\+\_\+component}} (const usize col) -\/$>$ T \&
+\begin{DoxyCompactList}\small\item\em Gets a reference to a component at the specified position. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component T$>$ }\\auto \mbox{\hyperlink{classnid_1_1Archetype_a064068357589d4ea04eecb8e14565214}{begin}} () -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$
+\begin{DoxyCompactList}\small\item\em Gets an iterator to the beginning of the specified components row. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component T$>$ }\\auto \mbox{\hyperlink{classnid_1_1Archetype_a0103dc5cdf2aeff660f685f8eb700309}{end}} () -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$ T $>$
+\begin{DoxyCompactList}\small\item\em Gets an iterator to the end of the specified components row. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}{get\+\_\+raw}} (const usize col, const usize row) const -\/$>$ void \texorpdfstring{$\ast$}{*}
+\begin{DoxyCompactList}\small\item\em Gets a pointer to the memory at the specified position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Manages a collection of components arranged in a contiguous memory layout. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classnid_1_1Archetype_a6126c9d2839101e7f939943f2e1062a2}\label{classnid_1_1Archetype_a6126c9d2839101e7f939943f2e1062a2} 
+\index{nid::Archetype@{nid::Archetype}!Archetype@{Archetype}}
+\index{Archetype@{Archetype}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{Archetype()}{Archetype()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily nid\+::\+Archetype\+::\+Archetype (\begin{DoxyParamCaption}\item[{Comp\+Type\+List}]{comp\+\_\+infos }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Constructs an \doxylink{classnid_1_1Archetype}{Archetype} with the given component type list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em comp\+\_\+infos} & List of component type information. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_ad73dd1563b9f132d39cc08fa852c7465}\label{classnid_1_1Archetype_ad73dd1563b9f132d39cc08fa852c7465} 
+\index{nid::Archetype@{nid::Archetype}!Archetype@{Archetype}}
+\index{Archetype@{Archetype}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{Archetype()}{Archetype()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily nid\+::\+Archetype\+::\+Archetype (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&\&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Move constructor for \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \doxylink{classnid_1_1Archetype}{Archetype} to be moved. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classnid_1_1Archetype_a064068357589d4ea04eecb8e14565214}\label{classnid_1_1Archetype_a064068357589d4ea04eecb8e14565214} 
+\index{nid::Archetype@{nid::Archetype}!begin@{begin}}
+\index{begin@{begin}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{begin()}{begin()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto nid\+::\+Archetype\+::begin (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$T$>$ \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets an iterator to the beginning of the specified components row. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Type of the component. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+Iterator to the beginning of the row of component type T. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a9519436e6b2eccbf318466d927eac5c9}\label{classnid_1_1Archetype_a9519436e6b2eccbf318466d927eac5c9} 
+\index{nid::Archetype@{nid::Archetype}!cap@{cap}}
+\index{cap@{cap}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{cap()}{cap()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::cap (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const -\/$>$ usize \hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Gets the capacity of the \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+\begin{DoxyReturn}{Returns}
+Current capacity. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_ac839dd431e38a59dbea67ce7164f942c}\label{classnid_1_1Archetype_ac839dd431e38a59dbea67ce7164f942c} 
+\index{nid::Archetype@{nid::Archetype}!create@{create}}
+\index{create@{create}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{create()}{create()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+Archetype\+::create (\begin{DoxyParamCaption}\item[{const usize}]{col,  }\item[{Ts \&\&...}]{pack }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Creates components in an existing column of the \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+This function constructs new components in the specified column at the appropriate locations. The column index must be valid (less than the current capacity). The provided components ({\ttfamily pack}) may only cover part of the column, not necessarily all the rows.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & Types of the components to create. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em col} & The column where the components will be created. \\
+\hline
+{\em pack} & New components to create in the specified column. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_ac571f000f903826dc307e6830069b735}\label{classnid_1_1Archetype_ac571f000f903826dc307e6830069b735} 
+\index{nid::Archetype@{nid::Archetype}!decrease\_size@{decrease\_size}}
+\index{decrease\_size@{decrease\_size}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{decrease\_size()}{decrease\_size()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::decrease\+\_\+size (\begin{DoxyParamCaption}\item[{const usize}]{count }\end{DoxyParamCaption}) -\/$>$ void \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Decrease the current size of the \doxylink{classnid_1_1Archetype}{Archetype} by the specified count. 
+
+This function decrements the size of the \doxylink{classnid_1_1Archetype}{Archetype} by the given count, which represents the number of columns that are removed.
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & The number of columns to remove from the current size. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_a47e39eb43ca5b41ac8ea56105b9fca24}\label{classnid_1_1Archetype_a47e39eb43ca5b41ac8ea56105b9fca24} 
+\index{nid::Archetype@{nid::Archetype}!emplace\_back@{emplace\_back}}
+\index{emplace\_back@{emplace\_back}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{emplace\_back()}{emplace\_back()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+Archetype\+::emplace\+\_\+back (\begin{DoxyParamCaption}\item[{Ts \&\&...}]{pack }\end{DoxyParamCaption}) -\/$>$ usize \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds a new column to the \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+This function adds a new column to the archetype, initializing it with the provided components. If the current capacity is reached, the function will grow the underlying storage before adding the new column. The components are constructed in place at the appropriate locations.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & Types of the components. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em pack} & Components to be added. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of the added column. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a0103dc5cdf2aeff660f685f8eb700309}\label{classnid_1_1Archetype_a0103dc5cdf2aeff660f685f8eb700309} 
+\index{nid::Archetype@{nid::Archetype}!end@{end}}
+\index{end@{end}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{end()}{end()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto nid\+::\+Archetype\+::end (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1RowIterator}{Row\+Iterator}}$<$T$>$ \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets an iterator to the end of the specified components row. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Type of the component. \\
+\hline
+\end{DoxyTemplParams}
+\begin{DoxyReturn}{Returns}
+Iterator to the end of the row of component type T. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a2c01cd9f678bd55d15782a726e051673}\label{classnid_1_1Archetype_a2c01cd9f678bd55d15782a726e051673} 
+\index{nid::Archetype@{nid::Archetype}!get\_component@{get\_component}}
+\index{get\_component@{get\_component}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{get\_component()}{get\_component()}}
+{\footnotesize\ttfamily template$<$Component T$>$ \\
+auto nid\+::\+Archetype\+::get\+\_\+component (\begin{DoxyParamCaption}\item[{const usize}]{col }\end{DoxyParamCaption}) -\/$>$ T\& \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets a reference to a component at the specified position. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Type of the component. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Column index of the component. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the component. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}\label{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91} 
+\index{nid::Archetype@{nid::Archetype}!get\_raw@{get\_raw}}
+\index{get\_raw@{get\_raw}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{get\_raw()}{get\_raw()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::get\+\_\+raw (\begin{DoxyParamCaption}\item[{const usize}]{col,  }\item[{const usize}]{row }\end{DoxyParamCaption}) const -\/$>$ void\texorpdfstring{$\ast$}{*} \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets a pointer to the memory at the specified position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Column index of the component. \\
+\hline
+{\em row} & Row index of the component. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to the memory. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8}\label{classnid_1_1Archetype_ae6cac9a309d6c635168b1ee20ef329f8} 
+\index{nid::Archetype@{nid::Archetype}!get\_row@{get\_row}}
+\index{get\_row@{get\_row}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{get\_row()}{get\_row()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::get\+\_\+row (\begin{DoxyParamCaption}\item[{const Component\+Id}]{id }\end{DoxyParamCaption}) const -\/$>$ usize \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets the row index associated with the specified component ID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The component ID for which to get the row index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The row index associated with the specified component ID. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::out\+\_\+of\+\_\+range} & if the component ID is not found in the map. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{classnid_1_1Archetype_aeeb332e7f6e7c68b5352316fa190cd67}\label{classnid_1_1Archetype_aeeb332e7f6e7c68b5352316fa190cd67} 
+\index{nid::Archetype@{nid::Archetype}!increase\_size@{increase\_size}}
+\index{increase\_size@{increase\_size}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{increase\_size()}{increase\_size()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::increase\+\_\+size (\begin{DoxyParamCaption}\item[{const usize}]{count }\end{DoxyParamCaption}) -\/$>$ void \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Increases the current size of the \doxylink{classnid_1_1Archetype}{Archetype} by the specified count. 
+
+This function increments the size of the \doxylink{classnid_1_1Archetype}{Archetype} by the given count, which represents the number of new columns added.
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & The number of columns to add to the current size. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_a9aa8461c3e08a139c17d9e5c2111a896}\label{classnid_1_1Archetype_a9aa8461c3e08a139c17d9e5c2111a896} 
+\index{nid::Archetype@{nid::Archetype}!len@{len}}
+\index{len@{len}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{len()}{len()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::len (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const -\/$>$ usize \hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [noexcept]}}
+
+
+
+Gets the number of columns in the \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+\begin{DoxyReturn}{Returns}
+Current number of columns. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_ac2753e2b236738a373a569004dd6e3d7}\label{classnid_1_1Archetype_ac2753e2b236738a373a569004dd6e3d7} 
+\index{nid::Archetype@{nid::Archetype}!match@{match}}
+\index{match@{match}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{match()}{match()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::match (\begin{DoxyParamCaption}\item[{std\+::span$<$ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}} $>$}]{type\+\_\+list }\end{DoxyParamCaption}) const -\/$>$ bool}
+
+
+
+Checks if the given type list matches the types within the archetype. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em type\+\_\+list} & A span representing the list of types to be matched. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if its is a match, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a94783bc1af20c4e6f3078b04ceeee120}\label{classnid_1_1Archetype_a94783bc1af20c4e6f3078b04ceeee120} 
+\index{nid::Archetype@{nid::Archetype}!operator=@{operator=}}
+\index{operator=@{operator=}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::operator= (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classnid_1_1Archetype}{Archetype}} \&\&}]{other }\end{DoxyParamCaption}) -\/$>$ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Move assignment operator for \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & \doxylink{classnid_1_1Archetype}{Archetype} to be moved. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Reference to the assigned \doxylink{classnid_1_1Archetype}{Archetype}. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a7438b457c6bfbf79c92098cf9a5ac948}\label{classnid_1_1Archetype_a7438b457c6bfbf79c92098cf9a5ac948} 
+\index{nid::Archetype@{nid::Archetype}!partial\_match@{partial\_match}}
+\index{partial\_match@{partial\_match}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{partial\_match()}{partial\_match()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::partial\+\_\+match (\begin{DoxyParamCaption}\item[{std\+::span$<$ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}} $>$}]{type\+\_\+list }\end{DoxyParamCaption}) const -\/$>$ bool}
+
+
+
+Checks if there is a partial match with the given type list. 
+
+This function determines whether the provided type list partially matches the types within the archetype.
+
+
+\begin{DoxyParams}{Parameters}
+{\em type\+\_\+list} & A span representing the list of types to be checked. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if there is a partial match, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_af68e18ac7370c5f79e7669433e024072}\label{classnid_1_1Archetype_af68e18ac7370c5f79e7669433e024072} 
+\index{nid::Archetype@{nid::Archetype}!prepare\_push@{prepare\_push}}
+\index{prepare\_push@{prepare\_push}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{prepare\_push()}{prepare\_push()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::prepare\+\_\+push (\begin{DoxyParamCaption}\item[{usize}]{count }\end{DoxyParamCaption}) -\/$>$ void}
+
+
+
+Prepares the \doxylink{classnid_1_1Archetype}{Archetype} to push new components by ensuring sufficient capacity. 
+
+This function ensures that the \doxylink{classnid_1_1Archetype}{Archetype} has enough capacity to add the specified number of new components. If the current capacity is insufficient, it will grow the capacity to accommodate the new components.
+
+
+\begin{DoxyParams}{Parameters}
+{\em count} & The number of new components to be added. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_ae60592a7e488d14b2a97fcea6f8a893c}\label{classnid_1_1Archetype_ae60592a7e488d14b2a97fcea6f8a893c} 
+\index{nid::Archetype@{nid::Archetype}!remove@{remove}}
+\index{remove@{remove}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{remove()}{remove()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::remove (\begin{DoxyParamCaption}\item[{usize}]{col }\end{DoxyParamCaption}) -\/$>$ usize}
+
+
+
+Removes the component at the specified column. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em col} & Index of the column to remove. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index to the column that was last before removal(the len after removal). 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a898491aa34d1d9ae4b95eb2fb3aac171}\label{classnid_1_1Archetype_a898491aa34d1d9ae4b95eb2fb3aac171} 
+\index{nid::Archetype@{nid::Archetype}!reserve@{reserve}}
+\index{reserve@{reserve}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{reserve()}{reserve()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::reserve (\begin{DoxyParamCaption}\item[{usize}]{new\+\_\+capacity }\end{DoxyParamCaption}) -\/$>$ void}
+
+
+
+Reserves additional capacity for the \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+\_\+capacity} & The new capacity to reserve. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_abd4db1859cc3c42fefce2ea3ae5d30be}\label{classnid_1_1Archetype_abd4db1859cc3c42fefce2ea3ae5d30be} 
+\index{nid::Archetype@{nid::Archetype}!swap@{swap}}
+\index{swap@{swap}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{swap()}{swap()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::swap (\begin{DoxyParamCaption}\item[{usize}]{first,  }\item[{usize}]{second }\end{DoxyParamCaption}) -\/$>$ void\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Swaps the components at two specified columns. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em first} & Index of the first column. \\
+\hline
+{\em second} & Index of the second column. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classnid_1_1Archetype_ad145f0384ee4bd84856219b199ff3a4a}\label{classnid_1_1Archetype_ad145f0384ee4bd84856219b199ff3a4a} 
+\index{nid::Archetype@{nid::Archetype}!type@{type}}
+\index{type@{type}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{type()}{type()}}
+{\footnotesize\ttfamily auto nid\+::\+Archetype\+::type (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const -\/$>$ std\+::span$<$const \mbox{\hyperlink{structnid_1_1CompTypeInfo}{Comp\+Type\+Info}}$>$ \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Retrieves the component type list. 
+
+\begin{DoxyReturn}{Returns}
+A constant reference to the Comp\+Type\+List containing component information. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1Archetype_a5b24e2a0e60b24c96ab1a9a27dc5865a}\label{classnid_1_1Archetype_a5b24e2a0e60b24c96ab1a9a27dc5865a} 
+\index{nid::Archetype@{nid::Archetype}!update@{update}}
+\index{update@{update}!nid::Archetype@{nid::Archetype}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+Archetype\+::update (\begin{DoxyParamCaption}\item[{const usize}]{col,  }\item[{Ts \&\&...}]{pack }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Updates components in an existing column of the \doxylink{classnid_1_1Archetype}{Archetype}. 
+
+This function updates the specified column with new components, destroying the existing components in the column before constructing the new ones in place. The column index must be valid (less than the current size). The provided components ({\ttfamily pack}) may only cover part of the column, not necessarily all the rows.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & Types of the components to update. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em col} & The column to be updated. \\
+\hline
+{\em pack} & New components to update the column with. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/archetype.\+h\item 
+src/archetype.\+cpp\end{DoxyCompactItemize}

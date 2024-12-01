@@ -1,0 +1,316 @@
+\doxysection{nid\+::World Class Reference}
+\hypertarget{classnid_1_1World}{}\label{classnid_1_1World}\index{nid::World@{nid::World}}
+
+
+A \doxylink{classnid_1_1World}{World} which is the heart of the ECS.  
+
+
+
+
+{\ttfamily \#include $<$world.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}\label{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68} 
+{\bfseries World} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor for \doxylink{classnid_1_1World}{World}. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a9ac9ec0b3b2d4249b91e96b87f0ff995}\label{classnid_1_1World_a9ac9ec0b3b2d4249b91e96b87f0ff995} 
+{\bfseries \texorpdfstring{$\sim$}{\string~}\+World} ()=default
+\begin{DoxyCompactList}\small\item\em Destructor for \doxylink{classnid_1_1World}{World}. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a92e68f5497da9185bde16292a2f0c1a0}\label{classnid_1_1World_a92e68f5497da9185bde16292a2f0c1a0} 
+{\bfseries World} (const \mbox{\hyperlink{classnid_1_1World}{World}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539}\label{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539} 
+auto {\bfseries operator=} (const \mbox{\hyperlink{classnid_1_1World}{World}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted copy assignment operator. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_ae97f4f2d26ffb741787fc87d7dc85ed7}\label{classnid_1_1World_ae97f4f2d26ffb741787fc87d7dc85ed7} 
+{\bfseries World} (\mbox{\hyperlink{classnid_1_1World}{World}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted move constructor. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_aecac2d1a3726511a0020e149c6843f2b}\label{classnid_1_1World_aecac2d1a3726511a0020e149c6843f2b} 
+auto {\bfseries operator=} (\mbox{\hyperlink{classnid_1_1World}{World}} \&\&)=delete
+\begin{DoxyCompactList}\small\item\em Deleted move assignment operator. \end{DoxyCompactList}\item 
+auto \mbox{\hyperlink{classnid_1_1World_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d}{despawn}} (Entity\+Id entity) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Despawns an entity from the world. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1World_ae7b9a881c3b27c73b9804dfd827bb084}{spawn}} (Ts \&\&... pack) -\/$>$ Entity\+Id
+\begin{DoxyCompactList}\small\item\em Spawns a new entity with the given components. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1World_a45bc3cddff5b9963f34513038e0e8f1b}{get}} (const Entity\+Id entity) -\/$>$ decltype(auto)
+\begin{DoxyCompactList}\small\item\em Gets the components of the specified types for a given entity. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1World_af540635c3b06fc7cf09d06ca68c8bfa4}{has}} (const Entity\+Id entity) -\/$>$ bool
+\begin{DoxyCompactList}\small\item\em Checks if the specified entity has the components. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1World_ab2291f375b044fe8d45247a00e77a1d6}{add}} (const Entity\+Id entity, Ts \&\&... pack) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Adds the specified components to a given entity. \end{DoxyCompactList}\item 
+{\footnotesize template$<$Component... Ts$>$ }\\auto \mbox{\hyperlink{classnid_1_1World_ad29bd42efb428d3b17ec704b6e9bae2e}{remove}} (const Entity\+Id entity) -\/$>$ void
+\begin{DoxyCompactList}\small\item\em Removes the specified components from a given entity. \end{DoxyCompactList}\item 
+\Hypertarget{classnid_1_1World_a87ce650c621e4bd06ada428686ec266e}\label{classnid_1_1World_a87ce650c621e4bd06ada428686ec266e} 
+{\footnotesize template$<$Component... Ts$>$ }\\auto {\bfseries query} () -\/$>$ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}$<$ Ts... $>$
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A \doxylink{classnid_1_1World}{World} which is the heart of the ECS. 
+
+INFO
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Point\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Vector\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{Point\ p\{.x\ =\ 10,\ .y\ =\ 10\};}
+\DoxyCodeLine{Vector\ v\{.x\ =\ 20,\ .y\ =\ 20\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(p);}
+\DoxyCodeLine{world.add(entity,\ v);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ has\ the\ components\ Point\ and\ Vector\ with\ values\ from\ the\ variables\ p\ and\ v.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity,\ Vector\{.x\ =\ 100,\ .y\ =\ 100\});}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ will\ now\ have\ the\ same\ type\ of\ components\ but\ the\ value\ of\ the\ Vector\ component\ will\ be\ overwritten.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.remove<Point>(entity);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ only\ has\ a\ Vector\ component.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ Most\ functions\ on\ the\ world\ accept\ an\ arbitrary\ number\ of\ types}}
+\DoxyCodeLine{EntityId\ entity2\ =\ world.spawn(\textcolor{keywordtype}{int}\{1\},\ \textcolor{keywordtype}{float}\{32.4f\},\ std::string(\textcolor{stringliteral}{"{}TestString"{}}),\ std::vector<int>\{1,\ 2,\ 3,\ 4,\ 5,\ 6\});}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity2,\ \textcolor{keywordtype}{double}\{2.3\},\ std::unordered\_map<int,\ int>\{\});}
+
+\end{DoxyCode}
+ 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classnid_1_1World_ab2291f375b044fe8d45247a00e77a1d6}\label{classnid_1_1World_ab2291f375b044fe8d45247a00e77a1d6} 
+\index{nid::World@{nid::World}!add@{add}}
+\index{add@{add}!nid::World@{nid::World}}
+\doxysubsubsection{\texorpdfstring{add()}{add()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+World\+::add (\begin{DoxyParamCaption}\item[{const Entity\+Id}]{entity,  }\item[{Ts \&\&...}]{pack }\end{DoxyParamCaption}) -\/$>$ void \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Adds the specified components to a given entity. 
+
+This function adds the specified components to the given entity. If the entity already has a component of one of the supplied types, the existing component will be overwritten with the new one provided in the pack. Throws a {\ttfamily std\+::out\+\_\+of\+\_\+range} exception if the entity does not exist.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & The types of the components to add. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & The ID of the entity. \\
+\hline
+{\em pack} & The components to add.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Point\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{keyword}{struct\ }Vector\ \{}
+\DoxyCodeLine{\ \ \ \ \textcolor{keywordtype}{int}\ x,\ y;}
+\DoxyCodeLine{\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{Point\ p\{.x\ =\ 10,\ .y\ =\ 10\};}
+\DoxyCodeLine{Vector\ v\{.x\ =\ 20,\ .y\ =\ 20\};}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(p);}
+\DoxyCodeLine{world.add(entity,\ v);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ now\ has\ the\ components\ Point\ and\ Vector\ with\ values\ from\ the\ variables\ p\ and\ v.}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.add(entity,\ Vector\{.x\ =\ 100,\ .y\ =\ 100\});}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ will\ now\ have\ the\ same\ type\ of\ components\ but\ the\ value\ of\ the\ Vector\ component\ will\ be\ overwritten.}}
+
+\end{DoxyCode}
+ \Hypertarget{classnid_1_1World_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d}\label{classnid_1_1World_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d} 
+\index{nid::World@{nid::World}!despawn@{despawn}}
+\index{despawn@{despawn}!nid::World@{nid::World}}
+\doxysubsubsection{\texorpdfstring{despawn()}{despawn()}}
+{\footnotesize\ttfamily auto nid\+::\+World\+::despawn (\begin{DoxyParamCaption}\item[{Entity\+Id}]{entity }\end{DoxyParamCaption}) -\/$>$ void}
+
+
+
+Despawns an entity from the world. 
+
+This function removes the specified entity from the world, along with all its associated components. The entity must exist in the world; attempting to despawn a non-\/existent entity will throw a {\ttfamily std\+::out\+\_\+of\+\_\+range} exception.
+
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & The ID of the entity to despawn.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ComponentType1\ comp1;}
+\DoxyCodeLine{ComponentType2\ comp2;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(comp1,\ comp2);}
+\DoxyCodeLine{world.despawn(entity);}
+
+\end{DoxyCode}
+ \Hypertarget{classnid_1_1World_a45bc3cddff5b9963f34513038e0e8f1b}\label{classnid_1_1World_a45bc3cddff5b9963f34513038e0e8f1b} 
+\index{nid::World@{nid::World}!get@{get}}
+\index{get@{get}!nid::World@{nid::World}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+World\+::get (\begin{DoxyParamCaption}\item[{const Entity\+Id}]{entity }\end{DoxyParamCaption}) -\/$>$ decltype(auto) \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Gets the components of the specified types for a given entity. 
+
+This function retrieves the components of the specified types for the given entity. If only one component type is requested, a single reference is returned. If multiple component types are requested, a tuple of references is returned. Throws a {\ttfamily std\+::out\+\_\+of\+\_\+range} exception if the entity does not exist or if the specified components are not present on the entity.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & The types of the components to get. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & The ID of the entity. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A reference or tuple of references to the requested components.
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ComponentType1\ comp1;}
+\DoxyCodeLine{ComponentType2\ comp2;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(comp1,\ comp2);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ Get\ a\ single\ component}}
+\DoxyCodeLine{\textcolor{keyword}{auto}\&\ component1\ =\ world.get<ComponentType1>(entity);}
+\DoxyCodeLine{}
+\DoxyCodeLine{\textcolor{comment}{//\ Get\ multiple\ components}}
+\DoxyCodeLine{\textcolor{keyword}{auto}\&\ [component1,\ component2]\ =\ world.get<ComponentType1,\ ComponentType2>(entity);}
+
+\end{DoxyCode}
+ \Hypertarget{classnid_1_1World_af540635c3b06fc7cf09d06ca68c8bfa4}\label{classnid_1_1World_af540635c3b06fc7cf09d06ca68c8bfa4} 
+\index{nid::World@{nid::World}!has@{has}}
+\index{has@{has}!nid::World@{nid::World}}
+\doxysubsubsection{\texorpdfstring{has()}{has()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+World\+::has (\begin{DoxyParamCaption}\item[{const Entity\+Id}]{entity }\end{DoxyParamCaption}) -\/$>$ bool \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks if the specified entity has the components. 
+
+This function determines whether the given entity, identified by its Entity\+Id, possesses the components specified by the template parameters Ts.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & The types of components to check for. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & The identifier of the entity to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the entity has all the specified components, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{classnid_1_1World_ad29bd42efb428d3b17ec704b6e9bae2e}\label{classnid_1_1World_ad29bd42efb428d3b17ec704b6e9bae2e} 
+\index{nid::World@{nid::World}!remove@{remove}}
+\index{remove@{remove}!nid::World@{nid::World}}
+\doxysubsubsection{\texorpdfstring{remove()}{remove()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+World\+::remove (\begin{DoxyParamCaption}\item[{const Entity\+Id}]{entity }\end{DoxyParamCaption}) -\/$>$ void \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Removes the specified components from a given entity. 
+
+This function removes the specified components from the given entity. Throws a {\ttfamily std\+::out\+\_\+of\+\_\+range} exception if the entity does not exist. If the entity does not have all of the specified components, this function will cause undefined behavior.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & The types of the components to remove. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em entity} & The ID of the entity.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ComponentType1\ comp1;}
+\DoxyCodeLine{ComponentType2\ comp2;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{EntityId\ entity\ =\ world.spawn(comp1,\ comp2);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ has\ the\ components\ ComponentType1\ and\ ComponentType2}}
+\DoxyCodeLine{}
+\DoxyCodeLine{world.remove<ComponentType2>(entity);}
+\DoxyCodeLine{\textcolor{comment}{//\ The\ entity\ only\ has\ the\ component\ ComponentType1}}
+
+\end{DoxyCode}
+ \Hypertarget{classnid_1_1World_ae7b9a881c3b27c73b9804dfd827bb084}\label{classnid_1_1World_ae7b9a881c3b27c73b9804dfd827bb084} 
+\index{nid::World@{nid::World}!spawn@{spawn}}
+\index{spawn@{spawn}!nid::World@{nid::World}}
+\doxysubsubsection{\texorpdfstring{spawn()}{spawn()}}
+{\footnotesize\ttfamily template$<$Component... Ts$>$ \\
+auto nid\+::\+World\+::spawn (\begin{DoxyParamCaption}\item[{Ts \&\&...}]{pack }\end{DoxyParamCaption}) -\/$>$ Entity\+Id \hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Spawns a new entity with the given components. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Ts} & The types of the components. \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em pack} & The components to add to the new entity. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The ID of the newly spawned entity.
+\end{DoxyReturn}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ComponentType1\ comp1;}
+\DoxyCodeLine{ComponentType2\ comp2;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{\textcolor{comment}{//\ Spawn\ an\ entity\ with\ the\ components\ comp1\ and\ comp2.}}
+\DoxyCodeLine{EntityId\ entity1\ =\ world.spawn(comp1,\ comp2);}
+\DoxyCodeLine{}
+\DoxyCodeLine{ComponentType3\ comp3;}
+\DoxyCodeLine{ComponentType4\ comp4;}
+\DoxyCodeLine{}
+\DoxyCodeLine{\mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}\ world;}
+\DoxyCodeLine{\textcolor{comment}{//\ Spawn\ an\ entity\ with\ the\ components\ comp3\ and\ comp4.}}
+\DoxyCodeLine{EntityId\ entity2\ =\ world.spawn(comp3,\ comp4);}
+
+\end{DoxyCode}
+ 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/world.\+h\item 
+src/world.\+cpp\end{DoxyCompactItemize}

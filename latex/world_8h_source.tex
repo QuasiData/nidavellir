@@ -1,0 +1,348 @@
+\doxysection{world.\+h}
+\hypertarget{world_8h_source}{}\label{world_8h_source}\index{src/world.h@{src/world.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//\ ReSharper\ disable\ CppUseStructuredBinding}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ "{}archetype.h"{}}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ "{}comp\_type\_info.h"{}}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ "{}identifiers.h"{}}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <concepts>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <iterator>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <memory\_resource>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <ankerl/unordered\_dense.h>}}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{namespace\ }nid\ \{}
+\DoxyCodeLine{00053\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classnid_1_1World}{World}}\ \{}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{struct\ }ArchetypeRecord\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\ archetype;}
+\DoxyCodeLine{00056\ \ \ \ \ \ \ \ \ std::vector<EntityId>\ entities;}
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ ArchetypeId\ id;}
+\DoxyCodeLine{00058\ \ \ \ \ \};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keyword}{struct\ }EntityRecord\ \{}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ ArchetypeId\ archetype;}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ usize\ col;}
+\DoxyCodeLine{00063\ \ \ \ \ \};}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keyword}{struct\ }RowRecord\ \{}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ usize\ row;}
+\DoxyCodeLine{00067\ \ \ \ \ \};}
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keyword}{using\ }ArchetypeMap\ =\ ankerl::unordered\_dense::map<ArchetypeId,\ RowRecord>;}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ ankerl::unordered\_dense::map<ArchetypeId,\ ArchetypeRecord>\ archetype\_map;}
+\DoxyCodeLine{00072\ \ \ \ \ ankerl::unordered\_dense::map<EntityId,\ EntityRecord>\ entity\_map;}
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ \ \ \ \ ankerl::unordered\_dense::map<ComponentId,\ ArchetypeMap>\ component\_map;}
+\DoxyCodeLine{00075\ \ \ \ \ ankerl::unordered\_dense::map<CompTypeList,\ ArchetypeId,\ TypeHash>\ type\_map;}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ CompTypeList\ scratch\_component\_buffer;}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ \ \ \ \ ArchetypeId\ next\_archetype\_id\{0\};}
+\DoxyCodeLine{00080\ \ \ \ \ EntityId\ next\_entity\_id\{0\};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\ \{}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classnid_1_1World}{World}};}
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }table\_match\ =\ std::tuple<usize,\ Ts*...>;}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1World}{World}}*\ world;}
+\DoxyCodeLine{00089\ \ \ \ \ \ \ \ \ std::vector<table\_match>\ table\_args;}
+\DoxyCodeLine{00090\ \ \ \ \ \ \ \ \ std::vector<CompTypeInfo>\ required\_comps;}
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ std::vector<CompTypeInfo>\ optional\_comps;}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ usize\ selected\_index\{0\};}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ std::array<bool,\ \textcolor{keyword}{sizeof}...(Ts)>\ optional\_flags\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}(\mbox{\hyperlink{classnid_1_1World}{World}}*\ world)\ :\ world(world)\ \{}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ table\_args.reserve(100);}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ required\_comps.reserve(4);}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ optional\_comps.reserve(2);}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_1_1Query}{\string~Query}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\&)\ -\/>\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\&\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}(\mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\&\&)\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ operator=(\mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\&\&)\ \textcolor{keyword}{noexcept}\ -\/>\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}\&\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ select(\textcolor{keyword}{const}\ usize\ index)\ -\/>\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}<Ts...>\&\ \{}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ selected\_index\ =\ index;}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ optional()\ -\/>\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}<Ts...>\&\ \{}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ optional\_flags[selected\_index]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<std::invocable<usize,\ Ts*...>\ Func>}
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ run(Func\&\&\ func)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ build();}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ tup\ :\ table\_args)\ \{}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::apply(std::forward<Func>(func),\ tup);}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ get\_component\_ptr(\textcolor{keyword}{const}\ usize\ type\_id,\ \textcolor{keyword}{const}\ ArchetypeId\ arch\_id,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1Archetype}{Archetype}}\&\ arch)\ -\/>\ \textcolor{keywordtype}{void}*\ \{}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ arch\_map\ =\ world-\/>component\_map.at(type\_id);}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ it\ =\ arch\_map.find(arch\_id);\ it\ !=\ arch\_map.end())\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ arch.\mbox{\hyperlink{classnid_1_1Archetype_a9875df5a3d91c7021820bc34a46a3c91}{get\_raw}}(0,\ it-\/>second.row);}
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ build()\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ std::array<\mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}},\ \textcolor{keyword}{sizeof}...(Ts)>\ pack\_infos\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (usize\ i\{0\};\ i\ <\ \textcolor{keyword}{sizeof}...(Ts);\ ++i)\ \{}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (optional\_flags[i])\ \{}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ optional\_comps.push\_back(pack\_infos[i]);}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ required\_comps.push\_back(pack\_infos[i]);}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [arch\_id,\ val]\ :\ world-\/>archetype\_map)\ \{}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ arch\ =\ val.archetype;\ arch.\mbox{\hyperlink{classnid_1_1Archetype_a7438b457c6bfbf79c92098cf9a5ac948}{partial\_match}}(required\_comps))\ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classnid_1_1World_1_1Query}{Query}}<Ts...>::table\_match\ table\ =\ \{arch.\mbox{\hyperlink{classnid_1_1Archetype_a9aa8461c3e08a139c17d9e5c2111a896}{len}}(),\ \textcolor{keyword}{static\_cast<}Ts*\textcolor{keyword}{>}(get\_component\_ptr(type\_id<Ts>(),\ arch\_id,\ arch))...\};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ push\_args(table);}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ push\_args(table\_match\ table)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ table\_args.emplace\_back(table);}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00157\ \ \ \ \ \};}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00162\ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_a97af9fdbe4e80659f0e7d4b4b529cb68}{World}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00167\ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_a9ac9ec0b3b2d4249b91e96b87f0ff995}{\string~World}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00172\ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_a92e68f5497da9185bde16292a2f0c1a0}{World}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1World}{World}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_a2283b949e0a3c11bb101fc0d2c13a539}{operator=}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classnid_1_1World}{World}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00182\ \ \ \ \ \mbox{\hyperlink{classnid_1_1World_ae97f4f2d26ffb741787fc87d7dc85ed7}{World}}(\mbox{\hyperlink{classnid_1_1World}{World}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00187\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_aecac2d1a3726511a0020e149c6843f2b}{operator=}}(\mbox{\hyperlink{classnid_1_1World}{World}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00206\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_a6e4d5b2437b0aaa3f2a8d65aaaa5a12d}{despawn}}(EntityId\ entity)\ -\/>\ void;}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00231\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_ae7b9a881c3b27c73b9804dfd827bb084}{spawn}}(Ts\&\&...\ pack)\ -\/>\ EntityId\ \{}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(!pack\_has\_duplicates<Ts...>());}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ CompTypeList\ comp\_ts\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ sort\_component\_list(comp\_ts);}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ arch\_rec\ =\ find\_or\_create\_archetype(comp\_ts);}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ col\ =\ arch\_rec.archetype.emplace\_back(std::forward<Ts>(pack)...);}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ new\_entity\_id\ =\ next\_entity\_id++;}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ arch\_rec.entities.push\_back(new\_entity\_id);}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ entity\_map.insert(\{new\_entity\_id,\ EntityRecord\{.archetype\ =\ arch\_rec.id,\ .col\ =\ col\}\});}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ new\_entity\_id;}
+\DoxyCodeLine{00244\ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00273\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_a45bc3cddff5b9963f34513038e0e8f1b}{get}}(\textcolor{keyword}{const}\ EntityId\ entity)\ -\/>\ \textcolor{keyword}{decltype}(\textcolor{keyword}{auto})\ \{}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(!pack\_has\_duplicates<Ts...>());}
+\DoxyCodeLine{00275\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ [arch\_id,\ col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [arch,\ \_1,\ \_2]\ =\ archetype\_map.at(arch\_id);}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ tup\ =\ std::tie(arch.get\_component<Ts>(col)...);}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(std::same\_as<\textcolor{keyword}{decltype}(tup),\ std::tuple<Ts\&...>>);}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ \textcolor{keyword}{constexpr}\ (\textcolor{keyword}{sizeof}...(Ts)\ ==\ 1)\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::get<0>(tup);}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ tup;}
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00286\ \ \ \ \ \}}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00299\ \ \ \ \ [[nodiscard]]\ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_af540635c3b06fc7cf09d06ca68c8bfa4}{has}}(\textcolor{keyword}{const}\ EntityId\ entity)\ -\/>\ \textcolor{keywordtype}{bool}\ \{}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(!pack\_has\_duplicates<Ts...>());}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\ [arch\_id,\ col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ [arch,\ \_1,\ \_2]\ =\ archetype\_map.at(arch\_id);}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ std::array<\mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}},\ \textcolor{keyword}{sizeof}...(Ts)>\ pack\_infos\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ arch.partial\_match(pack\_infos);}
+\DoxyCodeLine{00306\ \ \ \ \ \}}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00340\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00341\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_ab2291f375b044fe8d45247a00e77a1d6}{add}}(\textcolor{keyword}{const}\ EntityId\ entity,\ Ts\&\&...\ pack)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(!pack\_has\_duplicates<Ts...>());}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}...(Ts)\ >\ 0);}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(scratch\_component\_buffer.size()\ ==\ 0,\ \textcolor{stringliteral}{"{}The\ scratch\ buffer\ has\ not\ been\ cleared"{}});}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_id,\ src\_col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ entity\_types\ =\ archetype\_map.at(src\_id).archetype.type();}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \textcolor{keyword}{constexpr}\ usize\ stack\_buffer\_size\ =\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}})\ *\ 64;}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ std::array<u8,\ stack\_buffer\_size>\ buffer\{\};}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ std::pmr::monotonic\_buffer\_resource\ resource(buffer.data(),\ stack\_buffer\_size);}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ std::pmr::vector<CompTypeInfo>\ in\_pack\_types\{\&resource\};}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ std::pmr::vector<CompTypeInfo>\ not\_in\_pack\_types\{\&resource\};}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ std::array<\mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}},\ \textcolor{keyword}{sizeof}...(Ts)>\ pack\_infos\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ in\_pack\ =\ [\&](\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ info1)\ \{}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ranges::find\_if(pack\_infos,\ [info1](\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ info2)\ \{\ \textcolor{keywordflow}{return}\ info1.id\ ==\ info2.\mbox{\hyperlink{structnid_1_1CompTypeInfo_a7320950513d293a96cb955cfe23e1ead}{id}};\ \})\ !=\ pack\_infos.end();}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ entity\_types)\ \{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (in\_pack(info))\ \{}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ in\_pack\_types.push\_back(info);}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ not\_in\_pack\_types.push\_back(info);}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ scratch\_component\_buffer.reserve(\textcolor{keyword}{sizeof}...(Ts)\ +\ not\_in\_pack\_types.size());}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ std::ranges::copy(pack\_infos,\ std::back\_inserter(scratch\_component\_buffer));}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ std::ranges::copy(not\_in\_pack\_types,\ std::back\_inserter(scratch\_component\_buffer));}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ sort\_component\_list(scratch\_component\_buffer);}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [target\_arch,\ target\_entities,\ target\_id]\ =\ find\_or\_create\_archetype(scratch\_component\_buffer);}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_arch,\ src\_entities,\ \_]\ =\ archetype\_map.at(src\_id);}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (src\_id\ ==\ target\_id)\ \{}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ src\_arch.update(src\_col,\ std::forward<Ts>(pack)...);}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ target\_arch.prepare\_push(1);}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ target\_col\{target\_arch.len()\};}
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ not\_in\_pack\_types)\ \{}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ dst\_ptr\ =\ target\_arch.get\_raw(target\_col,\ target\_arch.get\_row(info.id));}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ info.move\_ctor\_dtor(dst\_ptr,\ src\_ptr,\ 1);}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ in\_pack\_types)\ \{}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{00391\ }
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ info.dtor(src\_ptr,\ 1);}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ target\_arch.create(target\_col,\ std::forward<Ts>(pack)...);}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ target\_entities.push\_back(entity);}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ target\_arch.increase\_size(1);}
+\DoxyCodeLine{00399\ }
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ src\_last\_col\{src\_arch.len()\ -\/\ 1\};}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (src\_col\ <\ src\_last\_col)\ \{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ src\_arch.swap(src\_col,\ src\_last\_col);}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(src\_entities[src\_col],\ src\_entities[src\_last\_col]);}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ entity\_map.at(src\_entities[src\_col]).col\ =\ src\_col;}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ src\_entities.pop\_back();}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ src\_arch.decrease\_size(1);}
+\DoxyCodeLine{00409\ }
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ src\_id\ =\ target\_id;}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ src\_col\ =\ target\_col;}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00413\ }
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ scratch\_component\_buffer.clear();}
+\DoxyCodeLine{00415\ \ \ \ \ \}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00439\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00440\ \ \ \ \ \textcolor{keyword}{auto}\ \mbox{\hyperlink{classnid_1_1World_ad29bd42efb428d3b17ec704b6e9bae2e}{remove}}(\textcolor{keyword}{const}\ EntityId\ entity)\ -\/>\ \textcolor{keywordtype}{void}\ \{}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(!pack\_has\_duplicates<Ts...>());}
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}...(Ts)\ >\ 0);}
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(scratch\_component\_buffer.empty(),\ \textcolor{stringliteral}{"{}The\ scratch\ buffer\ has\ not\ been\ cleared"{}});}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_id,\ src\_col]\ =\ entity\_map.at(entity);}
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ entity\_types\ =\ archetype\_map.at(src\_id).archetype.type();}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ std::array<\mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}},\ \textcolor{keyword}{sizeof}...(Ts)>\ pack\_infos\ =\ \{get\_component\_info<Ts>()...\};}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ not\_in\_pack\ =\ [\&](\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ info1)\ \{}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ranges::find\_if(pack\_infos,\ [info1](\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ info2)\ \{\ \textcolor{keywordflow}{return}\ info1.id\ ==\ info2.\mbox{\hyperlink{structnid_1_1CompTypeInfo_a7320950513d293a96cb955cfe23e1ead}{id}};\ \})\ ==\ pack\_infos.end();}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ scratch\_component\_buffer.reserve(\textcolor{keyword}{sizeof}...(Ts));}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ entity\_types)\ \{}
+\DoxyCodeLine{00456\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (not\_in\_pack(info))\ \{}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ scratch\_component\_buffer.push\_back(info);}
+\DoxyCodeLine{00458\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \textcolor{preprocessor}{\#ifndef\ NDEBUG}}
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ in\_entity\_type\ =\ [\&](\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ info1)\ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ std::ranges::find\_if(entity\_types,\ [info1](\textcolor{keyword}{const}\ \mbox{\hyperlink{structnid_1_1CompTypeInfo}{CompTypeInfo}}\&\ info2)\ \{\ \textcolor{keywordflow}{return}\ info1.id\ ==\ info2.\mbox{\hyperlink{structnid_1_1CompTypeInfo_a7320950513d293a96cb955cfe23e1ead}{id}};\ \})\ !=\ entity\_types.end();}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ pack\_infos)\ \{}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(in\_entity\_type(info),\ \textcolor{stringliteral}{"{}Tried\ removing\ a\ component\ from\ an\ entity\ that\ did\ not\ have\ it"{}});}
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00469\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ \ \ \ \ \ \ \ \ sort\_component\_list(scratch\_component\_buffer);}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [target\_arch,\ target\_entities,\ target\_id]\ =\ find\_or\_create\_archetype(scratch\_component\_buffer);}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\&\ [src\_arch,\ src\_entities,\ \_]\ =\ archetype\_map.at(src\_id);}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ NIDAVELLIR\_ASSERT(src\_id\ !=\ target\_id,\ \textcolor{stringliteral}{"{}When\ removing\ components\ there\ should\ be\ no\ way\ of\ ending\ up\ in\ the\ same\ archetype\ again"{}});}
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ target\_arch.prepare\_push(1);}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ target\_col\{target\_arch.len()\};}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ scratch\_component\_buffer)\ \{}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ dst\_ptr\ =\ target\_arch.get\_raw(target\_col,\ target\_arch.get\_row(info.id));}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ info.move\_ctor\_dtor(dst\_ptr,\ src\_ptr,\ 1);}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keyword}{const}\ \textcolor{keyword}{auto}\&\ info\ :\ pack\_infos)\ \{}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ src\_ptr\ =\ src\_arch.get\_raw(src\_col,\ src\_arch.get\_row(info.id));}
+\DoxyCodeLine{00490\ }
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ info.dtor(src\_ptr,\ 1);}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ target\_entities.push\_back(entity);}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ target\_arch.increase\_size(1);}
+\DoxyCodeLine{00496\ }
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ usize\ src\_last\_col\{src\_arch.len()\ -\/\ 1\};}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (src\_col\ <\ src\_last\_col)\ \{}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ src\_arch.swap(src\_col,\ src\_last\_col);}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \ \ \ \ std::swap(src\_entities[src\_col],\ src\_entities[src\_last\_col]);}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ entity\_map.at(src\_entities[src\_col]).col\ =\ src\_col;}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ src\_entities.pop\_back();}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ src\_arch.decrease\_size(1);}
+\DoxyCodeLine{00506\ }
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ src\_id\ =\ target\_id;}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ src\_col\ =\ target\_col;}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ scratch\_component\_buffer.clear();}
+\DoxyCodeLine{00511\ \ \ \ \ \}}
+\DoxyCodeLine{00512\ }
+\DoxyCodeLine{00513\ \ \ \ \ \textcolor{keyword}{template}<\mbox{\hyperlink{conceptnid_1_1Component}{Component}}...\ Ts>}
+\DoxyCodeLine{00514\ \ \ \ \ \textcolor{keyword}{auto}\ query()\ -\/>\ Query<Ts...>\ \{}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{sizeof}...(Ts)\ >\ 0);}
+\DoxyCodeLine{00516\ \ \ \ \ \ \ \ \ \textcolor{keyword}{auto}\ que\ =\ Query<Ts...>(\textcolor{keyword}{this});}
+\DoxyCodeLine{00517\ }
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ que;}
+\DoxyCodeLine{00519\ \ \ \ \ \}}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00527\ \ \ \ \ \textcolor{keyword}{auto}\ find\_or\_create\_archetype(\textcolor{keyword}{const}\ CompTypeList\&\ comp\_ts)\ -\/>\ ArchetypeRecord\&;}
+\DoxyCodeLine{00528\ \};}
+\DoxyCodeLine{00529\ \}\ \textcolor{comment}{//\ namespace\ nid}}
+
+\end{DoxyCode}

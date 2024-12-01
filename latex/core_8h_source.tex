@@ -1,0 +1,37 @@
+\doxysection{core.\+h}
+\hypertarget{core_8h_source}{}\label{core_8h_source}\index{src/core.h@{src/core.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#include\ <cstdint>}}
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <cstddef>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <type\_traits>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }nid\ \{}
+\DoxyCodeLine{00007\ \textcolor{keyword}{using\ }u8\ =\ std::uint8\_t;}
+\DoxyCodeLine{00008\ \textcolor{keyword}{using\ }u16\ =\ std::uint16\_t;}
+\DoxyCodeLine{00009\ \textcolor{keyword}{using\ }u32\ =\ std::uint32\_t;}
+\DoxyCodeLine{00010\ \textcolor{keyword}{using\ }u64\ =\ std::uint64\_t;}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{using\ }i8\ =\ std::int8\_t;}
+\DoxyCodeLine{00013\ \textcolor{keyword}{using\ }i16\ =\ std::int16\_t;}
+\DoxyCodeLine{00014\ \textcolor{keyword}{using\ }i32\ =\ std::int32\_t;}
+\DoxyCodeLine{00015\ \textcolor{keyword}{using\ }i64\ =\ std::int64\_t;}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \textcolor{keyword}{using\ }f32\ =\ float;}
+\DoxyCodeLine{00018\ \textcolor{keyword}{using\ }f64\ =\ double;}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{using\ }usize\ =\ std::size\_t;}
+\DoxyCodeLine{00021\ \textcolor{keyword}{using\ }isize\ =\ std::conditional\_t<\textcolor{keyword}{sizeof}(usize)\ ==\ 8,\ i64,\ i32>;}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{auto}\ nidavellir\_assert(\textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ expr\_str,\ \textcolor{keywordtype}{bool}\ expr,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ file,\ \textcolor{keywordtype}{int}\ line,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{char}*\ msg)\ -\/>\ void;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#ifndef\ NDEBUG}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ NIDAVELLIR\_ASSERT(expr,\ msg)\ \(\backslash\)}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\ \ \ \ nidavellir\_assert(\#expr,\ expr,\ \_\_FILE\_\_,\ \_\_LINE\_\_,\ msg)}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ NIDAVELLIR\_ASSERT(expr,\ msg)\ (void)0}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00031\ \}\ \textcolor{comment}{//\ namespace\ nid}}
+
+\end{DoxyCode}
