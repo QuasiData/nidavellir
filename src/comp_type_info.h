@@ -468,9 +468,9 @@ template<Component T>
 /**
  * @brief Helper function to check for duplicate types in a parameter pack.
  *
- * This function checks if there are any duplicate types in the parameter pack `Types...`.
+ * This function checks if there are any duplicate types in the parameter pack `Ts...`.
  *
- * @tparam Types The parameter pack to check for duplicates.
+ * @tparam Ts The parameter pack to check for duplicates.
  * @return `true` if there are duplicate types, `false` otherwise.
  */
 template<typename... Ts>

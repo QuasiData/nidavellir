@@ -67,6 +67,19 @@ auto main() -> int {
 
     world.query<T1, T2>().run([](usize len, T1* t1, T2* t2) {
         std::cout << len << "\n";
+        std::cout << "\n";
+        for (usize i{0}; i < len; ++i) {
+            // std::cout << t1[0].x << "\n";
+            // std::cout << t2[0].z << "\n";
+        }
+    });
+
+    world.query<T1, T2, T3>().select(2).optional().run([](usize len, T1* t1, T2* t2, T3* t3) {
+        std::cout << len << "\n";
+        if (t3 != nullptr) {
+            std::cout << "T3 is present\n";
+        }
+        std::cout << "\n";
         for (usize i{0}; i < len; ++i) {
             // std::cout << t1[0].x << "\n";
             // std::cout << t2[0].z << "\n";

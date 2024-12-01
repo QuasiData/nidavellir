@@ -87,10 +87,16 @@ class World {
         using table_match = std::tuple<usize, Ts*...>;
         World* world;
         std::vector<table_match> table_args;
+        std::vector<CompTypeInfo> required_comps;
+        std::vector<CompTypeInfo> optional_comps;
+        usize selected_index{0};
+        std::array<bool, sizeof...(Ts)> optional_flags{false};
 
       public:
         explicit Query(World* world) : world(world) {
-            table_args.reserve(sizeof(usize) * 100);
+            table_args.reserve(100);
+            required_comps.reserve(4);
+            optional_comps.reserve(2);
         }
 
         ~Query() = default;
@@ -100,14 +106,51 @@ class World {
         Query(Query&&) = default;
         auto operator=(Query&&) noexcept -> Query& = default;
 
+        auto select(const usize index) -> Query<Ts...>& {
+            selected_index = index;
+            return *this;
+        }
+
+        auto optional() -> Query<Ts...>& {
+            optional_flags[selected_index] = true;
+            return *this;
+        }
+
         template<std::invocable<usize, Ts*...> Func>
         auto run(Func&& func) -> void {
+            build();
             for (const auto& tup : table_args) {
                 std::apply(std::forward<Func>(func), tup);
             }
         }
 
       private:
+        auto get_component_ptr(const usize type_id, const ArchetypeId arch_id, const Archetype& arch) -> void* {
+            const auto& arch_map = world->component_map.at(type_id);
+            if (const auto it = arch_map.find(arch_id); it != arch_map.end()) {
+                return arch.get_raw(0, it->second.row);
+            }
+            return nullptr;
+        }
+
+        auto build() -> void {
+            std::array<CompTypeInfo, sizeof...(Ts)> pack_infos = {get_component_info<Ts>()...};
+            for (usize i{0}; i < sizeof...(Ts); ++i) {
+                if (optional_flags[i]) {
+                    optional_comps.push_back(pack_infos[i]);
+                } else {
+                    required_comps.push_back(pack_infos[i]);
+                }
+            }
+
+            for (const auto& [arch_id, val] : world->archetype_map) {
+                if (const auto& arch = val.archetype; arch.partial_match(required_comps)) {
+                    typename Query<Ts...>::table_match table = {arch.len(), static_cast<Ts*>(get_component_ptr(type_id<Ts>(), arch_id, arch))...};
+                    push_args(table);
+                }
+            }
+        }
+
         auto push_args(table_match table) -> void {
             table_args.emplace_back(table);
         }
@@ -471,15 +514,6 @@ class World {
     auto query() -> Query<Ts...> {
         static_assert(sizeof...(Ts) > 0);
         auto que = Query<Ts...>(this);
-
-        std::array<CompTypeInfo, sizeof...(Ts)> pack_infos = {get_component_info<Ts>()...};
-
-        for (const auto& [key, val] : archetype_map) {
-            if (const auto& arch = val.archetype; arch.partial_match(pack_infos)) {
-                typename Query<Ts...>::table_match table = {arch.len(), static_cast<Ts*>(arch.get_raw(0, component_map.at(type_id<Ts>()).at(key).row))...};
-                que.push_args(table);
-            }
-        }
 
         return que;
     }

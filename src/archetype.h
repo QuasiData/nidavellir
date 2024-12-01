@@ -346,7 +346,7 @@ class Archetype {
      * @brief Retrieves the component type list.
      * @return A constant reference to the CompTypeList containing component information.
      */
-    [[nodiscard]] auto type() -> const CompTypeList& { return infos; }
+    [[nodiscard]] auto type() const -> std::span<const CompTypeInfo> { return infos; }
 
     /**
      * @brief Gets the row index associated with the specified component ID.
